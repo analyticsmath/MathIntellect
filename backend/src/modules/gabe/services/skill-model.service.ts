@@ -74,9 +74,15 @@ export class SkillModelService {
 
     const updatedProfile: SkillProfile = {
       skill_level: Math.round(nextSkill),
-      risk_tolerance: Math.round(this.ema(current.risk_tolerance, targetRiskTolerance, 0.24)),
-      decision_speed: Math.round(this.ema(current.decision_speed, targetDecisionSpeed, 0.3)),
-      strategy_depth: Math.round(this.ema(current.strategy_depth, targetStrategyDepth, 0.31)),
+      risk_tolerance: Math.round(
+        this.ema(current.risk_tolerance, targetRiskTolerance, 0.24),
+      ),
+      decision_speed: Math.round(
+        this.ema(current.decision_speed, targetDecisionSpeed, 0.3),
+      ),
+      strategy_depth: Math.round(
+        this.ema(current.strategy_depth, targetStrategyDepth, 0.31),
+      ),
       consistency_score: Math.round(nextConsistency),
       learning_curve: this.deriveLearningCurve(
         performance,
@@ -115,8 +121,9 @@ export class SkillModelService {
     );
     const speedBonus = this.clamp(1 - executionTimeMs / 80_000, 0, 1);
     const stabilityBonus = this.clamp(
-      1 - Math.abs(this.number(metrics.max, 0) - this.number(metrics.min, 0)) /
-        Math.max(1, Math.abs(this.number(metrics.max, 0)) + 10),
+      1 -
+        Math.abs(this.number(metrics.max, 0) - this.number(metrics.min, 0)) /
+          Math.max(1, Math.abs(this.number(metrics.max, 0)) + 10),
       0,
       1,
     );
@@ -132,7 +139,11 @@ export class SkillModelService {
     adjustmentCount: number,
   ): number {
     const toleranceMs = 3_200 + difficultyScore * 150 + adjustmentCount * 220;
-    const ratio = this.clamp(1 - executionTimeMs / Math.max(1, toleranceMs), -0.8, 1);
+    const ratio = this.clamp(
+      1 - executionTimeMs / Math.max(1, toleranceMs),
+      -0.8,
+      1,
+    );
 
     return clampScore(55 + ratio * 45);
   }
@@ -146,13 +157,18 @@ export class SkillModelService {
       return this.ema(previousConsistency, currentPerformance, 0.2);
     }
 
-    const mean = historical.reduce((sum, value) => sum + value, 0) / historical.length;
+    const mean =
+      historical.reduce((sum, value) => sum + value, 0) / historical.length;
     const variance =
       historical.reduce((sum, value) => sum + (value - mean) ** 2, 0) /
       historical.length;
 
     const deviation = Math.abs(currentPerformance - mean);
-    const volatilityPenalty = this.clamp(Math.sqrt(variance) * 0.5 + deviation * 0.2, 0, 45);
+    const volatilityPenalty = this.clamp(
+      Math.sqrt(variance) * 0.5 + deviation * 0.2,
+      0,
+      45,
+    );
     const consistencyTarget = clampScore(92 - volatilityPenalty);
 
     return this.ema(previousConsistency, consistencyTarget, 0.3);
@@ -165,16 +181,15 @@ export class SkillModelService {
     if (historical.length < 3) return 'stable';
 
     const recent = historical.slice(-5);
-    const recentAvg = recent.reduce((sum, value) => sum + value, 0) / recent.length;
+    const recentAvg =
+      recent.reduce((sum, value) => sum + value, 0) / recent.length;
 
     if (currentPerformance - recentAvg > 5) return 'rising';
     if (recentAvg - currentPerformance > 5) return 'declining';
     return 'stable';
   }
 
-  private toBehaviorPattern(
-    behavior: BehaviorAnalysisOutput,
-  ): BehaviorPattern {
+  private toBehaviorPattern(behavior: BehaviorAnalysisOutput): BehaviorPattern {
     if (behavior.behavior_type === 'explorer') {
       return 'explorer';
     }
@@ -195,7 +210,9 @@ export class SkillModelService {
   }
 
   private number(value: unknown, fallback: number): number {
-    return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
+    return typeof value === 'number' && Number.isFinite(value)
+      ? value
+      : fallback;
   }
 
   private clamp(value: number, min: number, max: number): number {

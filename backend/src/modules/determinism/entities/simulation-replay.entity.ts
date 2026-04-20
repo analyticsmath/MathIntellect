@@ -38,10 +38,20 @@ export class SimulationReplay {
   @Column({ name: 'deterministic_options', type: 'jsonb', nullable: true })
   deterministicOptions: Record<string, unknown> | null;
 
-  @Column({ name: 'engine_version', type: 'varchar', length: 32, default: '1.0.0' })
+  @Column({
+    name: 'engine_version',
+    type: 'varchar',
+    length: 32,
+    default: '1.0.0',
+  })
   engineVersion: string;
 
-  @Column({ name: 'prompt_version', type: 'varchar', length: 32, default: 'v3.2-lock' })
+  @Column({
+    name: 'prompt_version',
+    type: 'varchar',
+    length: 32,
+    default: 'v3.2-lock',
+  })
   promptVersion: string;
 
   @Column({ name: 'parameter_hash', type: 'varchar', length: 128 })
@@ -67,7 +77,12 @@ export class SimulationReplay {
   replaySteps: Record<string, unknown>[] | null;
 
   // Phase 6 final output hash
-  @Column({ name: 'final_output_hash', type: 'varchar', length: 128, nullable: true })
+  @Column({
+    name: 'final_output_hash',
+    type: 'varchar',
+    length: 128,
+    nullable: true,
+  })
   finalOutputHash: string | null;
 
   // Legacy field retained

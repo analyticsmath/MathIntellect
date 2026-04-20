@@ -23,8 +23,7 @@ export class MarketEngine {
     onProgress?: ProgressCallback,
   ): Promise<MarketResult> {
     const t0 = Date.now();
-    const { initialPrice, volatility, drift, timeHorizonDays, paths, seed } =
-      params;
+    const { initialPrice, volatility, timeHorizonDays, paths, seed } = params;
 
     if (initialPrice <= 0)
       throw new BadRequestException('initialPrice must be > 0');
@@ -48,10 +47,14 @@ export class MarketEngine {
     const cholesky = this.cholesky(correlation);
 
     const allPaths: number[][] = [];
-    const finalPrices: number[] = new Array(paths);
+    const finalPrices: number[] = new Array<number>(paths);
     const assetFinalPrices: Record<string, number[]> = {};
-    const dayReturnAccumulator = new Array<number>(timeHorizonDays).fill(0);
-    const dayReturnCounts = new Array<number>(timeHorizonDays).fill(0);
+    const dayReturnAccumulator: number[] = new Array<number>(
+      timeHorizonDays,
+    ).fill(0);
+    const dayReturnCounts: number[] = new Array<number>(timeHorizonDays).fill(
+      0,
+    );
     const shockEventsApplied: Array<{
       path: number;
       day: number;
@@ -67,9 +70,13 @@ export class MarketEngine {
       0,
       0.2,
     );
-    const shockMagnitude = this.clamp(params.shockMagnitude ?? 0.08, 0.005, 0.6);
+    const shockMagnitude = this.clamp(
+      params.shockMagnitude ?? 0.08,
+      0.005,
+      0.6,
+    );
     assets.forEach((asset) => {
-      assetFinalPrices[asset.id] = new Array(paths);
+      assetFinalPrices[asset.id] = new Array<number>(paths);
     });
 
     let maxDrawdown = 0;
@@ -105,16 +112,23 @@ export class MarketEngine {
             let effectiveSigma = asset.volatility;
 
             if (params.regimeSwitching) {
-              const multipliers = params.regimeVolatilityMultipliers ?? [1, 1.8];
+              const multipliers = params.regimeVolatilityMultipliers ?? [
+                1, 1.8,
+              ];
               const regimeMultiplier =
-                multipliers[regimeState] ?? multipliers[multipliers.length - 1] ?? 1;
+                multipliers[regimeState] ??
+                multipliers[multipliers.length - 1] ??
+                1;
               effectiveSigma *= regimeMultiplier;
             }
 
             if (params.volatilityClustering) {
               const alpha = this.clamp(params.garchAlpha ?? 0.08, 0.01, 0.35);
               const beta = this.clamp(params.garchBeta ?? 0.86, 0.5, 0.97);
-              const omega = Math.max(1e-8, (1 - alpha - beta) * asset.volatility ** 2);
+              const omega = Math.max(
+                1e-8,
+                (1 - alpha - beta) * asset.volatility ** 2,
+              );
 
               sigmaState[assetIndex] = Math.sqrt(
                 omega +
@@ -125,7 +139,8 @@ export class MarketEngine {
             }
 
             const driftAdj = (asset.drift - 0.5 * effectiveSigma ** 2) * dt;
-            const volComponent = effectiveSigma * Math.sqrt(dt) * shocks[assetIndex];
+            const volComponent =
+              effectiveSigma * Math.sqrt(dt) * shocks[assetIndex];
             let nextPrice =
               assetPrices[assetIndex] * Math.exp(driftAdj + volComponent);
 
@@ -148,8 +163,9 @@ export class MarketEngine {
               }
             }
 
-            previousLogReturns[assetIndex] =
-              Math.log(nextPrice / Math.max(assetPrices[assetIndex], Number.EPSILON));
+            previousLogReturns[assetIndex] = Math.log(
+              nextPrice / Math.max(assetPrices[assetIndex], Number.EPSILON),
+            );
             assetPrices[assetIndex] = nextPrice;
           }
 
@@ -175,7 +191,10 @@ export class MarketEngine {
           assetFinalPrices[asset.id][p] = assetPrices[index];
         });
 
-        maxDrawdown = Math.max(maxDrawdown, this.computePathDrawdown(portfolioPath));
+        maxDrawdown = Math.max(
+          maxDrawdown,
+          this.computePathDrawdown(portfolioPath),
+        );
       }
 
       const progress = Math.round((pEnd / paths) * 100);
@@ -198,7 +217,8 @@ export class MarketEngine {
 
     const T = timeHorizonDays / this.TRADING_DAYS_PER_YEAR;
     const annualizedReturn = Math.log(mean / Math.max(initialPrice, 1e-6)) / T;
-    const annualizedVolatility = stdDev / (Math.max(initialPrice, 1e-6) * Math.sqrt(T));
+    const annualizedVolatility =
+      stdDev / (Math.max(initialPrice, 1e-6) * Math.sqrt(T));
     const detectedRegimes = this.detectRegimes(
       dayReturnAccumulator,
       dayReturnCounts,
@@ -224,7 +244,8 @@ export class MarketEngine {
       annualizedReturn,
       annualizedVolatility,
       detectedRegimes,
-      shockEventsApplied: shockEventsApplied.length > 0 ? shockEventsApplied : undefined,
+      shockEventsApplied:
+        shockEventsApplied.length > 0 ? shockEventsApplied : undefined,
       sentimentProxy,
       priceStats: {
         mean,
@@ -237,9 +258,7 @@ export class MarketEngine {
     };
   }
 
-  private resolveAssets(
-    params: MarketParams,
-  ): Array<{
+  private resolveAssets(params: MarketParams): Array<{
     id: string;
     initialPrice: number;
     volatility: number;
@@ -262,7 +281,11 @@ export class MarketEngine {
 
     return assets.map((asset, index) => ({
       id: asset.id || `asset_${index + 1}`,
-      initialPrice: this.clamp(asset.initialPrice, 1e-6, Number.MAX_SAFE_INTEGER),
+      initialPrice: this.clamp(
+        asset.initialPrice,
+        1e-6,
+        Number.MAX_SAFE_INTEGER,
+      ),
       volatility: this.clamp(asset.volatility, 0, 5),
       drift: this.clamp(asset.drift, -2, 2),
       weight: Number.isFinite(asset.weight) ? asset.weight : 1,
@@ -288,7 +311,9 @@ export class MarketEngine {
       return this.identity(size);
     }
 
-    const valid = matrix.every((row) => Array.isArray(row) && row.length === size);
+    const valid = matrix.every(
+      (row) => Array.isArray(row) && row.length === size,
+    );
     if (!valid) {
       return this.identity(size);
     }
@@ -309,7 +334,9 @@ export class MarketEngine {
 
   private cholesky(matrix: number[][]): number[][] {
     const n = matrix.length;
-    const lower = Array.from({ length: n }, () => Array(n).fill(0));
+    const lower: number[][] = Array.from({ length: n }, () =>
+      new Array<number>(n).fill(0),
+    );
 
     for (let i = 0; i < n; i++) {
       for (let j = 0; j <= i; j++) {
@@ -334,13 +361,15 @@ export class MarketEngine {
     lower: number[][],
     rng: () => number,
   ): number[] {
-    const independent = Array.from({ length: size }, () => this.standardNormal(rng));
-    const result = new Array<number>(size).fill(0);
+    const independent: number[] = Array.from({ length: size }, () =>
+      this.standardNormal(rng),
+    );
+    const result: number[] = new Array<number>(size).fill(0);
 
     for (let row = 0; row < size; row++) {
       let value = 0;
       for (let col = 0; col <= row; col++) {
-        value += lower[row][col] * independent[col];
+        value += (lower[row][col] ?? 0) * (independent[col] ?? 0);
       }
       result[row] = value;
     }
@@ -375,7 +404,9 @@ export class MarketEngine {
   }
 
   private normalizeShockEvents(
-    events: Array<{ day: number; magnitude: number; label?: string }> | undefined,
+    events:
+      | Array<{ day: number; magnitude: number; label?: string }>
+      | undefined,
     maxDay: number,
   ): Map<number, number> {
     const map = new Map<number, number>();
@@ -401,7 +432,11 @@ export class MarketEngine {
   private detectRegimes(
     dayReturnAccumulator: number[],
     dayReturnCounts: number[],
-  ): Array<{ day: number; state: 'bull' | 'bear' | 'neutral'; signal: number }> {
+  ): Array<{
+    day: number;
+    state: 'bull' | 'bear' | 'neutral';
+    signal: number;
+  }> {
     const regimes: Array<{
       day: number;
       state: 'bull' | 'bear' | 'neutral';
@@ -433,13 +468,20 @@ export class MarketEngine {
     annualizedReturn: number,
     annualizedVolatility: number,
     maxDrawdown: number,
-    regimes: Array<{ day: number; state: 'bull' | 'bear' | 'neutral'; signal: number }>,
-  ): { score: number; label: 'bullish' | 'neutral' | 'bearish'; reasoning: string } {
+    regimes: Array<{
+      day: number;
+      state: 'bull' | 'bear' | 'neutral';
+      signal: number;
+    }>,
+  ): {
+    score: number;
+    label: 'bullish' | 'neutral' | 'bearish';
+    reasoning: string;
+  } {
     const bullDays = regimes.filter((regime) => regime.state === 'bull').length;
     const bearDays = regimes.filter((regime) => regime.state === 'bear').length;
 
-    const regimeTilt =
-      (bullDays - bearDays) / Math.max(1, regimes.length);
+    const regimeTilt = (bullDays - bearDays) / Math.max(1, regimes.length);
 
     const score = this.clamp(
       50 +

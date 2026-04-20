@@ -58,13 +58,18 @@ export class FeedRankingService {
         COMPLEXITY_SCORE[post.simulationType ?? 'custom'] ?? 50;
 
       const authorTypeKey = `${post.authorId}:${post.simulationType}`;
-      const repeatPenalty = Math.max(0, (byAuthorType.get(authorTypeKey) ?? 1) - 1) * 8;
+      const repeatPenalty =
+        Math.max(0, (byAuthorType.get(authorTypeKey) ?? 1) - 1) * 8;
       const ageHours = Math.max(
         0,
         (Date.now() - post.createdAt.getTime()) / (1000 * 60 * 60),
       );
       const agePenalty = Math.min(45, ageHours * 0.55);
-      const noveltyFactor = this.clamp(100 - repeatPenalty - agePenalty, 0, 100);
+      const noveltyFactor = this.clamp(
+        100 - repeatPenalty - agePenalty,
+        0,
+        100,
+      );
 
       const score =
         engagement * 0.35 +

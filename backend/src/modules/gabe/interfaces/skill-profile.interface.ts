@@ -54,7 +54,9 @@ export function normalizeSkillProfile(
       : DEFAULT_SKILL_PROFILE.behavior_pattern;
 
   return {
-    skill_level: clampScore(profile.skill_level ?? DEFAULT_SKILL_PROFILE.skill_level),
+    skill_level: clampScore(
+      profile.skill_level ?? DEFAULT_SKILL_PROFILE.skill_level,
+    ),
     risk_tolerance: clampScore(
       profile.risk_tolerance ?? DEFAULT_SKILL_PROFILE.risk_tolerance,
     ),

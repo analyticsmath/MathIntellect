@@ -43,7 +43,9 @@ export class TransformerRegistry {
       case SimulationType.CONFLICT:
         return this.conflict.buildCharts(meta.id, raw as ConflictResult);
       default:
-        throw new NotFoundException(`No transformer for type: ${meta.type}`);
+        throw new NotFoundException(
+          `No transformer for type: ${meta.type as string}`,
+        );
     }
   }
 
@@ -59,7 +61,9 @@ export class TransformerRegistry {
       case SimulationType.CONFLICT:
         return this.conflict.build3D(meta.id, raw as ConflictResult);
       default:
-        throw new NotFoundException(`No 3D transformer for type: ${meta.type}`);
+        throw new NotFoundException(
+          `No 3D transformer for type: ${meta.type as string}`,
+        );
     }
   }
 
@@ -96,7 +100,7 @@ export class TransformerRegistry {
         );
       default:
         throw new NotFoundException(
-          `No summary transformer for type: ${meta.type}`,
+          `No summary transformer for type: ${meta.type as string}`,
         );
     }
   }

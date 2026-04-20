@@ -68,14 +68,19 @@ export class ProgressionService {
     return this.progressionRepo.save(created);
   }
 
-  async selectTrack(userId: string, track: ProgressionTrack): Promise<UserProgression> {
+  async selectTrack(
+    userId: string,
+    track: ProgressionTrack,
+  ): Promise<UserProgression> {
     const state = await this.getOrCreate(userId);
     state.currentTrack = track;
     state.behaviorStyle = this.trackBehaviorStyle(track);
     return this.progressionRepo.save(state);
   }
 
-  async getPromptAdaptation(userId: string): Promise<ProgressionPromptAdaptation> {
+  async getPromptAdaptation(
+    userId: string,
+  ): Promise<ProgressionPromptAdaptation> {
     const state = await this.getOrCreate(userId);
 
     return {
@@ -106,11 +111,15 @@ export class ProgressionService {
 
     const skillPointGain = Math.max(
       1,
-      Math.round(input.xpGain / 70 + this.clamp(input.performanceScore, 0, 100) / 40),
+      Math.round(
+        input.xpGain / 70 + this.clamp(input.performanceScore, 0, 100) / 40,
+      ),
     );
     state.skillPoints = Math.max(0, state.skillPoints + skillPointGain);
 
-    const trackExperience = this.normalizeTrackExperience(state.trackExperienceJson);
+    const trackExperience = this.normalizeTrackExperience(
+      state.trackExperienceJson,
+    );
     const simulationTrack = this.trackFromSimulationType(input.simulationType);
     trackExperience[simulationTrack] += input.xpGain;
     trackExperience[state.currentTrack] += Math.round(input.xpGain * 0.2);
@@ -118,10 +127,15 @@ export class ProgressionService {
 
     state.explanationDepth = rank >= 55 ? 3 : rank >= 20 ? 2 : 1;
     state.visualizationRichness = rank >= 60 ? 3 : rank >= 25 ? 2 : 1;
-    state.complexityScale = Number(this.clamp(0.9 + rank / 125, 0.9, 1.85).toFixed(4));
+    state.complexityScale = Number(
+      this.clamp(0.9 + rank / 125, 0.9, 1.85).toFixed(4),
+    );
 
     const unlocks = await this.resolveUnlocks(state.currentTrack, rank);
-    const unlocked = new Set([...(state.unlockedFeaturesJson ?? []), ...unlocks.features]);
+    const unlocked = new Set([
+      ...(state.unlockedFeaturesJson ?? []),
+      ...unlocks.features,
+    ]);
     const unlockedEngines = new Set([
       ...(state.unlockedEnginesJson ?? []),
       ...unlocks.engines,
@@ -163,14 +177,20 @@ export class ProgressionService {
     switch (simulationType) {
       case SimulationType.MONTE_CARLO:
       case SimulationType.CUSTOM:
-        params.iterations = this.clampInt(this.number(params.iterations, 3_500) * scale, 500, 220_000);
+        params.iterations = this.clampInt(
+          this.number(params.iterations, 3_500) * scale,
+          500,
+          220_000,
+        );
         params.scenarioBranchDepth = this.clampInt(
-          this.number(params.scenarioBranchDepth, 2) + Math.floor(state.explanationDepth / 2),
+          this.number(params.scenarioBranchDepth, 2) +
+            Math.floor(state.explanationDepth / 2),
           2,
           5,
         );
         params.riskCurveWindows = this.clampInt(
-          this.number(params.riskCurveWindows, 16) + state.visualizationRichness * 4,
+          this.number(params.riskCurveWindows, 16) +
+            state.visualizationRichness * 4,
           8,
           64,
         );
@@ -186,12 +206,24 @@ export class ProgressionService {
         params.coalitionFormationEnabled =
           state.currentTrack === ProgressionTrack.GAME_THEORY_SPECIALIST ||
           state.currentTrack === ProgressionTrack.STRATEGIST;
-        params.repeatedLearningRounds = this.clampInt(8 + state.visualizationRichness * 6, 8, 36);
-        params.reputationDecay = Number(this.clamp(0.03 + state.explanationDepth * 0.02, 0.02, 0.2).toFixed(4));
+        params.repeatedLearningRounds = this.clampInt(
+          8 + state.visualizationRichness * 6,
+          8,
+          36,
+        );
+        params.reputationDecay = Number(
+          this.clamp(0.03 + state.explanationDepth * 0.02, 0.02, 0.2).toFixed(
+            4,
+          ),
+        );
         break;
 
       case SimulationType.MARKET:
-        params.paths = this.clampInt(this.number(params.paths, 80) * scale, 20, 4_000);
+        params.paths = this.clampInt(
+          this.number(params.paths, 80) * scale,
+          20,
+          4_000,
+        );
         params.timeHorizonDays = this.clampInt(
           this.number(params.timeHorizonDays, 160) * (0.85 + scale / 2),
           30,
@@ -200,18 +232,37 @@ export class ProgressionService {
         params.regimeSwitching = true;
         params.sentimentModeling = true;
         params.shockEventProbability = Number(
-          this.clamp(this.number(params.shockEventProbability, 0.012) + state.visualizationRichness * 0.002, 0, 0.08).toFixed(4),
+          this.clamp(
+            this.number(params.shockEventProbability, 0.012) +
+              state.visualizationRichness * 0.002,
+            0,
+            0.08,
+          ).toFixed(4),
         );
-        params.shockMagnitude = Number(this.clamp(this.number(params.shockMagnitude, 0.06), 0.02, 0.4).toFixed(4));
+        params.shockMagnitude = Number(
+          this.clamp(
+            this.number(params.shockMagnitude, 0.06),
+            0.02,
+            0.4,
+          ).toFixed(4),
+        );
         break;
 
       case SimulationType.CONFLICT:
-        params.rounds = this.clampInt(this.number(params.rounds, 120) * scale, 20, 3_000);
-        params.alliances = Array.isArray(params.alliances) ? params.alliances : params.coalitions;
+        params.rounds = this.clampInt(
+          this.number(params.rounds, 120) * scale,
+          20,
+          3_000,
+        );
+        params.alliances = Array.isArray(params.alliances)
+          ? params.alliances
+          : params.coalitions;
         params.betrayalSensitivity = Number(
           this.clamp(
             this.number(params.betrayalSensitivity, 0.5) +
-              (state.currentTrack === ProgressionTrack.CHAOS_CONFLICT_ANALYST ? 0.12 : 0),
+              (state.currentTrack === ProgressionTrack.CHAOS_CONFLICT_ANALYST
+                ? 0.12
+                : 0),
             0.05,
             0.95,
           ).toFixed(3),
@@ -227,7 +278,9 @@ export class ProgressionService {
 
   async getSkillTree(track?: ProgressionTrack): Promise<SkillTreeNode[]> {
     if (!track) {
-      return this.skillTreeRepo.find({ order: { unlockLevel: 'ASC', key: 'ASC' } });
+      return this.skillTreeRepo.find({
+        order: { unlockLevel: 'ASC', key: 'ASC' },
+      });
     }
 
     return this.skillTreeRepo.find({
@@ -236,22 +289,37 @@ export class ProgressionService {
     });
   }
 
-  async upsertSkillTreeNodes(nodes: Array<Partial<SkillTreeNode>>): Promise<void> {
+  async upsertSkillTreeNodes(
+    nodes: Array<Partial<SkillTreeNode>>,
+  ): Promise<void> {
     for (const node of nodes) {
       if (!node.key || !node.track || !node.name || !node.description) {
-        throw new NotFoundException('Skill tree node is missing required fields');
+        throw new NotFoundException(
+          'Skill tree node is missing required fields',
+        );
       }
 
-      const existing = await this.skillTreeRepo.findOne({ where: { key: node.key } });
+      const existing = await this.skillTreeRepo.findOne({
+        where: { key: node.key },
+      });
       if (existing) {
         existing.track = node.track;
         existing.name = node.name;
         existing.description = node.description;
-        existing.unlockLevel = this.clampInt(node.unlockLevel ?? existing.unlockLevel, 1, 100);
+        existing.unlockLevel = this.clampInt(
+          node.unlockLevel ?? existing.unlockLevel,
+          1,
+          100,
+        );
         existing.engineUnlock = node.engineUnlock ?? existing.engineUnlock;
-        existing.aiStyleModifierJson = node.aiStyleModifierJson ?? existing.aiStyleModifierJson;
+        existing.aiStyleModifierJson =
+          node.aiStyleModifierJson ?? existing.aiStyleModifierJson;
         existing.uiComplexityModifier = Number(
-          this.clamp(node.uiComplexityModifier ?? existing.uiComplexityModifier, -3, 3).toFixed(3),
+          this.clamp(
+            node.uiComplexityModifier ?? existing.uiComplexityModifier,
+            -3,
+            3,
+          ).toFixed(3),
         );
         await this.skillTreeRepo.save(existing);
         continue;
@@ -266,7 +334,9 @@ export class ProgressionService {
           unlockLevel: this.clampInt(node.unlockLevel ?? 1, 1, 100),
           engineUnlock: node.engineUnlock ?? null,
           aiStyleModifierJson: node.aiStyleModifierJson ?? null,
-          uiComplexityModifier: Number(this.clamp(node.uiComplexityModifier ?? 0, -3, 3).toFixed(3)),
+          uiComplexityModifier: Number(
+            this.clamp(node.uiComplexityModifier ?? 0, -3, 3).toFixed(3),
+          ),
         }),
       );
     }
@@ -280,9 +350,15 @@ export class ProgressionService {
     return found?.label ?? 'Analyst';
   }
 
-  private recommendNextSimulation(trackExperience: Record<ProgressionTrack, number>): SimulationType {
-    const entries = Object.entries(trackExperience) as Array<[ProgressionTrack, number]>;
-    const lowest = entries.sort((a, b) => a[1] - b[1])[0]?.[0] ?? ProgressionTrack.STRATEGIST;
+  private recommendNextSimulation(
+    trackExperience: Record<ProgressionTrack, number>,
+  ): SimulationType {
+    const entries = Object.entries(trackExperience) as Array<
+      [ProgressionTrack, number]
+    >;
+    const lowest =
+      entries.sort((a, b) => a[1] - b[1])[0]?.[0] ??
+      ProgressionTrack.STRATEGIST;
     return TRACK_SIMULATION_MAP[lowest];
   }
 
@@ -294,7 +370,9 @@ export class ProgressionService {
     const baseEngines = this.staticEngineUnlocks(track, rank);
 
     const dynamicNodes = await this.skillTreeRepo.find({ where: { track } });
-    const unlockedNodes = dynamicNodes.filter((node) => rank >= node.unlockLevel);
+    const unlockedNodes = dynamicNodes.filter(
+      (node) => rank >= node.unlockLevel,
+    );
 
     return {
       features: [
@@ -310,7 +388,10 @@ export class ProgressionService {
     };
   }
 
-  private staticFeatureUnlocks(track: ProgressionTrack, rank: number): string[] {
+  private staticFeatureUnlocks(
+    track: ProgressionTrack,
+    rank: number,
+  ): string[] {
     const featureMap: Record<ProgressionTrack, string[]> = {
       [ProgressionTrack.STRATEGIST]: [
         'mission_briefing',
@@ -408,7 +489,9 @@ export class ProgressionService {
   }
 
   private number(value: unknown, fallback: number): number {
-    return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
+    return typeof value === 'number' && Number.isFinite(value)
+      ? value
+      : fallback;
   }
 
   private clamp(value: number, min: number, max: number): number {

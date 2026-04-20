@@ -78,7 +78,9 @@ export class SimulationEngineService {
         );
 
       default:
-        throw new BadRequestException(`Unsupported simulation type: ${type}`);
+        throw new BadRequestException(
+          `Unsupported simulation type: ${type as string}`,
+        );
     }
   }
 
@@ -103,7 +105,7 @@ export class SimulationEngineService {
   private cast<T>(params: Record<string, unknown>, type: SimulationType): T {
     if (!params || Object.keys(params).length === 0) {
       throw new BadRequestException(
-        `parameters are required for ${type} simulation`,
+        `parameters are required for ${type as string} simulation`,
       );
     }
     return params as unknown as T;

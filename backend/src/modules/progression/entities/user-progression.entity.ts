@@ -32,7 +32,12 @@ export class UserProgression {
   })
   currentTrack: ProgressionTrack;
 
-  @Column({ name: 'track_experience_json', type: 'jsonb', nullable: false, default: {} })
+  @Column({
+    name: 'track_experience_json',
+    type: 'jsonb',
+    nullable: false,
+    default: {},
+  })
   trackExperienceJson: Record<string, number>;
 
   @Column({ name: 'skill_points', type: 'int', default: 0 })
@@ -44,10 +49,20 @@ export class UserProgression {
   @Column({ name: 'intelligence_rank_label', length: 80, default: 'Analyst' })
   intelligenceRankLabel: string;
 
-  @Column({ name: 'unlocked_engines_json', type: 'jsonb', nullable: false, default: [] })
+  @Column({
+    name: 'unlocked_engines_json',
+    type: 'jsonb',
+    nullable: false,
+    default: [],
+  })
   unlockedEnginesJson: string[];
 
-  @Column({ name: 'unlocked_features_json', type: 'jsonb', nullable: false, default: [] })
+  @Column({
+    name: 'unlocked_features_json',
+    type: 'jsonb',
+    nullable: false,
+    default: [],
+  })
   unlockedFeaturesJson: string[];
 
   @Column({ name: 'behavior_style', length: 64, default: 'balanced' })

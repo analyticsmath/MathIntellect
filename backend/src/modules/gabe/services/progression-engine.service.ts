@@ -39,7 +39,10 @@ const MILESTONES: LevelMilestone[] = [
   {
     level: 50,
     title: 'Simulation Expert',
-    unlocks: ['Expert-level complexity orchestration', 'Sensitivity analysis dashboards'],
+    unlocks: [
+      'Expert-level complexity orchestration',
+      'Sensitivity analysis dashboards',
+    ],
   },
   {
     level: 75,
@@ -95,9 +98,12 @@ export class ProgressionEngineService {
     const boundedXp = Math.max(0, xp);
     const xpSignal = 1 + Math.pow(boundedXp / 75, 0.58);
     const skillAssist = Math.max(0, skillProfile.skill_level - 20) / 65;
-    const consistencyAssist = Math.max(0, skillProfile.consistency_score - 40) / 120;
+    const consistencyAssist =
+      Math.max(0, skillProfile.consistency_score - 40) / 120;
 
-    return this.clampLevel(Math.round(xpSignal + skillAssist + consistencyAssist));
+    return this.clampLevel(
+      Math.round(xpSignal + skillAssist + consistencyAssist),
+    );
   }
 
   private levelProgress(level: number): {
@@ -106,7 +112,9 @@ export class ProgressionEngineService {
     nextTitle: string | null;
   } {
     const ordered = [...MILESTONES].sort((a, b) => a.level - b.level);
-    const currentIndex = ordered.findLastIndex((milestone) => milestone.level <= level);
+    const currentIndex = ordered.findLastIndex(
+      (milestone) => milestone.level <= level,
+    );
 
     if (currentIndex < 0 || currentIndex === ordered.length - 1) {
       return {
@@ -130,8 +138,9 @@ export class ProgressionEngineService {
   }
 
   private resolveUnlockedFeatures(level: number): string[] {
-    const unlocked = MILESTONES.filter((milestone) => milestone.level <= level)
-      .flatMap((milestone) => milestone.unlocks);
+    const unlocked = MILESTONES.filter(
+      (milestone) => milestone.level <= level,
+    ).flatMap((milestone) => milestone.unlocks);
 
     return [...new Set(unlocked)];
   }

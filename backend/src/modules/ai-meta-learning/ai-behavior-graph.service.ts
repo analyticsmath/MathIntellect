@@ -88,29 +88,56 @@ export class AiBehaviorGraphService {
       };
     }
 
-    const riskWindow = [...(graph.riskTrajectory ?? []), this.clamp(input.riskScore, 0, 100)].slice(-20);
+    const riskWindow = [
+      ...(graph.riskTrajectory ?? []),
+      this.clamp(input.riskScore, 0, 100),
+    ].slice(-20);
     graph.riskTrajectory = riskWindow;
 
     graph.enginePreferenceGraph = {
       ...graph.enginePreferenceGraph,
       [simulationType]:
-        ((graph.enginePreferenceGraph[simulationType] ?? input.performanceScore) + input.performanceScore) /
+        ((graph.enginePreferenceGraph[simulationType] ??
+          input.performanceScore) +
+          input.performanceScore) /
         2,
     };
 
-    const explorationRatio = input.explorationRatio ?? (previousSimulationType !== simulationType ? 0.8 : 0.2);
-    graph.explorationRatio = graph.explorationRatio * 0.85 + this.clamp(explorationRatio, 0, 1) * 0.15;
+    const explorationRatio =
+      input.explorationRatio ??
+      (previousSimulationType !== simulationType ? 0.8 : 0.2);
+    graph.explorationRatio =
+      graph.explorationRatio * 0.85 + this.clamp(explorationRatio, 0, 1) * 0.15;
     graph.exploitationRatio = 1 - graph.explorationRatio;
 
-    graph.aiAdaptationCurve = [...(graph.aiAdaptationCurve ?? []), this.clamp(input.performanceScore, 0, 100)].slice(-10);
+    graph.aiAdaptationCurve = [
+      ...(graph.aiAdaptationCurve ?? []),
+      this.clamp(input.performanceScore, 0, 100),
+    ].slice(-10);
 
     graph.nodeSkillLevel = Number(
-      (graph.nodeSkillLevel * 0.7 + this.clamp(input.skillLevel ?? input.performanceScore, 0, 100) * 0.3).toFixed(4),
+      (
+        graph.nodeSkillLevel * 0.7 +
+        this.clamp(input.skillLevel ?? input.performanceScore, 0, 100) * 0.3
+      ).toFixed(4),
     );
     graph.nodeStrategyType = input.behaviorType;
-    graph.nodeRiskProfile = Number((graph.nodeRiskProfile * 0.75 + this.clamp(input.riskScore, 0, 100) * 0.25).toFixed(4));
+    graph.nodeRiskProfile = Number(
+      (
+        graph.nodeRiskProfile * 0.75 +
+        this.clamp(input.riskScore, 0, 100) * 0.25
+      ).toFixed(4),
+    );
     graph.nodeEngagementScore = Number(
-      (graph.nodeEngagementScore * 0.7 + this.clamp(input.engagementScore ?? input.learningVelocity ?? 50, 0, 100) * 0.3).toFixed(4),
+      (
+        graph.nodeEngagementScore * 0.7 +
+        this.clamp(
+          input.engagementScore ?? input.learningVelocity ?? 50,
+          0,
+          100,
+        ) *
+          0.3
+      ).toFixed(4),
     );
 
     graph.totalSimulations += 1;
@@ -144,8 +171,10 @@ export class AiBehaviorGraphService {
 
     return {
       userId,
-      intelligenceSummary: graph.intelligenceSummary ?? this.buildSummary(graph),
-      behavior_summary: graph.behaviorSummary ?? this.buildBehaviorSummary(graph),
+      intelligenceSummary:
+        graph.intelligenceSummary ?? this.buildSummary(graph),
+      behavior_summary:
+        graph.behaviorSummary ?? this.buildBehaviorSummary(graph),
       drift_direction: graph.driftDirection,
       recommended_next_strategy:
         graph.recommendedNextStrategy ?? this.recommendNextStrategy(graph),
@@ -188,7 +217,8 @@ export class AiBehaviorGraphService {
   ): 'increasing' | 'decreasing' | 'stable' {
     if (trajectory.length < 3) return 'stable';
     const half = Math.floor(trajectory.length / 2);
-    const firstHalfAvg = trajectory.slice(0, half).reduce((a, b) => a + b, 0) / half;
+    const firstHalfAvg =
+      trajectory.slice(0, half).reduce((a, b) => a + b, 0) / half;
     const secondHalfAvg =
       trajectory.slice(half).reduce((a, b) => a + b, 0) /
       Math.max(1, trajectory.length - half);
@@ -212,7 +242,10 @@ export class AiBehaviorGraphService {
       return 'reduce variance and run a stability-focused scenario next';
     }
 
-    if (graph.driftDirection === 'decreasing' && graph.nodeEngagementScore < 45) {
+    if (
+      graph.driftDirection === 'decreasing' &&
+      graph.nodeEngagementScore < 45
+    ) {
       return 'increase challenge gradually with one higher-complexity branch';
     }
 

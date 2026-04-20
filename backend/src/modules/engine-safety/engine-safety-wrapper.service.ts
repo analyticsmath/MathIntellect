@@ -131,7 +131,10 @@ export class EngineSafetyWrapperService {
         if (!Array.isArray(params.variables) || params.variables.length === 0) {
           return 'variables array is required';
         }
-        if (!params.outputExpression || typeof params.outputExpression !== 'string') {
+        if (
+          !params.outputExpression ||
+          typeof params.outputExpression !== 'string'
+        ) {
           return 'outputExpression is required';
         }
         break;
@@ -175,7 +178,9 @@ export class EngineSafetyWrapperService {
 
     const inputError = this.validateInput(type, params);
     if (inputError) {
-      this.logger.warn(`Safety: input validation failed for ${type}: ${inputError}`);
+      this.logger.warn(
+        `Safety: input validation failed for ${type}: ${inputError}`,
+      );
       return this.degradedResult(
         type,
         {
@@ -298,19 +303,22 @@ export class EngineSafetyWrapperService {
 
   private memoryCapBytes(): number {
     const fromEnv = Number(process.env.ENGINE_MEMORY_CAP_MB);
-    const capMb = Number.isFinite(fromEnv) && fromEnv > 0
-      ? fromEnv
-      : DEFAULT_ENGINE_MEMORY_CAP_MB;
+    const capMb =
+      Number.isFinite(fromEnv) && fromEnv > 0
+        ? fromEnv
+        : DEFAULT_ENGINE_MEMORY_CAP_MB;
 
     return Math.floor(capMb * 1024 * 1024);
   }
 
   private getFallback(type: string): Record<string, unknown> {
-    return FALLBACK_RESULTS[type] ?? {
-      type,
-      executionTimeMs: 0,
-      fallback: true,
-    };
+    return (
+      FALLBACK_RESULTS[type] ?? {
+        type,
+        executionTimeMs: 0,
+        fallback: true,
+      }
+    );
   }
 
   private estimateSize(payload: unknown): number {

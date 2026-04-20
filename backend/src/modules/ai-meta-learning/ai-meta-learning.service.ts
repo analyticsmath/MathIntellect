@@ -66,11 +66,14 @@ export class AiMetaLearningService {
   ): Promise<AiBehaviorProfile> {
     const profile = await this.getOrCreate(userId);
 
-    const preferences = this.normalizePreferenceMap(profile.simulationPreferenceJson);
+    const preferences = this.normalizePreferenceMap(
+      profile.simulationPreferenceJson,
+    );
     for (const key of Object.keys(preferences)) {
       preferences[key] *= 0.92;
     }
-    preferences[input.simulationType] += 8 + this.clamp(input.performanceScore / 14, 0, 9);
+    preferences[input.simulationType] +=
+      8 + this.clamp(input.performanceScore / 14, 0, 9);
 
     const consistencyDrift = this.clamp(
       profile.consistencyDrift * 0.68 +
@@ -96,7 +99,11 @@ export class AiMetaLearningService {
       100,
     );
 
-    const clusterLabel = this.classifyCluster(input, stagnationScore, consistencyDrift);
+    const clusterLabel = this.classifyCluster(
+      input,
+      stagnationScore,
+      consistencyDrift,
+    );
     const explanationStyle = this.resolveExplanationStyle(
       stagnationScore,
       consistencyDrift,
@@ -136,11 +143,13 @@ export class AiMetaLearningService {
 
   async getPromptTuning(userId: string): Promise<PromptTuningProfile> {
     const profile = await this.getOrCreate(userId);
-    const preferences = this.normalizePreferenceMap(profile.simulationPreferenceJson);
+    const preferences = this.normalizePreferenceMap(
+      profile.simulationPreferenceJson,
+    );
 
-    const preferredSimulationType = (Object.entries(preferences)
-      .sort((a, b) => b[1] - a[1])[0]?.[0] ??
-      SimulationType.MONTE_CARLO) as SimulationType;
+    const preferredSimulationType = (Object.entries(preferences).sort(
+      (a, b) => b[1] - a[1],
+    )[0]?.[0] ?? SimulationType.MONTE_CARLO) as SimulationType;
 
     const explanationStyle =
       profile.explanationStyle === 'concise' ||

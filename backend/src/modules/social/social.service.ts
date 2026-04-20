@@ -19,7 +19,10 @@ import { ShareSimulationDto } from './dto/share-simulation.dto';
 import { FeedQueryDto } from './dto/feed-query.dto';
 import { CommentDto } from './dto/comment.dto';
 import { ForkSimulationDto } from './dto/fork-simulation.dto';
-import { FeedRankingService, RankedFeedItem } from '../feed-ranking/feed-ranking.service';
+import {
+  FeedRankingService,
+  RankedFeedItem,
+} from '../feed-ranking/feed-ranking.service';
 
 interface FeedCursor {
   createdAt: Date;
@@ -74,7 +77,10 @@ export class SocialService {
       latestResult?.outcomeData ?? null,
     );
 
-    const preview = this.buildPreview(simulation, latestResult?.outcomeData ?? null);
+    const preview = this.buildPreview(
+      simulation,
+      latestResult?.outcomeData ?? null,
+    );
 
     const post = this.sharedRepo.create({
       simulationId: simulation.id,
@@ -275,7 +281,11 @@ export class SocialService {
       case SimulationType.CONFLICT: {
         const cooperation = this.number(payload.cooperationRate, 0) * 100;
         const rounds = this.number(payload.rounds, 0);
-        return this.clamp(35 + cooperation * 0.55 + Math.min(20, rounds / 20), 0, 100);
+        return this.clamp(
+          35 + cooperation * 0.55 + Math.min(20, rounds / 20),
+          0,
+          100,
+        );
       }
       default:
         return 50;
@@ -285,7 +295,8 @@ export class SocialService {
   private buildInsightSummary(
     type: SimulationType,
     performanceScore: number,
-    payload: Record<string, unknown> | null,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _payload: Record<string, unknown> | null,
   ): string {
     const scoreTag =
       performanceScore >= 72
@@ -431,7 +442,7 @@ export class SocialService {
     };
   }
 
-  private feedColor(type: string): string {
+  private feedColor(type: SimulationType): string {
     switch (type) {
       case SimulationType.MONTE_CARLO:
       case SimulationType.CUSTOM:
@@ -468,7 +479,9 @@ export class SocialService {
   }
 
   private number(value: unknown, fallback: number): number {
-    return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
+    return typeof value === 'number' && Number.isFinite(value)
+      ? value
+      : fallback;
   }
 
   private clamp(value: number, min: number, max: number): number {

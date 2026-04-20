@@ -158,7 +158,10 @@ export class SimulationSnapshotService {
       const normalizedOutput = this.normalizeOutputForHash(input.finalOutput);
       const finalOutputHash = this.hashPayload(normalizedOutput);
 
-      existing.executionSteps = input.executionSteps as Record<string, unknown>[];
+      existing.executionSteps = input.executionSteps as Record<
+        string,
+        unknown
+      >[];
       existing.replaySteps = input.executionSteps as Record<string, unknown>[];
       existing.finalOutputHash = finalOutputHash;
       existing.checksum = finalOutputHash.slice(0, 64);
@@ -174,7 +177,9 @@ export class SimulationSnapshotService {
     }
   }
 
-  async findBySimulation(simulationId: string): Promise<SimulationReplay | null> {
+  async findBySimulation(
+    simulationId: string,
+  ): Promise<SimulationReplay | null> {
     return this.replayRepo.findOne({ where: { simulationId } });
   }
 

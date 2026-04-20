@@ -1,11 +1,7 @@
 import { ConflictException } from '@nestjs/common';
 
 export class DeterminismViolationError extends ConflictException {
-  constructor(
-    simulationId: string,
-    expectedHash: string,
-    actualHash: string,
-  ) {
+  constructor(simulationId: string, expectedHash: string, actualHash: string) {
     super({
       message:
         'Determinism violation detected: replay output does not match original output.',

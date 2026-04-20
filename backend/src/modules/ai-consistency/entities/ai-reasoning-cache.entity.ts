@@ -42,7 +42,11 @@ export class AiReasoningCache {
   } | null;
 
   @Column({ name: 'source', type: 'varchar', length: 48, default: 'openai' })
-  source: 'cache' | 'openai' | 'deterministic_fallback' | 'static_safe_template';
+  source:
+    | 'cache'
+    | 'openai'
+    | 'deterministic_fallback'
+    | 'static_safe_template';
 
   @Column({ name: 'latency_ms', type: 'int', nullable: true })
   latencyMs: number | null;

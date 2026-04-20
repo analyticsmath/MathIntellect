@@ -1,4 +1,10 @@
-import { Controller, Get, Param, ParseUUIDPipe, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  UseGuards,
+} from '@nestjs/common';
 import { SimulationReplayEngine } from './simulation-replay.engine';
 import { SimulationSnapshotService } from './simulation-snapshot.service';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';

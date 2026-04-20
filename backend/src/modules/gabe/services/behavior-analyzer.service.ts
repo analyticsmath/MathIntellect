@@ -38,7 +38,8 @@ export class BehaviorAnalyzerService {
     const strategyChanges = Math.max(0, behavior?.strategyChanges ?? 0);
 
     const explorationRatio = this.clamp(
-      behavior?.explorationRatio ?? this.estimateExploration(adjustments, reruns),
+      behavior?.explorationRatio ??
+        this.estimateExploration(adjustments, reruns),
       0,
       1,
     );
@@ -133,10 +134,7 @@ export class BehaviorAnalyzerService {
     return 'focused_strategist';
   }
 
-  private estimateExploration(
-    adjustments: number,
-    reruns: number,
-  ): number {
+  private estimateExploration(adjustments: number, reruns: number): number {
     const value = 0.35 + adjustments * 0.03 - reruns * 0.04;
     return this.clamp(value, 0.05, 0.95);
   }

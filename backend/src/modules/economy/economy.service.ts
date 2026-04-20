@@ -35,9 +35,15 @@ export class EconomyService {
   computeReward(input: EconomyRewardInput): EconomyRewardOutput {
     const baseXp = Math.max(0, Math.round(input.baseXp));
 
-    const noveltyBonus = this.clamp((input.noveltyScore - 50) / 240, -0.12, 0.28);
+    const noveltyBonus = this.clamp(
+      (input.noveltyScore - 50) / 240,
+      -0.12,
+      0.28,
+    );
     const highRiskBonus =
-      input.riskScore >= 70 ? this.clamp((input.riskScore - 68) / 210, 0, 0.22) : 0;
+      input.riskScore >= 70
+        ? this.clamp((input.riskScore - 68) / 210, 0, 0.22)
+        : 0;
     const smartDecisionBonus = this.clamp(
       (input.accuracyScore - 45) / 220 + (input.improvementScore - 50) / 260,
       -0.18,
@@ -79,7 +85,9 @@ export class EconomyService {
     const levelSignal = this.clamp(level, 1, 100) / 125;
     const xpSignal = Math.log10(Math.max(10, xp + 10)) / 7;
 
-    return Number(this.clamp(0.88 + levelSignal + xpSignal, 0.85, 1.95).toFixed(4));
+    return Number(
+      this.clamp(0.88 + levelSignal + xpSignal, 0.85, 1.95).toFixed(4),
+    );
   }
 
   async recordTransaction(input: {

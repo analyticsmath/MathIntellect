@@ -18,9 +18,7 @@ export class ReplayV1Controller {
 
   // Required Phase 6 endpoint: GET /api/v1/replay/:simulationId
   @Get(':simulationId')
-  async getReplay(
-    @Param('simulationId', ParseUUIDPipe) simulationId: string,
-  ) {
+  async getReplay(@Param('simulationId', ParseUUIDPipe) simulationId: string) {
     return this.replayEngine.replay(simulationId);
   }
 

@@ -51,7 +51,7 @@ export class AppLogger implements LoggerService {
       const color =
         this.COLORS[level as keyof typeof this.COLORS] ?? '\x1b[37m';
       const ctx = context ? `[${context}] ` : '';
-      const line = `${color}[${level.toUpperCase()}]${this.RESET} ${ts} ${ctx}${message}`;
+      const line = `${color}[${level.toUpperCase()}]${this.RESET} ${ts} ${ctx}${String(message)}`;
       if (level === 'error') {
         console.error(line, trace ? `\n${trace}` : '');
       } else {
@@ -76,6 +76,7 @@ export class AppLogger implements LoggerService {
     this.write('verbose', message, context);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setLogLevels?(_levels: LogLevel[]) {
     /* honour NestJS contract */
   }

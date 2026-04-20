@@ -91,12 +91,13 @@ export class AiCoachService {
       }
     }
 
-    const [userState, progression, metaTuning, behaviorGraph] = await Promise.all([
-      this.userStateService.getState(userId),
-      this.progressionService.getPromptAdaptation(userId),
-      this.metaLearningService.getPromptTuning(userId),
-      this.behaviorGraphService.getProfile(userId),
-    ]);
+    const [userState, progression, metaTuning, behaviorGraph] =
+      await Promise.all([
+        this.userStateService.getState(userId),
+        this.progressionService.getPromptAdaptation(userId),
+        this.metaLearningService.getPromptTuning(userId),
+        this.behaviorGraphService.getProfile(userId),
+      ]);
 
     const context = dto.simulationId
       ? await this.contextService.getContext(dto.simulationId)
@@ -129,7 +130,10 @@ export class AiCoachService {
       context?.simulation_type,
     );
 
-    const blueprint = this.buildBlueprint(nextType, difficultyAdjustment.direction);
+    const blueprint = this.buildBlueprint(
+      nextType,
+      difficultyAdjustment.direction,
+    );
 
     const reasoning = [
       `Profile cluster: ${metaTuning.clusterLabel}; explanation style: ${metaTuning.explanationStyle}.`,
@@ -189,7 +193,9 @@ export class AiCoachService {
     if (stagnation > 68 || performance < 42) {
       return {
         direction: 'decrease',
-        magnitude: Number(this.clamp((stagnation - performance) / 38, 0.1, 0.9).toFixed(3)),
+        magnitude: Number(
+          this.clamp((stagnation - performance) / 38, 0.1, 0.9).toFixed(3),
+        ),
         rationale:
           'High stagnation and low consistency indicate cognitive overload. Reduce simulation complexity temporarily.',
       };
@@ -198,7 +204,9 @@ export class AiCoachService {
     if (performance > 66 && stagnation < 45 && explanationDepth !== 'concise') {
       return {
         direction: 'increase',
-        magnitude: Number(this.clamp((performance - stagnation) / 55, 0.12, 1).toFixed(3)),
+        magnitude: Number(
+          this.clamp((performance - stagnation) / 55, 0.12, 1).toFixed(3),
+        ),
         rationale:
           'Strong consistency and low stagnation suggest readiness for more complex branching and uncertainty depth.',
       };
@@ -278,7 +286,10 @@ export class AiCoachService {
             'Model trust stability and betrayal pressure under multi-agent conflict dynamics.',
           parameters: {
             rounds: adjustment === 'increase' ? 340 : 160,
-            alliances: [['a1', 'a2'], ['a3', 'a4']],
+            alliances: [
+              ['a1', 'a2'],
+              ['a3', 'a4'],
+            ],
             betrayalSensitivity: adjustment === 'decrease' ? 0.36 : 0.58,
           },
         };

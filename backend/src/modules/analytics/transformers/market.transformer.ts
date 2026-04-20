@@ -183,9 +183,7 @@ export class MarketTransformer {
         `VaR₉₅ = $${r.valueAtRisk95.toFixed(2)}`,
         `Max Drawdown = ${(r.maxDrawdown * 100).toFixed(1)}%`,
         ...(r.detectedRegimes && r.detectedRegimes.length > 0
-          ? [
-              `Regimes detected across ${r.detectedRegimes.length} days`,
-            ]
+          ? [`Regimes detected across ${r.detectedRegimes.length} days`]
           : []),
         `${r.finalPrices.length} simulated paths`,
       ],

@@ -41,7 +41,9 @@ export class UserIntelligenceProfileService {
     const profile = await this.getOrCreateProfile(userId);
 
     const skillProfile = normalizeSkillProfile(profile.intelligenceProfileJson);
-    const engagementState = normalizeEngagementState(profile.engagementStateJson);
+    const engagementState = normalizeEngagementState(
+      profile.engagementStateJson,
+    );
 
     return {
       profile,
@@ -58,7 +60,9 @@ export class UserIntelligenceProfileService {
     profile.xp = Math.max(0, Math.round(input.xpAfter));
     profile.level = Math.max(1, Math.min(100, Math.round(input.levelAfter)));
     profile.intelligenceProfileJson = normalizeSkillProfile(input.skillProfile);
-    profile.engagementStateJson = normalizeEngagementState(input.engagementState);
+    profile.engagementStateJson = normalizeEngagementState(
+      input.engagementState,
+    );
     profile.lastBehaviorTag = input.behaviorTag;
 
     return this.profileRepo.save(profile);
@@ -86,7 +90,9 @@ export class UserIntelligenceProfileService {
     userId: string,
   ): Promise<LastGamificationEventState | null> {
     const profile = await this.getOrCreateProfile(userId);
-    const engagementState = normalizeEngagementState(profile.engagementStateJson);
+    const engagementState = normalizeEngagementState(
+      profile.engagementStateJson,
+    );
     return engagementState.last_event;
   }
 

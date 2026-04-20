@@ -28,7 +28,12 @@ export class Profile {
   @Column({ name: 'avatar_url', type: 'text', nullable: true })
   avatarUrl: string | null;
 
-  @Column({ name: 'display_name', type: 'varchar', length: 120, nullable: true })
+  @Column({
+    name: 'display_name',
+    type: 'varchar',
+    length: 120,
+    nullable: true,
+  })
   displayName: string | null;
 
   @Column({ type: 'text', nullable: true })
@@ -60,7 +65,12 @@ export class Profile {
   })
   engagementStateJson: EngagementState | null;
 
-  @Column({ name: 'last_behavior_tag', type: 'varchar', length: 80, nullable: true })
+  @Column({
+    name: 'last_behavior_tag',
+    type: 'varchar',
+    length: 80,
+    nullable: true,
+  })
   lastBehaviorTag: string | null;
 
   @CreateDateColumn({ name: 'created_at' })

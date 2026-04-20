@@ -27,7 +27,11 @@ const STAGE_LABELS = [
 
 interface StreamState {
   sequence: number;
-  queue: Array<{ event: string; payload: Record<string, unknown>; dedupeKey: string }>;
+  queue: Array<{
+    event: string;
+    payload: Record<string, unknown>;
+    dedupeKey: string;
+  }>;
   dedupeKeys: string[];
   flushTimer: NodeJS.Timeout | null;
 }
@@ -50,7 +54,11 @@ export class SimulationStreamService {
     this.enqueue(simulationId, 'simulation:queued', this.asPayload(payload));
   }
 
-  emitExecutionStart(simulationId: string, engineType: string, seed: string): void {
+  emitExecutionStart(
+    simulationId: string,
+    engineType: string,
+    seed: string,
+  ): void {
     const payload: SimulationExecutionStartEvent = {
       simulationId,
       engineType,
@@ -115,24 +123,43 @@ export class SimulationStreamService {
   }
 
   // Legacy methods retained for existing frontend subscribers
-  emitStageUpdate(simulationId: string, stageIndex: number, engineType?: string): void {
+  emitStageUpdate(
+    simulationId: string,
+    stageIndex: number,
+    engineType?: string,
+  ): void {
     const idx = Math.max(0, Math.min(stageIndex - 1, STAGE_LABELS.length - 1));
     const event: SimulationStageUpdateEvent = {
       simulationId,
-      stage: (['initializing', 'sampling', 'computing', 'rendering', 'finalizing'] as const)[idx],
+      stage: (
+        [
+          'initializing',
+          'sampling',
+          'computing',
+          'rendering',
+          'finalizing',
+        ] as const
+      )[idx],
       stageIndex,
       totalStages: 5,
       label: STAGE_LABELS[idx],
       timestamp: new Date().toISOString(),
     };
-    this.enqueue(simulationId, 'simulation:stage_update', this.asPayload(event));
+    this.enqueue(
+      simulationId,
+      'simulation:stage_update',
+      this.asPayload(event),
+    );
 
     if (engineType) {
       this.emitAiThought(simulationId, engineType, stageIndex);
     }
   }
 
-  emitMetricStream(simulationId: string, partial: Record<string, number>): void {
+  emitMetricStream(
+    simulationId: string,
+    partial: Record<string, number>,
+  ): void {
     const event: SimulationMetricStreamEvent = {
       simulationId,
       metrics: partial,
@@ -146,9 +173,17 @@ export class SimulationStreamService {
     );
   }
 
-  emitAiThought(simulationId: string, engineType: string, stageIndex: number): void {
+  emitAiThought(
+    simulationId: string,
+    engineType: string,
+    stageIndex: number,
+  ): void {
     const phase: SimulationAiThoughtEvent['phase'] =
-      stageIndex <= 1 ? 'pre-analysis' : stageIndex >= 4 ? 'post-result' : 'mid-run';
+      stageIndex <= 1
+        ? 'pre-analysis'
+        : stageIndex >= 4
+          ? 'post-result'
+          : 'mid-run';
 
     const event: SimulationAiThoughtEvent = {
       simulationId,
@@ -223,7 +258,9 @@ export class SimulationStreamService {
     }
 
     if (coalesce) {
-      const existingIndex = state.queue.findIndex((item) => item.event === event);
+      const existingIndex = state.queue.findIndex(
+        (item) => item.event === event,
+      );
       if (existingIndex >= 0) {
         state.queue[existingIndex] = { event, payload, dedupeKey };
       } else {

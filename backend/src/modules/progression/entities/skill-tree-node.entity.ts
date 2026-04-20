@@ -33,7 +33,12 @@ export class SkillTreeNode {
   @Column({ name: 'unlock_level', type: 'int', default: 1 })
   unlockLevel: number;
 
-  @Column({ name: 'engine_unlock', type: 'varchar', length: 80, nullable: true })
+  @Column({
+    name: 'engine_unlock',
+    type: 'varchar',
+    length: 80,
+    nullable: true,
+  })
   engineUnlock: string | null;
 
   @Column({ name: 'ai_style_modifier_json', type: 'jsonb', nullable: true })

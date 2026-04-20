@@ -28,7 +28,12 @@ export class UserBehaviorGraph {
   @Column({ name: 'node_skill_level', type: 'float', default: 0 })
   nodeSkillLevel: number;
 
-  @Column({ name: 'node_strategy_type', type: 'varchar', length: 64, default: 'balanced' })
+  @Column({
+    name: 'node_strategy_type',
+    type: 'varchar',
+    length: 64,
+    default: 'balanced',
+  })
   nodeStrategyType: string;
 
   @Column({ name: 'node_risk_profile', type: 'float', default: 50 })
@@ -41,7 +46,12 @@ export class UserBehaviorGraph {
   @Column({ name: 'behavior_transitions', type: 'jsonb', default: '{}' })
   behaviorTransitions: Record<string, number>;
 
-  @Column({ name: 'drift_direction', type: 'varchar', length: 24, default: 'stable' })
+  @Column({
+    name: 'drift_direction',
+    type: 'varchar',
+    length: 24,
+    default: 'stable',
+  })
   driftDirection: 'increasing' | 'decreasing' | 'stable';
 
   @Column({ name: 'recommended_next_strategy', type: 'text', nullable: true })
@@ -72,10 +82,20 @@ export class UserBehaviorGraph {
   @Column({ name: 'total_simulations', type: 'int', default: 0 })
   totalSimulations: number;
 
-  @Column({ name: 'last_simulation_type', type: 'varchar', length: 64, nullable: true })
+  @Column({
+    name: 'last_simulation_type',
+    type: 'varchar',
+    length: 64,
+    nullable: true,
+  })
   lastSimulationType: string | null;
 
-  @Column({ name: 'last_behavior_type', type: 'varchar', length: 64, nullable: true })
+  @Column({
+    name: 'last_behavior_type',
+    type: 'varchar',
+    length: 64,
+    nullable: true,
+  })
   lastBehaviorType: string | null;
 
   @CreateDateColumn({ name: 'created_at' })

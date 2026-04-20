@@ -31,7 +31,7 @@ export class MonteCarloEngine {
     }
 
     const rng = this.buildRng(seed);
-    const samples: number[] = new Array(iterations);
+    const samples: number[] = new Array<number>(iterations);
     const tailRiskAmplifier =
       typeof params.tailRiskAmplifier === 'number' &&
       Number.isFinite(params.tailRiskAmplifier)
@@ -42,7 +42,11 @@ export class MonteCarloEngine {
       1,
       5,
     );
-    const riskCurveWindows = this.clampInt(params.riskCurveWindows ?? 20, 8, 80);
+    const riskCurveWindows = this.clampInt(
+      params.riskCurveWindows ?? 20,
+      8,
+      80,
+    );
 
     const normalVariableIndexes = variables
       .map((entry, index) => ({ distribution: entry.distribution, index }))
@@ -80,7 +84,11 @@ export class MonteCarloEngine {
               )
             : [];
 
-        for (let variableIndex = 0; variableIndex < variables.length; variableIndex++) {
+        for (
+          let variableIndex = 0;
+          variableIndex < variables.length;
+          variableIndex++
+        ) {
           const v = variables[variableIndex];
           const index = variableIndex;
           const normalPosition = normalIndexMap.get(index);
@@ -179,7 +187,7 @@ export class MonteCarloEngine {
         return rng() < (p.p ?? p.probability ?? 0.5) ? 1 : 0;
       default:
         throw new BadRequestException(
-          `Unknown distribution: ${v.distribution}`,
+          `Unknown distribution: ${v.distribution as string}`,
         );
     }
   }
@@ -194,11 +202,12 @@ export class MonteCarloEngine {
         String(value),
       );
     }
-    if (!/^[\d\s\.\+\-\*\/\(\)eE]+$/.test(resolved)) {
+    if (!/^[\d\s.+\-*/()eE]+$/u.test(resolved)) {
       throw new BadRequestException(`Unsafe expression: ${expr}`);
     }
     try {
-      return Function(`"use strict"; return (${resolved})`)() as number;
+      // eslint-disable-next-line @typescript-eslint/no-implied-eval, @typescript-eslint/no-unsafe-call
+      return new Function(`"use strict"; return (${resolved})`)() as number;
     } catch {
       throw new BadRequestException(`Cannot evaluate expression: ${expr}`);
     }
@@ -268,7 +277,8 @@ export class MonteCarloEngine {
       if (values.length === 0) return;
       const min = values[0];
       const max = values[values.length - 1];
-      const mean = values.reduce((sum, value) => sum + value, 0) / values.length;
+      const mean =
+        values.reduce((sum, value) => sum + value, 0) / values.length;
       branches.push({
         id,
         depth: currentDepth,
@@ -335,7 +345,8 @@ export class MonteCarloEngine {
     }
 
     if (points.at(-1)?.step !== samples.length) {
-      const mean = samples.reduce((sum, value) => sum + value, 0) / samples.length;
+      const mean =
+        samples.reduce((sum, value) => sum + value, 0) / samples.length;
       const variance =
         samples.reduce((sum, value) => sum + (value - mean) ** 2, 0) /
         samples.length;
@@ -343,7 +354,9 @@ export class MonteCarloEngine {
       points.push({
         step: samples.length,
         expectedValue: Number(mean.toFixed(6)),
-        riskScore: Number(this.clamp(std * 7.5 + Math.abs(mean) * 0.4, 0, 100).toFixed(4)),
+        riskScore: Number(
+          this.clamp(std * 7.5 + Math.abs(mean) * 0.4, 0, 100).toFixed(4),
+        ),
         lowerBand: Number((mean - 1.96 * std).toFixed(6)),
         upperBand: Number((mean + 1.96 * std).toFixed(6)),
       });
@@ -422,7 +435,9 @@ export class MonteCarloEngine {
     const n = matrix.length;
     if (n === 0) return null;
 
-    const lower = Array.from({ length: n }, () => Array(n).fill(0));
+    const lower: number[][] = Array.from({ length: n }, () =>
+      new Array<number>(n).fill(0),
+    );
 
     for (let i = 0; i < n; i++) {
       for (let j = 0; j <= i; j++) {
@@ -455,7 +470,7 @@ export class MonteCarloEngine {
     for (let row = 0; row < n; row++) {
       let value = 0;
       for (let col = 0; col <= row; col++) {
-        value += lower[row][col] * (vector[col] ?? 0);
+        value += (lower[row][col] ?? 0) * (vector[col] ?? 0);
       }
       result[row] = value;
     }

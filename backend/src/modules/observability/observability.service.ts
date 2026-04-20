@@ -145,7 +145,9 @@ export class ObservabilityService {
     }
 
     for (const engineType of Object.keys(engineBreakdown)) {
-      const engineLogs = logs.filter((entry) => entry.engineType === engineType);
+      const engineLogs = logs.filter(
+        (entry) => entry.engineType === engineType,
+      );
       const latencies = engineLogs
         .map((entry) => entry.executionTimeMs)
         .filter((value) => Number.isFinite(value))
@@ -163,7 +165,8 @@ export class ObservabilityService {
         p95LatencyMs: this.percentile(latencies, 95),
         avgLatencyMs:
           latencies.length > 0
-            ? latencies.reduce((sum, value) => sum + value, 0) / latencies.length
+            ? latencies.reduce((sum, value) => sum + value, 0) /
+              latencies.length
             : 0,
       };
     }
@@ -172,7 +175,8 @@ export class ObservabilityService {
     const p95LatencyMs = this.percentile(latencyValues, 95);
     const avgLatencyMs =
       latencyValues.length > 0
-        ? latencyValues.reduce((sum, value) => sum + value, 0) / latencyValues.length
+        ? latencyValues.reduce((sum, value) => sum + value, 0) /
+          latencyValues.length
         : 0;
 
     return {

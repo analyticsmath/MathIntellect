@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { AdaptDifficultyDto } from '../dto/adapt-difficulty.dto';
-import { SkillProfile, clampScore } from '../interfaces/skill-profile.interface';
+import {
+  SkillProfile,
+  clampScore,
+} from '../interfaces/skill-profile.interface';
 import { BehaviorAnalysisOutput } from './behavior-analyzer.service';
 import { SimulationType } from '../../simulations/entities/simulation.entity';
 
@@ -24,7 +27,10 @@ export class AdaptiveDifficultyService {
     skillProfile: SkillProfile,
     behavior: BehaviorAnalysisOutput,
   ): AdaptiveDifficultyResult {
-    const difficultyScore = this.computeDifficultySignal(skillProfile, behavior);
+    const difficultyScore = this.computeDifficultySignal(
+      skillProfile,
+      behavior,
+    );
     const modeLabel = this.modeFromScore(difficultyScore);
 
     const base = dto.parameters ?? {};
@@ -100,7 +106,10 @@ export class AdaptiveDifficultyService {
       160_000,
     );
 
-    if (typeof params.outputExpression !== 'string' || !params.outputExpression) {
+    if (
+      typeof params.outputExpression !== 'string' ||
+      !params.outputExpression
+    ) {
       const names = variables
         .map((entry) => (typeof entry.name === 'string' ? entry.name : null))
         .filter((entry): entry is string => Boolean(entry));
@@ -120,7 +129,7 @@ export class AdaptiveDifficultyService {
 
     const complexityFeatures: string[] = [
       `variables:${variables.length}`,
-      `iterations:${params.iterations}`,
+      `iterations:${String(params.iterations)}`,
     ];
 
     if (difficultyScore > 74 && normalVariableIndices.length >= 2) {
@@ -232,7 +241,9 @@ export class AdaptiveDifficultyService {
             : null;
         if (!entryStrategies) return false;
 
-        return players.every((player) => entryStrategies[player] === profile[player]);
+        return players.every(
+          (player) => entryStrategies[player] === profile[player],
+        );
       });
 
       if (found) {
@@ -241,7 +252,11 @@ export class AdaptiveDifficultyService {
 
       return {
         strategies: profile,
-        payoffs: this.generateSyntheticPayoff(profile, players, difficultyScore),
+        payoffs: this.generateSyntheticPayoff(
+          profile,
+          players,
+          difficultyScore,
+        ),
       };
     });
 
@@ -312,11 +327,10 @@ export class AdaptiveDifficultyService {
     params.paths = paths;
     params.timeHorizonDays = timeHorizonDays;
 
-    const assetTarget = difficultyScore < 52 ? 1 : this.clampInt(
-      Math.round(1 + difficultyScore / 30),
-      2,
-      5,
-    );
+    const assetTarget =
+      difficultyScore < 52
+        ? 1
+        : this.clampInt(Math.round(1 + difficultyScore / 30), 2, 5);
 
     const complexityFeatures = [`paths:${paths}`, `horizon:${timeHorizonDays}`];
 
@@ -338,7 +352,9 @@ export class AdaptiveDifficultyService {
       const correlationMatrix = Array.from({ length: assetTarget }, (_, row) =>
         Array.from({ length: assetTarget }, (_, col) => {
           if (row === col) return 1;
-          return Number((baseCorr * (1 - Math.abs(row - col) / assetTarget)).toFixed(3));
+          return Number(
+            (baseCorr * (1 - Math.abs(row - col) / assetTarget)).toFixed(3),
+          );
         }),
       );
 
@@ -359,8 +375,12 @@ export class AdaptiveDifficultyService {
 
     if (difficultyScore > 84) {
       params.volatilityClustering = true;
-      params.garchAlpha = Number((0.06 + (difficultyScore - 84) / 400).toFixed(4));
-      params.garchBeta = Number((0.84 - (difficultyScore - 84) / 420).toFixed(4));
+      params.garchAlpha = Number(
+        (0.06 + (difficultyScore - 84) / 400).toFixed(4),
+      );
+      params.garchBeta = Number(
+        (0.84 - (difficultyScore - 84) / 420).toFixed(4),
+      );
       complexityFeatures.push('volatility_clustering');
     }
 
@@ -436,14 +456,16 @@ export class AdaptiveDifficultyService {
     params.agents = finalizedAgents;
 
     params.rounds = this.clampInt(
-      Math.round(this.number(params.rounds, 120) * (0.85 + difficultyScore / 125)),
+      Math.round(
+        this.number(params.rounds, 120) * (0.85 + difficultyScore / 125),
+      ),
       20,
       1_500,
     );
 
     const complexityFeatures = [
       `agents:${targetAgents}`,
-      `rounds:${params.rounds}`,
+      `rounds:${String(params.rounds)}`,
     ];
 
     if (difficultyScore > 76 && targetAgents >= 4) {
@@ -500,7 +522,9 @@ export class AdaptiveDifficultyService {
   }
 
   private number(value: unknown, fallback: number): number {
-    return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
+    return typeof value === 'number' && Number.isFinite(value)
+      ? value
+      : fallback;
   }
 
   private clamp(value: number, min: number, max: number): number {
@@ -562,13 +586,10 @@ export class AdaptiveDifficultyService {
         ? 1.2
         : 0.45;
       const stabilityBonus = (cooperativeCount - aggressiveCount) * 0.35;
-      const complexityPulse = Math.sin((index + 1) * difficultyScore * 0.06) * 0.8;
+      const complexityPulse =
+        Math.sin((index + 1) * difficultyScore * 0.06) * 0.8;
       const value =
-        2.4 +
-        aggressionBias +
-        stabilityBonus +
-        complexityPulse +
-        index * 0.2;
+        2.4 + aggressionBias + stabilityBonus + complexityPulse + index * 0.2;
 
       payoff[player] = Number(value.toFixed(3));
     });

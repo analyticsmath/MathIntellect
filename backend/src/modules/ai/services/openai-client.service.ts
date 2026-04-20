@@ -100,7 +100,9 @@ export class OpenAIClientService {
 
         const latencyMs = Date.now() - startedAt;
         totalLatency += latencyMs;
-        this.logger.log(`OpenAI latency ${latencyMs}ms (attempt ${attempt + 1})`);
+        this.logger.log(
+          `OpenAI latency ${latencyMs}ms (attempt ${attempt + 1})`,
+        );
 
         const content = this.extractContent(response.data);
         const parsed = this.parseJsonPayload(content);

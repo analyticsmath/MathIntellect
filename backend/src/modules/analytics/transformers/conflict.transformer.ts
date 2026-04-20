@@ -98,8 +98,10 @@ export class ConflictTransformer {
         value:
           r.trustScores && Object.keys(r.trustScores).length > 0
             ? +(
-                Object.values(r.trustScores).reduce((sum, value) => sum + value, 0) /
-                Object.values(r.trustScores).length
+                Object.values(r.trustScores).reduce(
+                  (sum, value) => sum + value,
+                  0,
+                ) / Object.values(r.trustScores).length
               ).toFixed(3)
             : 0,
         format: 'number',

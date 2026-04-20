@@ -62,7 +62,13 @@ export class SimulationAdapterService {
         : ['tail_risk'];
 
     const highlightedMetrics = highSkill
-      ? ['expected_value', 'variance', 'sensitivity', 'tail_risk', 'stability_score']
+      ? [
+          'expected_value',
+          'variance',
+          'sensitivity',
+          'tail_risk',
+          'stability_score',
+        ]
       : lowSkill
         ? ['expected_value', 'risk_score']
         : ['expected_value', 'risk_score', 'stability_score'];

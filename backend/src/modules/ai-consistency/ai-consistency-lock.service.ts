@@ -40,7 +40,10 @@ export interface AiCacheStats {
   hitRate: number;
 }
 
-const DETERMINISTIC_FALLBACKS: Record<string, AiConsistencyRecord['responsePayload']> = {
+const DETERMINISTIC_FALLBACKS: Record<
+  string,
+  AiConsistencyRecord['responsePayload']
+> = {
   monte_carlo: {
     insight:
       'Deterministic fallback: variance sensitivity detected. Treat tails as first-class constraints.',
@@ -65,8 +68,7 @@ const DETERMINISTIC_FALLBACKS: Record<string, AiConsistencyRecord['responsePaylo
   conflict: {
     insight:
       'Deterministic fallback: alliance stability is sensitive to betrayal thresholds.',
-    recommendation:
-      'Tune trust decay and repeat with narrower perturbations.',
+    recommendation: 'Tune trust decay and repeat with narrower perturbations.',
     confidence_score: 59,
   },
 };
@@ -151,7 +153,9 @@ export class AiConsistencyLockService {
 
       return payload;
     } catch (err) {
-      this.logger.warn(`Cache read failed for ${cacheKey}: ${(err as Error).message}`);
+      this.logger.warn(
+        `Cache read failed for ${cacheKey}: ${(err as Error).message}`,
+      );
       return null;
     }
   }
@@ -230,7 +234,9 @@ export class AiConsistencyLockService {
         );
       }
     } catch (err) {
-      this.logger.warn(`Cache write failed for ${cacheKey}: ${(err as Error).message}`);
+      this.logger.warn(
+        `Cache write failed for ${cacheKey}: ${(err as Error).message}`,
+      );
     }
 
     return record;
@@ -299,7 +305,9 @@ export class AiConsistencyLockService {
 
   async purgeExpired(): Promise<number> {
     try {
-      const result = await this.cacheRepo.delete({ expiresAt: LessThan(new Date()) });
+      const result = await this.cacheRepo.delete({
+        expiresAt: LessThan(new Date()),
+      });
       return result.affected ?? 0;
     } catch {
       return 0;

@@ -20,7 +20,9 @@ export class SimulationFork {
   @Column({ name: 'post_id', type: 'uuid' })
   postId: string;
 
-  @ManyToOne(() => SharedSimulation, (post) => post.forks, { onDelete: 'CASCADE' })
+  @ManyToOne(() => SharedSimulation, (post) => post.forks, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'post_id' })
   post: SharedSimulation;
 

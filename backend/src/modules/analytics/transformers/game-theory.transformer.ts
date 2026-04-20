@@ -116,8 +116,10 @@ export class GameTheoryTransformer {
     });
     if (r.reputationScores) {
       const avgRep =
-        Object.values(r.reputationScores).reduce((sum, value) => sum + value, 0) /
-        Math.max(1, Object.keys(r.reputationScores).length);
+        Object.values(r.reputationScores).reduce(
+          (sum, value) => sum + value,
+          0,
+        ) / Math.max(1, Object.keys(r.reputationScores).length);
       keyMetrics.push({
         label: 'Avg Reputation',
         value: +avgRep.toFixed(2),

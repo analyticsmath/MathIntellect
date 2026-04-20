@@ -80,7 +80,9 @@ export class SimulationReplayEngine {
   }
 
   async replayRun(input: ReplayRunInput): Promise<ReplayResult> {
-    const snapshot = await this.snapshotService.findBySimulation(input.simulationId);
+    const snapshot = await this.snapshotService.findBySimulation(
+      input.simulationId,
+    );
 
     if (!snapshot) {
       throw new NotFoundException(
@@ -99,14 +101,18 @@ export class SimulationReplayEngine {
     return this.executeReplay(replaySnapshot);
   }
 
-  private async executeReplay(snapshot: SimulationReplay): Promise<ReplayResult> {
+  private async executeReplay(
+    snapshot: SimulationReplay,
+  ): Promise<ReplayResult> {
     const seed = String(snapshot.seed);
     const deterministicOptions =
       this.snapshotService.buildDeterministicOptions(seed);
 
     const engineType = snapshot.engineType ?? snapshot.simulationType;
     const replayParams = {
-      ...(snapshot.inputParametersSnapshot ?? snapshot.effectiveParameters ?? {}),
+      ...(snapshot.inputParametersSnapshot ??
+        snapshot.effectiveParameters ??
+        {}),
       deterministic: true,
       seed: Number(seed),
     } as Record<string, unknown>;
@@ -118,13 +124,18 @@ export class SimulationReplayEngine {
       executionSteps,
     );
 
-    const normalizedReplayOutput = this.snapshotService.normalizeOutputForHash(output);
-    const replayOutputHash = this.snapshotService.hashPayload(normalizedReplayOutput);
+    const normalizedReplayOutput =
+      this.snapshotService.normalizeOutputForHash(output);
+    const replayOutputHash = this.snapshotService.hashPayload(
+      normalizedReplayOutput,
+    );
     const originalOutputHash =
       snapshot.finalOutputHash ??
       snapshot.checksum ??
       this.snapshotService.hashPayload(
-        this.snapshotService.normalizeOutputForHash(snapshot.originalOutput ?? {}),
+        this.snapshotService.normalizeOutputForHash(
+          snapshot.originalOutput ?? {},
+        ),
       );
 
     if (replayOutputHash !== originalOutputHash) {
@@ -168,7 +179,10 @@ export class SimulationReplayEngine {
     executionSteps: ReplayStep[],
   ): Promise<SimulationEngineResult> {
     let step = 0;
-    const onProgress = (progress: number, partial?: Record<string, unknown>) => {
+    const onProgress = (
+      progress: number,
+      partial?: Record<string, unknown>,
+    ) => {
       step += 1;
       executionSteps.push({
         step,
@@ -202,7 +216,9 @@ export class SimulationReplayEngine {
           onProgress,
         );
       default:
-        throw new BadRequestException(`Unsupported replay engine type: ${engineType}`);
+        throw new BadRequestException(
+          `Unsupported replay engine type: ${engineType}`,
+        );
     }
   }
 }

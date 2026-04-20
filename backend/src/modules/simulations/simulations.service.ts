@@ -222,12 +222,16 @@ export class SimulationsService implements OnModuleInit {
     let complexityMultiplier = 1;
 
     if (dto.createdById) {
-      const state = await this.userIntelligenceProfile.getState(dto.createdById);
+      const state = await this.userIntelligenceProfile.getState(
+        dto.createdById,
+      );
       currentSkillProfile = state.skillProfile;
       currentEngagementState = state.engagementState;
       currentXp = state.profile.xp;
       currentLevel = state.profile.level;
-      progressionState = await this.progressionService.getOrCreate(dto.createdById);
+      progressionState = await this.progressionService.getOrCreate(
+        dto.createdById,
+      );
       complexityMultiplier = this.economyService.computeComplexityMultiplier(
         currentLevel,
         currentXp,
@@ -370,10 +374,14 @@ export class SimulationsService implements OnModuleInit {
       }
 
       // 4. Store compressed result payload (keeps heavy arrays bounded)
-      const compressedEngineResult = this.compressResultForStorage(engineResult);
+      const compressedEngineResult =
+        this.compressResultForStorage(engineResult);
       await this.resultsService.create({
         simulationId: simulation.id,
-        outcomeData: compressedEngineResult as unknown as Record<string, unknown>,
+        outcomeData: compressedEngineResult as unknown as Record<
+          string,
+          unknown
+        >,
         executionTime: engineResult.executionTimeMs,
       });
 
@@ -520,17 +528,20 @@ export class SimulationsService implements OnModuleInit {
             },
           );
 
-          await this.aiMetaLearningService.ingestSimulationRun(dto.createdById, {
-            simulationType: dto.type,
-            behaviorType: behavior.behavior_type,
-            learningVelocity: behavior.learning_velocity,
-            noveltyScore: xpSignals.noveltyScore,
-            repetitionRatio: xpSignals.repetitionRatio,
-            riskScore,
-            accuracyScore,
-            performanceScore: skillResult.performanceScore,
-            parameters: effectiveParameters,
-          });
+          await this.aiMetaLearningService.ingestSimulationRun(
+            dto.createdById,
+            {
+              simulationType: dto.type,
+              behaviorType: behavior.behavior_type,
+              learningVelocity: behavior.learning_velocity,
+              noveltyScore: xpSignals.noveltyScore,
+              repetitionRatio: xpSignals.repetitionRatio,
+              riskScore,
+              accuracyScore,
+              performanceScore: skillResult.performanceScore,
+              parameters: effectiveParameters,
+            },
+          );
 
           await this.aiBehaviorGraphService.ingest(dto.createdById, {
             simulationType: dto.type,
@@ -649,13 +660,17 @@ export class SimulationsService implements OnModuleInit {
         execution: {
           status: safeExecution.status,
           fallbackUsed: safeExecution.fallbackUsed,
-          safeOutput:
-            safeExecution.safeOutput as unknown as Record<string, unknown>,
+          safeOutput: safeExecution.safeOutput as unknown as Record<
+            string,
+            unknown
+          >,
         },
         status: safeExecution.status,
         fallbackUsed: safeExecution.fallbackUsed,
-        safeOutput:
-          safeExecution.safeOutput as unknown as Record<string, unknown>,
+        safeOutput: safeExecution.safeOutput as unknown as Record<
+          string,
+          unknown
+        >,
       };
     } catch (err) {
       simulation.status = SimulationStatus.FAILED;
@@ -743,24 +758,30 @@ export class SimulationsService implements OnModuleInit {
         const max = Math.max(...payoffs);
         const min = Math.min(...payoffs);
         const spread = max - min;
-        return this.clamp(38 + spread * 8 - result.nashEquilibria.length * 6, 0, 100);
+        return this.clamp(
+          38 + spread * 8 - result.nashEquilibria.length * 6,
+          0,
+          100,
+        );
       }
       case 'conflict':
         return this.clamp(
           (1 - result.cooperationRate) * 70 +
             Math.max(
               0,
-              result.agentResults.reduce(
-                (sum, item) => sum + item.losses,
-                0,
-              ) / Math.max(1, result.agentResults.length),
+              result.agentResults.reduce((sum, item) => sum + item.losses, 0) /
+                Math.max(1, result.agentResults.length),
             ) *
               0.25,
           0,
           100,
         );
       default:
-        return this.clamp(Math.sqrt(Math.max(metrics.variance, 0)) * 0.7, 0, 100);
+        return this.clamp(
+          Math.sqrt(Math.max(metrics.variance, 0)) * 0.7,
+          0,
+          100,
+        );
     }
   }
 
@@ -789,7 +810,8 @@ export class SimulationsService implements OnModuleInit {
     skillProfile: SkillProfile,
     simulationAdaptation: SimulationAdaptationResult,
   ): GabeRunSummary {
-    const { xpGain: _omit, ...xpComponents } = xpOutcome;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { xpGain: _xpGain, ...xpComponents } = xpOutcome;
 
     return {
       behavior,
@@ -875,7 +897,9 @@ export class SimulationsService implements OnModuleInit {
             ? this.sampleArray(result.finalPrices, 4_000)
             : result.finalPrices;
         const paths =
-          result.paths.length > 140 ? this.sampleArray(result.paths, 140) : result.paths;
+          result.paths.length > 140
+            ? this.sampleArray(result.paths, 140)
+            : result.paths;
 
         return {
           ...result,

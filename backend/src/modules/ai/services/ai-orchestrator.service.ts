@@ -201,7 +201,8 @@ export class AiOrchestratorService {
       validator: (payload): payload is ExplainResponse =>
         this.insightEngine.isExplainResponse(payload),
       normalize: (payload) => this.insightEngine.normalizeExplain(payload),
-      deterministicFallback: () => this.insightEngine.buildFallbackExplain(context),
+      deterministicFallback: () =>
+        this.insightEngine.buildFallbackExplain(context),
       staticSafeTemplate: () => this.staticSafeExplainTemplate(context),
     });
   }
@@ -236,7 +237,8 @@ export class AiOrchestratorService {
       validator: (payload): payload is InsightResponse =>
         this.insightEngine.isInsightResponse(payload),
       normalize: (payload) => this.insightEngine.normalizeInsight(payload),
-      deterministicFallback: () => this.insightEngine.buildFallbackInsight(context),
+      deterministicFallback: () =>
+        this.insightEngine.buildFallbackInsight(context),
       staticSafeTemplate: () => this.staticSafeInsightTemplate(context),
     });
   }
@@ -278,7 +280,11 @@ export class AiOrchestratorService {
         this.isValidDecisionOutput(payload),
       normalize: (payload) => this.decisionEngine.normalizeDecision(payload),
       deterministicFallback: () =>
-        this.decisionEngine.buildFallbackDecision(context, insight, userContext),
+        this.decisionEngine.buildFallbackDecision(
+          context,
+          insight,
+          userContext,
+        ),
       staticSafeTemplate: () => this.staticSafeDecisionTemplate(context),
     });
   }
@@ -340,8 +346,7 @@ export class AiOrchestratorService {
           simulationId: input.simulationId,
           simulationInput: input.simulationInput,
           engineType: input.engineType,
-          responsePayload:
-            deterministic as unknown as Record<string, unknown>,
+          responsePayload: deterministic as unknown as Record<string, unknown>,
           reasoningSteps: [
             'OpenAI response unavailable or invalid.',
             'Deterministic fallback engine response returned.',
@@ -424,11 +429,13 @@ export class AiOrchestratorService {
     }
   }
 
-  private isValidDecisionOutput(response: unknown): response is DecisionResponse {
+  private isValidDecisionOutput(
+    response: unknown,
+  ): response is DecisionResponse {
     return (
       this.decisionEngine.isDecisionResponse(response) &&
-      (response as DecisionResponse).alternatives.length >= 2 &&
-      (response as DecisionResponse).alternatives.length <= 3
+      response.alternatives.length >= 2 &&
+      response.alternatives.length <= 3
     );
   }
 
@@ -496,8 +503,7 @@ export class AiOrchestratorService {
     context: SimulationContext,
   ): InsightResponse {
     return {
-      summary:
-        `Static safe insight template for ${context.simulation_type} simulation due to transient AI unavailability.`,
+      summary: `Static safe insight template for ${context.simulation_type} simulation due to transient AI unavailability.`,
       key_findings: [
         'Core output was processed successfully.',
         'Use replay and deterministic checks before acting on high-impact decisions.',
@@ -522,8 +528,7 @@ export class AiOrchestratorService {
     context: SimulationContext,
   ): DecisionResponse {
     return {
-      decision:
-        `Static safe decision template for ${context.simulation_type}: choose the conservative execution path.`,
+      decision: `Static safe decision template for ${context.simulation_type}: choose the conservative execution path.`,
       reasoning: [
         'AI reasoning degraded to static-safe mode.',
         'Conservative path minimizes downside while maintaining optionality.',
@@ -551,8 +556,7 @@ export class AiOrchestratorService {
     context: SimulationContext,
   ): ExplainResponse {
     return {
-      summary:
-        `Static safe explanation template for ${context.simulation_type} simulation.`,
+      summary: `Static safe explanation template for ${context.simulation_type} simulation.`,
       steps: [
         {
           step: 'Capture core output metrics',

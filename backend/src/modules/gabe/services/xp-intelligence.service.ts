@@ -36,12 +36,17 @@ export class XpIntelligenceService {
   deriveSignals(input: XpSignalInput): XpSignalOutput {
     const parameterHash = this.hash(input.parameters);
     const hashHistory = input.engagementState.recent_parameter_hashes;
-    const repeats = hashHistory.filter((entry) => entry === parameterHash).length;
+    const repeats = hashHistory.filter(
+      (entry) => entry === parameterHash,
+    ).length;
     const historyDepth = Math.max(hashHistory.length, 1);
 
     const repetitionRatio = this.clamp(repeats / historyDepth, 0, 1);
     const noveltyScore = this.clamp(
-      96 - repetitionRatio * 70 - repeats * 8 + input.behavior.exploration_ratio * 12,
+      96 -
+        repetitionRatio * 70 -
+        repeats * 8 +
+        input.behavior.exploration_ratio * 12,
       5,
       100,
     );
@@ -90,11 +95,23 @@ export class XpIntelligenceService {
       this.clamp((signals.improvementScore - 50) / 58, -0.7, 1.15),
     );
 
-    const repetitionPenalty = this.clamp(1 - signals.repetitionRatio * 0.72, 0.2, 1);
-    const lowEffortDecay = this.clamp(1 - signals.lowEffortScore * 0.78, 0.2, 1);
+    const repetitionPenalty = this.clamp(
+      1 - signals.repetitionRatio * 0.72,
+      0.2,
+      1,
+    );
+    const lowEffortDecay = this.clamp(
+      1 - signals.lowEffortScore * 0.78,
+      0.2,
+      1,
+    );
 
     const rawXp =
-      (6 + difficultyComponent + noveltyComponent + riskComponent + accuracyComponent) *
+      (6 +
+        difficultyComponent +
+        noveltyComponent +
+        riskComponent +
+        accuracyComponent) *
       improvementMultiplier *
       repetitionPenalty *
       lowEffortDecay;

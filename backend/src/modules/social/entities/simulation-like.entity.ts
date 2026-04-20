@@ -21,7 +21,9 @@ export class SimulationLike {
   @Column({ name: 'post_id', type: 'uuid' })
   postId: string;
 
-  @ManyToOne(() => SharedSimulation, (post) => post.likes, { onDelete: 'CASCADE' })
+  @ManyToOne(() => SharedSimulation, (post) => post.likes, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'post_id' })
   post: SharedSimulation;
 

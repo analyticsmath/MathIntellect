@@ -6,7 +6,10 @@ import { ObservabilityController } from './observability.controller';
 import { AiConsistencyModule } from '../ai-consistency/ai-consistency.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([EngineExecutionLog]), AiConsistencyModule],
+  imports: [
+    TypeOrmModule.forFeature([EngineExecutionLog]),
+    AiConsistencyModule,
+  ],
   providers: [ObservabilityService],
   controllers: [ObservabilityController],
   exports: [ObservabilityService],

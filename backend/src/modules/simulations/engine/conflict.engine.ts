@@ -57,7 +57,10 @@ export class ConflictEngine {
     const resources: Record<string, number> = {};
     const lastActions: Record<string, Record<string, string>> = {};
     const trustMatrix: Record<string, Record<string, number>> = {};
-    const betrayalCounters: Record<string, { betrayals: number; interactions: number }> = {};
+    const betrayalCounters: Record<
+      string,
+      { betrayals: number; interactions: number }
+    > = {};
     const stats: Record<
       string,
       {
@@ -80,7 +83,8 @@ export class ConflictEngine {
     for (const a of agents) {
       for (const b of agents) {
         if (a.id === b.id) continue;
-        const sameAlliance = coalitionMap[a.id] && coalitionMap[a.id] === coalitionMap[b.id];
+        const sameAlliance =
+          coalitionMap[a.id] && coalitionMap[a.id] === coalitionMap[b.id];
         trustMatrix[a.id][b.id] = sameAlliance ? 0.72 : 0.45;
       }
     }
@@ -176,11 +180,15 @@ export class ConflictEngine {
             const coalitionB = coalitionMap[b.id];
             if (coalitionA && coalitionA === coalitionB) {
               if (!coalitionStats[coalitionA]) {
-                coalitionStats[coalitionA] = { interactions: 0, cooperativeActions: 0 };
+                coalitionStats[coalitionA] = {
+                  interactions: 0,
+                  cooperativeActions: 0,
+                };
               }
               coalitionStats[coalitionA].interactions += 2;
               coalitionStats[coalitionA].cooperativeActions +=
-                (actionA === 'cooperate' ? 1 : 0) + (actionB === 'cooperate' ? 1 : 0);
+                (actionA === 'cooperate' ? 1 : 0) +
+                (actionB === 'cooperate' ? 1 : 0);
             }
 
             if (payA > payB) {
@@ -264,7 +272,9 @@ export class ConflictEngine {
 
         const avgResources =
           members.reduce((sum, agentId) => {
-            const found = agentResults.find((agent) => agent.agentId === agentId);
+            const found = agentResults.find(
+              (agent) => agent.agentId === agentId,
+            );
             return sum + (found?.finalResources ?? 0);
           }, 0) / members.length;
 
@@ -300,10 +310,7 @@ export class ConflictEngine {
     for (const agent of agents) {
       const stats = betrayalCounters[agent.id];
       betrayalProbabilities[agent.id] = Number(
-        (
-          stats.betrayals /
-          Math.max(1, stats.interactions)
-        ).toFixed(4),
+        (stats.betrayals / Math.max(1, stats.interactions)).toFixed(4),
       );
     }
 
@@ -338,7 +345,8 @@ export class ConflictEngine {
       roundHistory,
       winner,
       cooperationRate: totalActions > 0 ? totalCooperate / totalActions : 0,
-      coalitionMetrics: coalitionMetrics.length > 0 ? coalitionMetrics : undefined,
+      coalitionMetrics:
+        coalitionMetrics.length > 0 ? coalitionMetrics : undefined,
       allianceMatrix: allianceMatrix.length > 0 ? allianceMatrix : undefined,
       betrayalProbabilities,
       trustScores,

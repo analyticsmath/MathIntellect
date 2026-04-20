@@ -84,7 +84,8 @@ export class EngagementEngineService {
         ),
       ),
       simulation_repetition_cycles:
-        prev.simulation_repetition_cycles + (input.repetitionRatio > 0.58 ? 1 : 0),
+        prev.simulation_repetition_cycles +
+        (input.repetitionRatio > 0.58 ? 1 : 0),
       drop_off_points: prev.drop_off_points + (dropOffRisk > 66 ? 1 : 0),
       engagement_spikes:
         prev.engagement_spikes + (input.behavior.engagement_score > 84 ? 1 : 0),
@@ -111,7 +112,9 @@ export class EngagementEngineService {
     };
 
     const directives: EngagementDirectives = {
-      reward_frequency_multiplier: Number((0.72 + rewardFrequency * 0.9).toFixed(3)),
+      reward_frequency_multiplier: Number(
+        (0.72 + rewardFrequency * 0.9).toFixed(3),
+      ),
       increase_reward_frequency: increaseReward,
       reduce_cognitive_overload: cognitiveLoad > 62,
       guided_mode: guidedMode,

@@ -27,10 +27,7 @@ export class ProgressionController {
   }
 
   @Post('select-track')
-  selectTrack(
-    @Req() req: AuthenticatedRequest,
-    @Body() dto: SelectTrackDto,
-  ) {
+  selectTrack(@Req() req: AuthenticatedRequest, @Body() dto: SelectTrackDto) {
     return this.progressionService.selectTrack(req.user.id, dto.track);
   }
 }

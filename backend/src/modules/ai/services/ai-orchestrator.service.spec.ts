@@ -58,6 +58,7 @@ describe('AiOrchestratorService', () => {
   };
 
   const contextService = {
+    // eslint-disable-next-line @typescript-eslint/require-await
     getContext: jest.fn(async (simulationId: string) => {
       const context = contexts[simulationId];
       if (!context) throw new Error(`Missing context for ${simulationId}`);
@@ -67,7 +68,7 @@ describe('AiOrchestratorService', () => {
 
   const promptBuilder = {
     promptVersion: 'v3.2-lock',
-    buildInsightPrompt: jest.fn((_: SimulationContext, validator) => ({
+    buildInsightPrompt: jest.fn((_: SimulationContext, validator: unknown) => ({
       promptVersion: 'v3.2-lock',
       schemaName: 'insight_schema',
       schema: {},
@@ -80,7 +81,7 @@ describe('AiOrchestratorService', () => {
         _: SimulationContext,
         __: InsightResponse,
         ___: Record<string, unknown> | undefined,
-        validator,
+        validator: unknown,
       ) => ({
         promptVersion: 'v3.2-lock',
         schemaName: 'decision_schema',
@@ -90,7 +91,7 @@ describe('AiOrchestratorService', () => {
         validator,
       }),
     ),
-    buildExplainPrompt: jest.fn((_: SimulationContext, validator) => ({
+    buildExplainPrompt: jest.fn((_: SimulationContext, validator: unknown) => ({
       promptVersion: 'v3.2-lock',
       schemaName: 'explain_schema',
       schema: {},
@@ -118,7 +119,7 @@ describe('AiOrchestratorService', () => {
     normalizeInsight: jest.fn((input: InsightResponse) => input),
     buildFallbackInsight: jest.fn(() => fallbackInsight),
     isExplainResponse: jest.fn(() => true),
-    normalizeExplain: jest.fn((input) => input),
+    normalizeExplain: jest.fn((input: unknown) => input),
     buildFallbackExplain: jest.fn(() => ({
       summary: 'fallback explain',
       steps: [
@@ -154,6 +155,7 @@ describe('AiOrchestratorService', () => {
   };
 
   const userIntelligenceProfile = {
+    // eslint-disable-next-line @typescript-eslint/require-await
     getState: jest.fn(async () => ({
       profile: { xp: 0, level: 1, lastBehaviorTag: 'balanced' },
       skillProfile: {
@@ -174,6 +176,7 @@ describe('AiOrchestratorService', () => {
   };
 
   const progressionService = {
+    // eslint-disable-next-line @typescript-eslint/require-await
     getPromptAdaptation: jest.fn(async () => ({
       explanationDepth: 'balanced',
       behaviorStyle: 'neutral',
@@ -183,6 +186,7 @@ describe('AiOrchestratorService', () => {
   };
 
   const aiMetaLearningService = {
+    // eslint-disable-next-line @typescript-eslint/require-await
     getPromptTuning: jest.fn(async () => ({
       clusterLabel: 'balanced_explorer',
       explanationStyle: 'balanced',
@@ -196,26 +200,29 @@ describe('AiOrchestratorService', () => {
 
   const aiConsistencyStore = new Map<string, { responsePayload: unknown }>();
   const aiConsistencyLock = {
-    get: jest.fn(async (simulationInput: Record<string, unknown>, engineType: string) => {
-      const key = `${engineType}:${JSON.stringify(simulationInput)}`;
-      const hit = aiConsistencyStore.get(key);
-      if (!hit) return null;
-      return {
-        cacheKey: key,
-        inputHash: key,
-        promptVersion: 'v3.2-lock',
-        engineType,
-        simulationId: null,
-        responsePayload: hit.responsePayload as Record<string, unknown>,
-        reasoningSteps: [],
-        tokenUsage: null,
-        source: 'cache',
-        timestamp: new Date().toISOString(),
-        latencyMs: null,
-      };
-    }),
+    get: jest.fn(
+      (simulationInput: Record<string, unknown>, engineType: string) => {
+        const key = `${engineType}:${JSON.stringify(simulationInput)}`;
+        const hit = aiConsistencyStore.get(key);
+        if (!hit) return Promise.resolve(null);
+        return Promise.resolve({
+          cacheKey: key,
+          inputHash: key,
+          promptVersion: 'v3.2-lock',
+          engineType,
+          simulationId: null,
+          responsePayload: hit.responsePayload as Record<string, unknown>,
+          reasoningSteps: [],
+          tokenUsage: null,
+          source: 'cache',
+          timestamp: new Date().toISOString(),
+          latencyMs: null,
+        });
+      },
+    ),
+
     set: jest.fn(
-      async ({
+      ({
         simulationInput,
         engineType,
         responsePayload,
@@ -226,7 +233,7 @@ describe('AiOrchestratorService', () => {
       }) => {
         const key = `${engineType}:${JSON.stringify(simulationInput)}`;
         aiConsistencyStore.set(key, { responsePayload });
-        return {
+        return Promise.resolve({
           cacheKey: key,
           inputHash: key,
           promptVersion: 'v3.2-lock',
@@ -238,7 +245,7 @@ describe('AiOrchestratorService', () => {
           source: 'openai',
           timestamp: new Date().toISOString(),
           latencyMs: null,
-        };
+        });
       },
     ),
   };
@@ -271,8 +278,9 @@ describe('AiOrchestratorService', () => {
       attempts: 0,
     });
 
-    const first = await service.generateInsight('sim-insight');
-    const second = await service.generateInsight('sim-insight');
+    const first: InsightResponse = await service.generateInsight('sim-insight');
+    const second: InsightResponse =
+      await service.generateInsight('sim-insight');
 
     expect(first).toEqual(fallbackInsight);
     expect(second).toEqual(fallbackInsight);
@@ -288,8 +296,12 @@ describe('AiOrchestratorService', () => {
       attempts: 0,
     });
 
-    const first = await service.generateDecision({ simulationId: 'sim-decision' });
-    const second = await service.generateDecision({ simulationId: 'sim-decision' });
+    const first: DecisionResponse = await service.generateDecision({
+      simulationId: 'sim-decision',
+    });
+    const second: DecisionResponse = await service.generateDecision({
+      simulationId: 'sim-decision',
+    });
 
     expect(first.alternatives.length).toBeGreaterThanOrEqual(2);
     expect(first.alternatives.length).toBeLessThanOrEqual(3);
@@ -306,7 +318,10 @@ describe('AiOrchestratorService', () => {
       attempts: 0,
     });
 
-    const response = await service.compareSimulations(['sim-a', 'sim-b']);
+    const response: CompareResponse = await service.compareSimulations([
+      'sim-a',
+      'sim-b',
+    ]);
 
     expect(response.best_option).toBe('sim-a');
     expect(response.comparisons[0].simulation_id).toBe('sim-a');
@@ -323,11 +338,17 @@ describe('AiOrchestratorService', () => {
       attempts: 0,
     });
 
-    const first = await service.compareSimulations(['sim-a', 'sim-b']);
-    const second = await service.compareSimulations(['sim-a', 'sim-b']);
+    const first: CompareResponse = await service.compareSimulations([
+      'sim-a',
+      'sim-b',
+    ]);
+    const second: CompareResponse = await service.compareSimulations([
+      'sim-a',
+      'sim-b',
+    ]);
 
     expect(second).toEqual(first);
     expect(contextService.getContext).toHaveBeenCalledTimes(2);
-    expect((second as CompareResponse).comparisons.length).toBe(2);
+    expect(second.comparisons.length).toBe(2);
   });
 });

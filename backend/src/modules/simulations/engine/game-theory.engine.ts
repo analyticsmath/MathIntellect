@@ -17,7 +17,7 @@ import {
  */
 @Injectable()
 export class GameTheoryEngine {
-  async run(
+  run(
     params: GameTheoryParams,
     onProgress?: ProgressCallback,
   ): Promise<GameTheoryResult> {
@@ -62,7 +62,10 @@ export class GameTheoryEngine {
 
     if (params.dynamicStrategyEvolution) {
       onProgress?.(92, { stage: 'Simulating strategy evolution' });
-      const rounds = Math.max(1, Math.min(30, params.dynamicEvolutionRounds ?? 8));
+      const rounds = Math.max(
+        1,
+        Math.min(30, params.dynamicEvolutionRounds ?? 8),
+      );
       const evolution = this.simulateStrategyEvolution(
         players,
         strategies,
@@ -101,7 +104,7 @@ export class GameTheoryEngine {
       equilibria: nashEquilibria.length,
     });
 
-    return {
+    return Promise.resolve({
       type: 'game_theory',
       players,
       dominantStrategies,
@@ -113,7 +116,7 @@ export class GameTheoryEngine {
       repeatedGameLearning,
       reputationScores,
       executionTimeMs: Date.now() - t0,
-    };
+    });
   }
 
   // ─── Dominant strategy detection ────────────────────────────────────────────
@@ -245,7 +248,8 @@ export class GameTheoryEngine {
 
     for (const player of players) {
       const playerStrategies = strategies[player] ?? [];
-      const initialWeight = playerStrategies.length > 0 ? 1 / playerStrategies.length : 1;
+      const initialWeight =
+        playerStrategies.length > 0 ? 1 / playerStrategies.length : 1;
       weights[player] = {};
       trajectory[player] = [];
       for (const strategy of playerStrategies) {
@@ -271,8 +275,10 @@ export class GameTheoryEngine {
         }
 
         const average =
-          playerStrategies.reduce((sum, strategy) => sum + expected[strategy], 0) /
-          Math.max(1, playerStrategies.length);
+          playerStrategies.reduce(
+            (sum, strategy) => sum + expected[strategy],
+            0,
+          ) / Math.max(1, playerStrategies.length);
 
         let normalization = 0;
         for (const strategy of playerStrategies) {
@@ -285,7 +291,8 @@ export class GameTheoryEngine {
 
         for (const strategy of playerStrategies) {
           weights[player][strategy] =
-            (weights[player][strategy] ?? 0) / Math.max(normalization, Number.EPSILON);
+            (weights[player][strategy] ?? 0) /
+            Math.max(normalization, Number.EPSILON);
         }
 
         const bestWeight = Math.max(
@@ -411,7 +418,8 @@ export class GameTheoryEngine {
 
     for (const player of players) {
       const playerStrategies = strategies[player] ?? [];
-      const initial = playerStrategies.length > 0 ? 1 / playerStrategies.length : 1;
+      const initial =
+        playerStrategies.length > 0 ? 1 / playerStrategies.length : 1;
       weights[player] = {};
       trajectory[player] = [];
       reputationScores[player] = 50;
@@ -437,8 +445,10 @@ export class GameTheoryEngine {
         }
 
         const average =
-          playerStrategies.reduce((sum, strategy) => sum + expected[strategy], 0) /
-          Math.max(1, playerStrategies.length);
+          playerStrategies.reduce(
+            (sum, strategy) => sum + expected[strategy],
+            0,
+          ) / Math.max(1, playerStrategies.length);
 
         let normalization = 0;
         for (const strategy of playerStrategies) {
@@ -525,8 +535,9 @@ export class GameTheoryEngine {
       for (let j = i + 1; j < players.length; j++) {
         const coalition = [players[i], players[j]];
         const coalitionEntries = matrix.filter((entry) =>
-          coalition.every((player) =>
-            this.cooperativeSignal(entry.strategies[player] ?? '') >= 0,
+          coalition.every(
+            (player) =>
+              this.cooperativeSignal(entry.strategies[player] ?? '') >= 0,
           ),
         );
 
@@ -548,7 +559,8 @@ export class GameTheoryEngine {
           ) / coalition.length;
 
         const cohesion = this.clamp(
-          coalitionEntries.length / Math.max(1, matrix.length) + reputation / 140,
+          coalitionEntries.length / Math.max(1, matrix.length) +
+            reputation / 140,
           0,
           1,
         );

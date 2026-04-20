@@ -49,15 +49,20 @@ function clamp(value: number, min: number, max: number): number {
 
 function numberArray(value: unknown): number[] {
   if (!Array.isArray(value)) return [];
-  return value
-    .filter((entry) => typeof entry === 'number' && Number.isFinite(entry))
+  return (value as unknown[])
+    .filter(
+      (entry): entry is number =>
+        typeof entry === 'number' && Number.isFinite(entry),
+    )
     .slice(-20);
 }
 
 function stringArray(value: unknown): string[] {
   if (!Array.isArray(value)) return [];
-  return value
-    .filter((entry) => typeof entry === 'string' && entry.length > 0)
+  return (value as unknown[])
+    .filter(
+      (entry): entry is string => typeof entry === 'string' && entry.length > 0,
+    )
     .slice(-20);
 }
 
