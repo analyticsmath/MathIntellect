@@ -1,6 +1,8 @@
 -- Phase 1 foundation migration: future-ready profile, notification, and model tables
 -- Date: 2026-04-20
 
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE IF NOT EXISTS profiles (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE,

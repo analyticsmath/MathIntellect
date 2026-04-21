@@ -1,4 +1,10 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './strategies/jwt.strategy';
 import { UsersService } from '../users/users.service';
@@ -21,6 +27,8 @@ export interface AuthSessionResponse {
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private readonly jwtService: JwtService,
     private readonly usersService: UsersService,
@@ -28,29 +36,57 @@ export class AuthService {
 
   async register(dto: RegisterDto): Promise<AuthSessionResponse> {
     const normalizedEmail = dto.email.trim().toLowerCase();
-    const user = await this.usersService.create({
-      name: dto.name.trim(),
-      email: normalizedEmail,
-      password: dto.password,
-    });
+    try {
+      const user = await this.usersService.create({
+        name: dto.name.trim(),
+        email: normalizedEmail,
+        password: dto.password,
+      });
 
-    return this.createSession(user);
+      this.logger.log(`Registration succeeded for ${normalizedEmail}`);
+      return this.createSession(user);
+    } catch (error) {
+      if (error instanceof ConflictException) {
+        throw error;
+      }
+
+      this.logger.error(
+        `Registration failed for ${normalizedEmail}: ${this.readableError(error)}`,
+      );
+      throw new InternalServerErrorException(
+        'Unable to register at the moment. Please try again.',
+      );
+    }
   }
 
   async login(dto: LoginDto): Promise<AuthSessionResponse> {
     const normalizedEmail = dto.email.trim().toLowerCase();
-    const user = await this.usersService.findByEmail(normalizedEmail);
+    try {
+      const user = await this.usersService.findByEmail(normalizedEmail);
 
-    if (!user) {
-      throw new UnauthorizedException('Invalid email or password');
+      if (!user) {
+        throw new UnauthorizedException('Invalid email or password');
+      }
+
+      const valid = await user.validatePassword(dto.password);
+      if (!valid) {
+        throw new UnauthorizedException('Invalid email or password');
+      }
+
+      this.logger.log(`Login succeeded for ${normalizedEmail}`);
+      return this.createSession(user);
+    } catch (error) {
+      if (error instanceof UnauthorizedException) {
+        throw error;
+      }
+
+      this.logger.error(
+        `Login failed for ${normalizedEmail}: ${this.readableError(error)}`,
+      );
+      throw new InternalServerErrorException(
+        'Unable to login at the moment. Please try again.',
+      );
     }
-
-    const valid = await user.validatePassword(dto.password);
-    if (!valid) {
-      throw new UnauthorizedException('Invalid email or password');
-    }
-
-    return this.createSession(user);
   }
 
   generateToken(payload: JwtPayload): string {
@@ -78,5 +114,13 @@ export class AuthService {
         createdAt: user.createdAt,
       },
     };
+  }
+
+  private readableError(error: unknown): string {
+    if (error instanceof Error) {
+      return error.message;
+    }
+
+    return String(error);
   }
 }

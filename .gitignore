@@ -10,8 +10,11 @@ backend/dist/
 
 # Environment files
 .env
-backend/.env
-frontend/.env
+.env.*
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env.*.example
 
 # Logs
 *.log

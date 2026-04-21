@@ -11,6 +11,14 @@ import { LoggerService, LogLevel } from '@nestjs/common';
  */
 export class AppLogger implements LoggerService {
   private readonly isProd = process.env.NODE_ENV === 'production';
+  private readonly level = this.normalizeLevel(process.env.LOG_LEVEL);
+  private readonly levelWeight: Record<string, number> = {
+    error: 0,
+    warn: 1,
+    log: 2,
+    debug: 3,
+    verbose: 4,
+  };
 
   private readonly COLORS = {
     log: '\x1b[32m', // green
@@ -22,24 +30,80 @@ export class AppLogger implements LoggerService {
 
   private readonly RESET = '\x1b[0m';
 
+  private normalizeLevel(level?: string): keyof AppLogger['levelWeight'] {
+    const raw = (level ?? 'info').toLowerCase();
+    if (raw === 'info') return 'log';
+    if (raw in this.levelWeight) {
+      return raw as keyof AppLogger['levelWeight'];
+    }
+    return 'log';
+  }
+
+  private shouldLog(level: string): boolean {
+    const incoming = this.levelWeight[level] ?? this.levelWeight.log;
+    const configured = this.levelWeight[this.level];
+    return incoming <= configured;
+  }
+
+  private redact(text: string): string {
+    return text
+      .replace(
+        /(postgres(?:ql)?:\/\/[^:\s/]+:)([^@/\s]+)@/gi,
+        '$1***@',
+      )
+      .replace(/(sk-[A-Za-z0-9_-]{10,})/g, 'sk-***')
+      .replace(/(JWT_SECRET=)([^\s]+)/gi, '$1***')
+      .replace(/(OPENAI_API_KEY=)([^\s]+)/gi, '$1***')
+      .replace(/(DATABASE_URL=)([^\s]+)/gi, '$1***');
+  }
+
+  private sanitize(value: unknown): unknown {
+    if (typeof value === 'string') {
+      return this.redact(value);
+    }
+
+    if (value instanceof Error) {
+      return {
+        name: value.name,
+        message: this.redact(value.message),
+      };
+    }
+
+    if (value && typeof value === 'object') {
+      try {
+        return JSON.parse(this.redact(JSON.stringify(value)));
+      } catch {
+        return '[Unserializable object]';
+      }
+    }
+
+    return value;
+  }
+
   private write(
     level: string,
     message: unknown,
     context?: string,
     trace?: string,
   ) {
+    if (!this.shouldLog(level)) {
+      return;
+    }
+
     const ts = new Date().toISOString();
+    const safeMessage = this.sanitize(message);
+    const safeTrace = trace ? this.redact(trace) : undefined;
 
     if (this.isProd) {
       // Structured JSON — parseable by log aggregators (CloudWatch, Datadog, etc.)
       const entry: Record<string, unknown> = {
         level,
-        message,
+        message: safeMessage,
         context,
         pid: process.pid,
         timestamp: ts,
       };
-      if (trace) entry.trace = trace;
+      if (safeTrace) entry.trace = safeTrace;
       const output = JSON.stringify(entry);
       if (level === 'error') {
         process.stderr.write(output + '\n');
@@ -51,9 +115,9 @@ export class AppLogger implements LoggerService {
       const color =
         this.COLORS[level as keyof typeof this.COLORS] ?? '\x1b[37m';
       const ctx = context ? `[${context}] ` : '';
-      const line = `${color}[${level.toUpperCase()}]${this.RESET} ${ts} ${ctx}${String(message)}`;
+      const line = `${color}[${level.toUpperCase()}]${this.RESET} ${ts} ${ctx}${String(safeMessage)}`;
       if (level === 'error') {
-        console.error(line, trace ? `\n${trace}` : '');
+        console.error(line, safeTrace ? `\n${safeTrace}` : '');
       } else {
         console.log(line);
       }

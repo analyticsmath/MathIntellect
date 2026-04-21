@@ -4,13 +4,13 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
-  Logger,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { AppLogger } from '../logger/app.logger';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
-  private readonly logger = new Logger(AllExceptionsFilter.name);
+  private readonly logger = new AppLogger();
 
   catch(exception: unknown, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
@@ -31,6 +31,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       this.logger.error(
         `${request.method} ${request.url} → ${status}`,
         exception instanceof Error ? exception.stack : String(exception),
+        AllExceptionsFilter.name,
       );
     }
 

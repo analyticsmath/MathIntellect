@@ -30,7 +30,8 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ length: 100 })
+  // Production schema uses `username`; map it to the `name` property expected by app code.
+  @Column({ name: 'username', length: 100 })
   name: string;
 
   @Index()
@@ -40,7 +41,7 @@ export class User {
   @Column({ length: 255 })
   password: string;
 
-  @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
+  @Column({ type: 'varchar', length: 50, default: UserRole.USER })
   role: UserRole;
 
   @CreateDateColumn({ name: 'created_at' })
