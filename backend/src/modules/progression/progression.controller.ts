@@ -26,6 +26,12 @@ export class ProgressionController {
     };
   }
 
+  // Compatibility alias for clients calling /progression
+  @Get()
+  getMyProgressionAlias(@Req() req: AuthenticatedRequest) {
+    return this.getMyProgression(req);
+  }
+
   @Post('select-track')
   selectTrack(@Req() req: AuthenticatedRequest, @Body() dto: SelectTrackDto) {
     return this.progressionService.selectTrack(req.user.id, dto.track);

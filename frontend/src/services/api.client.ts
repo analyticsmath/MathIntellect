@@ -31,10 +31,15 @@ client.interceptors.response.use(
     return res;
   },
   (err: AxiosError<{ message?: string | string[] }>) => {
+    const status = err.response?.status;
+
     if (err.response?.status === 401) {
       clearAuthSession();
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new Event('math-intellect:unauthorized'));
+        if (window.location.pathname !== '/login') {
+          window.location.assign('/login');
+        }
       }
     }
 
@@ -43,6 +48,18 @@ client.interceptors.response.use(
       err.message ??
       'Unknown error';
     const readable = Array.isArray(msg) ? msg.join('; ') : msg;
+
+    if (typeof window !== 'undefined' && status === 500) {
+      window.dispatchEvent(
+        new CustomEvent('math-intellect:api-error', {
+          detail: {
+            status,
+            message: readable || 'Internal server error',
+          },
+        }),
+      );
+    }
+
     return Promise.reject(new Error(readable));
   },
 );

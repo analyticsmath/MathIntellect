@@ -25,8 +25,11 @@ export class Result {
   @JoinColumn({ name: 'simulation_id' })
   simulation: Simulation;
 
-  @Column({ name: 'outcome_data', type: 'jsonb' })
+  @Column({ name: 'data', type: 'jsonb' })
   outcomeData: Record<string, unknown>;
+
+  @Column({ name: 'metrics', type: 'jsonb', nullable: true })
+  metrics: Record<string, unknown> | null;
 
   @Column({ name: 'execution_time', type: 'float', nullable: true })
   executionTime: number;

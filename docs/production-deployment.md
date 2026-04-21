@@ -35,6 +35,7 @@ Run once after deploy (or on every deploy if your SQL is idempotent):
 ```bash
 cd backend
 npm run db:migrate:foundation
+npm run db:migrate:phase16
 ```
 
 ## Vercel (Frontend)

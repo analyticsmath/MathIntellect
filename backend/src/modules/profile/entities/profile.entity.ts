@@ -51,26 +51,13 @@ export class Profile {
   @Column({ type: 'varchar', length: 80, nullable: true })
   timezone: string | null;
 
-  @Column({
-    name: 'intelligence_profile_json',
-    type: 'jsonb',
-    nullable: true,
-  })
+  // Backward-compatible runtime field: not persisted in the legacy production schema.
   intelligenceProfileJson: SkillProfile | null;
 
-  @Column({
-    name: 'engagement_state_json',
-    type: 'jsonb',
-    nullable: true,
-  })
+  // Backward-compatible runtime field: not persisted in the legacy production schema.
   engagementStateJson: EngagementState | null;
 
-  @Column({
-    name: 'last_behavior_tag',
-    type: 'varchar',
-    length: 80,
-    nullable: true,
-  })
+  // Backward-compatible runtime field: not persisted in the legacy production schema.
   lastBehaviorTag: string | null;
 
   @CreateDateColumn({ name: 'created_at' })

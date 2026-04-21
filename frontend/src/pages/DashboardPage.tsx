@@ -307,9 +307,9 @@ export function DashboardPage() {
 
           {!loading && !error && total === 0 && (
             <section className="premium-card p-8 md:p-10 text-center" data-tilt>
-              <h2 className="text-2xl font-semibold">No simulations yet</h2>
+              <h2 className="text-2xl font-semibold">No simulations yet. Launch your first mission.</h2>
               <p className="mt-3 text-sm max-w-md mx-auto" style={{ color: 'var(--text-secondary)' }}>
-                Launch your first mission to begin intelligence progression.
+                Command center is ready. Run your first simulation to unlock insights, badges, and progression.
               </p>
               <button
                 onClick={() => navigate('/app/simulations/new', { viewTransition: true })}

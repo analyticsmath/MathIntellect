@@ -175,7 +175,7 @@ export class SimulationsService implements OnModuleInit {
   async findById(id: string): Promise<Simulation> {
     const simulation = await this.simulationsRepo.findOne({
       where: { id },
-      relations: ['createdBy', 'strategies', 'results'],
+      relations: ['createdBy', 'results'],
     });
     if (!simulation) throw new NotFoundException(`Simulation ${id} not found`);
     return simulation;
@@ -390,7 +390,16 @@ export class SimulationsService implements OnModuleInit {
       const metrics = this.analyticsService.computeMetrics(numericValues);
 
       if (numericValues.length > 0) {
-        await this.analyticsService.recordMetrics(simulation.id, numericValues);
+        try {
+          await this.analyticsService.recordMetrics(
+            simulation.id,
+            numericValues,
+          );
+        } catch (analyticsError) {
+          this.logger.warn(
+            `Analytics event persistence skipped for simulation ${simulation.id}: ${(analyticsError as Error).message}`,
+          );
+        }
       }
 
       const riskScore = this.estimateRiskScore(engineResult, metrics);

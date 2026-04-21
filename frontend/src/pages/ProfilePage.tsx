@@ -9,6 +9,7 @@ export function ProfilePage() {
   const { profile, loading, error, update, refetch } = useProfile();
   const [saving, setSaving] = useState(false);
   const [savedAt, setSavedAt] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const [displayName, setDisplayName] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
@@ -32,6 +33,7 @@ export function ProfilePage() {
       return;
     }
     setSaving(true);
+    setSaveError(null);
     try {
       await update({
         displayName,
@@ -40,6 +42,8 @@ export function ProfilePage() {
         timezone,
       });
       setSavedAt(new Date().toLocaleTimeString());
+    } catch (cause) {
+      setSaveError(cause instanceof Error ? cause.message : 'Failed to update profile');
     } finally {
       setSaving(false);
     }
@@ -67,6 +71,14 @@ export function ProfilePage() {
         <div className="px-3 md:px-6 pt-5 pb-10 space-y-5">
           {loading && <Loader message="Loading profile..." />}
           {error && !loading && <ErrorState message={error} onRetry={refetch} />}
+          {!loading && !error && !profile && (
+            <section className="premium-card p-8 md:p-10 text-center">
+              <h2 className="text-2xl font-semibold">Profile is initializing</h2>
+              <p className="mt-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                We are creating your profile. Refresh in a moment if this view stays empty.
+              </p>
+            </section>
+          )}
 
           {!loading && !error && profile && (
             <>
@@ -148,6 +160,11 @@ export function ProfilePage() {
                 {savedAt && (
                   <p className="mt-3 text-xs" style={{ color: 'var(--text-muted)' }}>
                     Saved at {savedAt}
+                  </p>
+                )}
+                {saveError && (
+                  <p className="mt-3 text-xs" style={{ color: 'var(--rose-alert)' }}>
+                    {saveError}
                   </p>
                 )}
               </section>

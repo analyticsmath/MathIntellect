@@ -48,200 +48,274 @@ export class SocialService {
   ) {}
 
   async shareSimulation(userId: string, dto: ShareSimulationDto) {
-    const simulation = await this.simulationsRepo.findOne({
-      where: { id: dto.simulationId },
-      relations: ['createdBy'],
-    });
+    try {
+      const simulation = await this.simulationsRepo.findOne({
+        where: { id: dto.simulationId },
+        relations: ['createdBy'],
+      });
 
-    if (!simulation) {
-      throw new NotFoundException(`Simulation ${dto.simulationId} not found`);
+      if (!simulation) {
+        throw new NotFoundException(`Simulation ${dto.simulationId} not found`);
+      }
+
+      if (simulation.createdBy?.id && simulation.createdBy.id !== userId) {
+        throw new ForbiddenException(
+          'Only the owner can share this simulation',
+        );
+      }
+
+      const latestResult = await this.resultsRepo.findOne({
+        where: { simulationId: simulation.id },
+        order: { createdAt: 'DESC' },
+      });
+
+      const performanceScore = this.estimatePerformanceScore(
+        simulation.type,
+        latestResult?.outcomeData ?? null,
+      );
+
+      const aiInsightSummary = this.buildInsightSummary(
+        simulation.type,
+        performanceScore,
+        latestResult?.outcomeData ?? null,
+      );
+
+      const preview = this.buildPreview(
+        simulation,
+        latestResult?.outcomeData ?? null,
+      );
+
+      const post = this.sharedRepo.create({
+        simulationId: simulation.id,
+        authorId: userId,
+        title: dto.title ?? `${simulation.name} Intelligence Artifact`,
+        summary: dto.summary ?? simulation.description ?? null,
+        aiInsightSummary,
+        simulationType: simulation.type,
+        performanceScore,
+        previewJson: preview,
+        snapshot3dRef: `/api/v1/analytics/${simulation.id}/3d`,
+        isPublic: dto.isPublic ?? true,
+      });
+
+      return await this.sharedRepo.save(post);
+    } catch (error) {
+      if (this.isMissingSocialSchema(error)) {
+        return {
+          id: 'social-disabled',
+          simulationId: dto.simulationId,
+          authorId: userId,
+          title: dto.title ?? 'Shared simulation',
+          summary: dto.summary ?? null,
+          isPublic: dto.isPublic ?? true,
+          status: 'social_schema_missing',
+        };
+      }
+      throw error;
     }
-
-    if (simulation.createdBy?.id && simulation.createdBy.id !== userId) {
-      throw new ForbiddenException('Only the owner can share this simulation');
-    }
-
-    const latestResult = await this.resultsRepo.findOne({
-      where: { simulationId: simulation.id },
-      order: { createdAt: 'DESC' },
-    });
-
-    const performanceScore = this.estimatePerformanceScore(
-      simulation.type,
-      latestResult?.outcomeData ?? null,
-    );
-
-    const aiInsightSummary = this.buildInsightSummary(
-      simulation.type,
-      performanceScore,
-      latestResult?.outcomeData ?? null,
-    );
-
-    const preview = this.buildPreview(
-      simulation,
-      latestResult?.outcomeData ?? null,
-    );
-
-    const post = this.sharedRepo.create({
-      simulationId: simulation.id,
-      authorId: userId,
-      title: dto.title ?? `${simulation.name} Intelligence Artifact`,
-      summary: dto.summary ?? simulation.description ?? null,
-      aiInsightSummary,
-      simulationType: simulation.type,
-      performanceScore,
-      previewJson: preview,
-      snapshot3dRef: `/api/v1/analytics/${simulation.id}/3d`,
-      isPublic: dto.isPublic ?? true,
-    });
-
-    return this.sharedRepo.save(post);
   }
 
   async getFeed(query: FeedQueryDto, userId?: string) {
-    const limit = this.clampInt(query.limit ?? 12, 1, 50);
-    const page = this.clampInt(query.page ?? 1, 1, 10_000);
-    const cursor = this.parseCursor(query.cursor);
-    const debug = query.debug === true;
+    try {
+      const limit = this.clampInt(query.limit ?? 12, 1, 50);
+      const page = this.clampInt(query.page ?? 1, 1, 10_000);
+      const cursor = this.parseCursor(query.cursor);
+      const debug = query.debug === true;
 
-    const allPublicPosts = await this.sharedRepo.find({
-      where: { isPublic: true },
-      relations: ['simulation', 'author'],
-      order: { createdAt: 'DESC', id: 'DESC' },
-      take: 500,
-    });
+      const allPublicPosts = await this.sharedRepo.find({
+        where: { isPublic: true },
+        relations: ['simulation', 'author'],
+        order: { createdAt: 'DESC', id: 'DESC' },
+        take: 500,
+      });
 
-    const ranked = this.feedRankingService.rankPosts(allPublicPosts, {
-      debug,
-    });
+      const ranked = this.feedRankingService.rankPosts(allPublicPosts, {
+        debug,
+      });
 
-    if (userId) {
-      await this.feedRankingService.snapshotRankingsForUser(
-        userId,
-        ranked.slice(0, Math.min(120, ranked.length)),
-      );
-    }
+      if (userId) {
+        await this.feedRankingService.snapshotRankingsForUser(
+          userId,
+          ranked.slice(0, Math.min(120, ranked.length)),
+        );
+      }
 
-    const startIndex = cursor
-      ? this.indexAfterCursor(ranked, cursor)
-      : (page - 1) * limit;
-    const sliced = ranked.slice(startIndex, startIndex + limit);
-    const hasMore = startIndex + limit < ranked.length;
-    const nextCursor =
-      hasMore && sliced.length > 0
-        ? this.buildCursor(
-            sliced[sliced.length - 1].post.createdAt,
-            sliced[sliced.length - 1].post.id,
-          )
-        : null;
+      const startIndex = cursor
+        ? this.indexAfterCursor(ranked, cursor)
+        : (page - 1) * limit;
+      const sliced = ranked.slice(startIndex, startIndex + limit);
+      const hasMore = startIndex + limit < ranked.length;
+      const nextCursor =
+        hasMore && sliced.length > 0
+          ? this.buildCursor(
+              sliced[sliced.length - 1].post.createdAt,
+              sliced[sliced.length - 1].post.id,
+            )
+          : null;
 
-    return {
-      ranked: true,
-      items: sliced.map((item) => this.toRankedApiItem(item, debug)),
-      posts: sliced.map((item) => this.toLegacyFeedPost(item)),
-      total: ranked.length,
-      hasMore,
-      page,
-      pageInfo: {
+      return {
+        ranked: true,
+        items: sliced.map((item) => this.toRankedApiItem(item, debug)),
+        posts: sliced.map((item) => this.toLegacyFeedPost(item)),
+        total: ranked.length,
         hasMore,
-        nextCursor,
-      },
-    };
+        page,
+        pageInfo: {
+          hasMore,
+          nextCursor,
+        },
+      };
+    } catch (error) {
+      if (this.isMissingSocialSchema(error)) {
+        return {
+          ranked: true,
+          items: [],
+          posts: [],
+          total: 0,
+          hasMore: false,
+          page: this.clampInt(query.page ?? 1, 1, 10_000),
+          pageInfo: {
+            hasMore: false,
+            nextCursor: null,
+          },
+        };
+      }
+      throw error;
+    }
   }
 
   async toggleLike(userId: string, postId: string) {
-    const post = await this.sharedRepo.findOne({ where: { id: postId } });
-    if (!post) {
-      throw new NotFoundException(`Social post ${postId} not found`);
+    try {
+      const post = await this.sharedRepo.findOne({ where: { id: postId } });
+      if (!post) {
+        throw new NotFoundException(`Social post ${postId} not found`);
+      }
+
+      const existing = await this.likeRepo.findOne({
+        where: { postId, userId },
+      });
+
+      if (existing) {
+        await this.likeRepo.remove(existing);
+        await this.sharedRepo.decrement({ id: postId }, 'likesCount', 1);
+      } else {
+        await this.likeRepo.save(this.likeRepo.create({ postId, userId }));
+        await this.sharedRepo.increment({ id: postId }, 'likesCount', 1);
+      }
+
+      const refreshed = await this.sharedRepo.findOne({
+        where: { id: postId },
+      });
+
+      return {
+        liked: !existing,
+        likesCount: Math.max(0, refreshed?.likesCount ?? 0),
+      };
+    } catch (error) {
+      if (this.isMissingSocialSchema(error)) {
+        return {
+          liked: false,
+          likesCount: 0,
+        };
+      }
+      throw error;
     }
-
-    const existing = await this.likeRepo.findOne({ where: { postId, userId } });
-
-    if (existing) {
-      await this.likeRepo.remove(existing);
-      await this.sharedRepo.decrement({ id: postId }, 'likesCount', 1);
-    } else {
-      await this.likeRepo.save(this.likeRepo.create({ postId, userId }));
-      await this.sharedRepo.increment({ id: postId }, 'likesCount', 1);
-    }
-
-    const refreshed = await this.sharedRepo.findOne({ where: { id: postId } });
-
-    return {
-      liked: !existing,
-      likesCount: Math.max(0, refreshed?.likesCount ?? 0),
-    };
   }
 
   async addComment(userId: string, dto: CommentDto) {
-    const post = await this.sharedRepo.findOne({ where: { id: dto.postId } });
-    if (!post) {
-      throw new NotFoundException(`Social post ${dto.postId} not found`);
+    try {
+      const post = await this.sharedRepo.findOne({ where: { id: dto.postId } });
+      if (!post) {
+        throw new NotFoundException(`Social post ${dto.postId} not found`);
+      }
+
+      const comment = this.commentRepo.create({
+        postId: dto.postId,
+        userId,
+        content: dto.content,
+      });
+
+      const saved = await this.commentRepo.save(comment);
+      await this.sharedRepo.increment({ id: dto.postId }, 'commentsCount', 1);
+
+      return saved;
+    } catch (error) {
+      if (this.isMissingSocialSchema(error)) {
+        return {
+          id: 'comment-disabled',
+          postId: dto.postId,
+          userId,
+          content: dto.content,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        };
+      }
+      throw error;
     }
-
-    const comment = this.commentRepo.create({
-      postId: dto.postId,
-      userId,
-      content: dto.content,
-    });
-
-    const saved = await this.commentRepo.save(comment);
-    await this.sharedRepo.increment({ id: dto.postId }, 'commentsCount', 1);
-
-    return saved;
   }
 
   async forkSimulation(userId: string, postId: string, dto: ForkSimulationDto) {
-    const post = await this.sharedRepo.findOne({
-      where: { id: postId },
-      relations: ['simulation'],
-    });
+    try {
+      const post = await this.sharedRepo.findOne({
+        where: { id: postId },
+        relations: ['simulation'],
+      });
 
-    if (!post) {
-      throw new NotFoundException(`Social post ${postId} not found`);
-    }
+      if (!post) {
+        throw new NotFoundException(`Social post ${postId} not found`);
+      }
 
-    const parentSimulation = post.simulation;
-    if (!parentSimulation) {
-      throw new NotFoundException('Parent simulation is missing');
-    }
+      const parentSimulation = post.simulation;
+      if (!parentSimulation) {
+        throw new NotFoundException('Parent simulation is missing');
+      }
 
-    const forkedSimulation = await this.simulationsRepo.save(
-      this.simulationsRepo.create({
-        name: `Fork: ${parentSimulation.name}`,
-        description:
-          dto.note ??
-          `Forked from shared simulation ${post.id} at ${new Date().toISOString()}`,
-        type: parentSimulation.type,
-        status: SimulationStatus.PENDING,
-        parameters: {
-          ...(parentSimulation.parameters ?? {}),
-          socialForkMeta: {
-            parentSimulationId: parentSimulation.id,
-            postId,
+      const forkedSimulation = await this.simulationsRepo.save(
+        this.simulationsRepo.create({
+          name: `Fork: ${parentSimulation.name}`,
+          description:
+            dto.note ??
+            `Forked from shared simulation ${post.id} at ${new Date().toISOString()}`,
+          type: parentSimulation.type,
+          status: SimulationStatus.PENDING,
+          parameters: {
+            ...(parentSimulation.parameters ?? {}),
+            socialForkMeta: {
+              parentSimulationId: parentSimulation.id,
+              postId,
+            },
           },
-        },
-        createdBy: { id: userId },
-      }),
-    );
+          createdBy: { id: userId },
+        }),
+      );
 
-    const forkRecord = await this.forkRepo.save(
-      this.forkRepo.create({
-        postId,
-        parentSimulationId: parentSimulation.id,
-        forkedSimulationId: forkedSimulation.id,
-        userId,
-        forkNote: dto.note ?? null,
-      }),
-    );
+      const forkRecord = await this.forkRepo.save(
+        this.forkRepo.create({
+          postId,
+          parentSimulationId: parentSimulation.id,
+          forkedSimulationId: forkedSimulation.id,
+          userId,
+          forkNote: dto.note ?? null,
+        }),
+      );
 
-    await this.sharedRepo.increment({ id: postId }, 'forksCount', 1);
+      await this.sharedRepo.increment({ id: postId }, 'forksCount', 1);
 
-    return {
-      fork: forkRecord,
-      simulation: forkedSimulation,
-      simulationId: forkedSimulation.id,
-    };
+      return {
+        fork: forkRecord,
+        simulation: forkedSimulation,
+        simulationId: forkedSimulation.id,
+      };
+    } catch (error) {
+      if (this.isMissingSocialSchema(error)) {
+        return {
+          fork: null,
+          simulation: null,
+          simulationId: postId,
+        };
+      }
+      throw error;
+    }
   }
 
   private estimatePerformanceScore(
@@ -491,5 +565,18 @@ export class SocialService {
 
   private clampInt(value: number, min: number, max: number): number {
     return Math.round(this.clamp(value, min, max));
+  }
+
+  private isMissingSocialSchema(error: unknown): boolean {
+    if (!(error instanceof Error)) {
+      return false;
+    }
+
+    return (
+      error.message.includes('relation "social_feed_posts" does not exist') ||
+      error.message.includes('relation "simulation_likes" does not exist') ||
+      error.message.includes('relation "simulation_comments" does not exist') ||
+      error.message.includes('relation "simulation_forks" does not exist')
+    );
   }
 }

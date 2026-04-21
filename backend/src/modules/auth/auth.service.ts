@@ -5,12 +5,18 @@ import {
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
+import { Repository } from 'typeorm';
 import { JwtPayload } from './strategies/jwt.strategy';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/entities/user.entity';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { ProfileService } from '../profile/profile.service';
+import { ProgressionService } from '../progression/progression.service';
+import { UserSettings } from '../foundation/entities/user-settings.entity';
+import { Achievement } from '../foundation/entities/achievement.entity';
 
 export interface AuthenticatedUser {
   id: string;
@@ -28,10 +34,17 @@ export interface AuthSessionResponse {
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
+  private readonly bootstrapAchievementKey = 'account_initialized';
 
   constructor(
     private readonly jwtService: JwtService,
     private readonly usersService: UsersService,
+    private readonly profileService: ProfileService,
+    private readonly progressionService: ProgressionService,
+    @InjectRepository(UserSettings)
+    private readonly userSettingsRepo: Repository<UserSettings>,
+    @InjectRepository(Achievement)
+    private readonly achievementRepo: Repository<Achievement>,
   ) {}
 
   async register(dto: RegisterDto): Promise<AuthSessionResponse> {
@@ -42,6 +55,7 @@ export class AuthService {
         email: normalizedEmail,
         password: dto.password,
       });
+      await this.provisionUserState(user.id);
 
       this.logger.log(`Registration succeeded for ${normalizedEmail}`);
       return this.createSession(user);
@@ -72,6 +86,7 @@ export class AuthService {
       if (!valid) {
         throw new UnauthorizedException('Invalid email or password');
       }
+      await this.provisionUserState(user.id);
 
       this.logger.log(`Login succeeded for ${normalizedEmail}`);
       return this.createSession(user);
@@ -122,5 +137,36 @@ export class AuthService {
     }
 
     return String(error);
+  }
+
+  private async provisionUserState(userId: string): Promise<void> {
+    await this.profileService.getMe(userId);
+    await this.progressionService.getOrCreate(userId);
+
+    const existingSettings = await this.userSettingsRepo.findOne({
+      where: { userId },
+    });
+    if (!existingSettings) {
+      await this.userSettingsRepo.save(
+        this.userSettingsRepo.create({
+          userId,
+          theme: 'system',
+          chartPreferences: {},
+          emailNotifications: true,
+        }),
+      );
+    }
+
+    const existingAchievement = await this.achievementRepo.findOne({
+      where: { userId, key: this.bootstrapAchievementKey },
+    });
+    if (!existingAchievement) {
+      await this.achievementRepo.save(
+        this.achievementRepo.create({
+          userId,
+          key: this.bootstrapAchievementKey,
+        }),
+      );
+    }
   }
 }

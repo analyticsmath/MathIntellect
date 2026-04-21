@@ -19,7 +19,7 @@ export class ProfileService {
   async getMe(userId: string): Promise<Profile> {
     const existing = await this.profileRepo.findOne({ where: { userId } });
     if (existing) {
-      return existing;
+      return this.withComputedState(existing);
     }
 
     const user = await this.usersRepo.findOne({ where: { id: userId } });
@@ -41,7 +41,8 @@ export class ProfileService {
       lastBehaviorTag: DEFAULT_SKILL_PROFILE.behavior_pattern,
     });
 
-    return this.profileRepo.save(created);
+    const saved = await this.profileRepo.save(created);
+    return this.withComputedState(saved);
   }
 
   async updateMe(userId: string, dto: UpdateProfileDto): Promise<Profile> {
@@ -68,6 +69,23 @@ export class ProfileService {
       profile.engagementStateJson = { ...DEFAULT_ENGAGEMENT_STATE };
     }
 
-    return this.profileRepo.save(profile);
+    const saved = await this.profileRepo.save(profile);
+    return this.withComputedState(saved);
+  }
+
+  private withComputedState(profile: Profile): Profile {
+    profile.intelligenceProfileJson = profile.intelligenceProfileJson
+      ? { ...profile.intelligenceProfileJson }
+      : { ...DEFAULT_SKILL_PROFILE };
+
+    profile.engagementStateJson = profile.engagementStateJson
+      ? { ...profile.engagementStateJson }
+      : { ...DEFAULT_ENGAGEMENT_STATE };
+
+    profile.lastBehaviorTag =
+      profile.lastBehaviorTag ??
+      profile.intelligenceProfileJson.behavior_pattern;
+
+    return profile;
   }
 }

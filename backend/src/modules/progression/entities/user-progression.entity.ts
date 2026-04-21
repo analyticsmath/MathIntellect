@@ -26,8 +26,8 @@ export class UserProgression {
 
   @Column({
     name: 'current_track',
-    type: 'enum',
-    enum: ProgressionTrack,
+    type: 'varchar',
+    length: 60,
     default: ProgressionTrack.STRATEGIST,
   })
   currentTrack: ProgressionTrack;

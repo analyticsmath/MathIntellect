@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserProgression } from './entities/user-progression.entity';
@@ -37,6 +37,8 @@ export interface SimulationEvolutionOutput {
 
 @Injectable()
 export class ProgressionService {
+  private readonly logger = new Logger(ProgressionService.name);
+
   constructor(
     @InjectRepository(UserProgression)
     private readonly progressionRepo: Repository<UserProgression>,
@@ -45,27 +47,39 @@ export class ProgressionService {
   ) {}
 
   async getOrCreate(userId: string): Promise<UserProgression> {
-    const existing = await this.progressionRepo.findOne({ where: { userId } });
-    if (existing) {
-      return existing;
+    try {
+      const existing = await this.progressionRepo.findOne({
+        where: { userId },
+      });
+      if (existing) {
+        return existing;
+      }
+
+      const created = this.progressionRepo.create({
+        userId,
+        currentTrack: ProgressionTrack.STRATEGIST,
+        trackExperienceJson: this.emptyTrackExperience(),
+        skillPoints: 0,
+        intelligenceRank: 1,
+        intelligenceRankLabel: this.rankLabelFor(1),
+        unlockedEnginesJson: ['monte_carlo'],
+        unlockedFeaturesJson: ['adaptive_simulation_core'],
+        behaviorStyle: this.trackBehaviorStyle(ProgressionTrack.STRATEGIST),
+        explanationDepth: 1,
+        visualizationRichness: 1,
+        complexityScale: 1,
+      });
+
+      return this.progressionRepo.save(created);
+    } catch (error) {
+      if (this.isMissingRelation(error, 'user_progression')) {
+        this.logger.warn(
+          'user_progression table is missing. Returning ephemeral progression state.',
+        );
+        return this.buildFallbackState(userId);
+      }
+      throw error;
     }
-
-    const created = this.progressionRepo.create({
-      userId,
-      currentTrack: ProgressionTrack.STRATEGIST,
-      trackExperienceJson: this.emptyTrackExperience(),
-      skillPoints: 0,
-      intelligenceRank: 1,
-      intelligenceRankLabel: this.rankLabelFor(1),
-      unlockedEnginesJson: ['monte_carlo'],
-      unlockedFeaturesJson: ['adaptive_simulation_core'],
-      behaviorStyle: this.trackBehaviorStyle(ProgressionTrack.STRATEGIST),
-      explanationDepth: 1,
-      visualizationRichness: 1,
-      complexityScale: 1,
-    });
-
-    return this.progressionRepo.save(created);
   }
 
   async selectTrack(
@@ -75,7 +89,14 @@ export class ProgressionService {
     const state = await this.getOrCreate(userId);
     state.currentTrack = track;
     state.behaviorStyle = this.trackBehaviorStyle(track);
-    return this.progressionRepo.save(state);
+    try {
+      return await this.progressionRepo.save(state);
+    } catch (error) {
+      if (this.isMissingRelation(error, 'user_progression')) {
+        return state;
+      }
+      throw error;
+    }
   }
 
   async getPromptAdaptation(
@@ -147,7 +168,16 @@ export class ProgressionService {
     const previousStyle = state.behaviorStyle;
     state.behaviorStyle = this.trackBehaviorStyle(state.currentTrack);
 
-    const saved = await this.progressionRepo.save(state);
+    let saved: UserProgression;
+    try {
+      saved = await this.progressionRepo.save(state);
+    } catch (error) {
+      if (this.isMissingRelation(error, 'user_progression')) {
+        saved = state;
+      } else {
+        throw error;
+      }
+    }
 
     return {
       state: saved,
@@ -277,68 +307,85 @@ export class ProgressionService {
   }
 
   async getSkillTree(track?: ProgressionTrack): Promise<SkillTreeNode[]> {
-    if (!track) {
-      return this.skillTreeRepo.find({
+    try {
+      if (!track) {
+        return await this.skillTreeRepo.find({
+          order: { unlockLevel: 'ASC', key: 'ASC' },
+        });
+      }
+
+      return await this.skillTreeRepo.find({
+        where: { track },
         order: { unlockLevel: 'ASC', key: 'ASC' },
       });
+    } catch (error) {
+      if (this.isMissingRelation(error, 'skill_tree_nodes')) {
+        return [];
+      }
+      throw error;
     }
-
-    return this.skillTreeRepo.find({
-      where: { track },
-      order: { unlockLevel: 'ASC', key: 'ASC' },
-    });
   }
 
   async upsertSkillTreeNodes(
     nodes: Array<Partial<SkillTreeNode>>,
   ): Promise<void> {
-    for (const node of nodes) {
-      if (!node.key || !node.track || !node.name || !node.description) {
-        throw new NotFoundException(
-          'Skill tree node is missing required fields',
+    try {
+      for (const node of nodes) {
+        if (!node.key || !node.track || !node.name || !node.description) {
+          throw new NotFoundException(
+            'Skill tree node is missing required fields',
+          );
+        }
+
+        const existing = await this.skillTreeRepo.findOne({
+          where: { key: node.key },
+        });
+        if (existing) {
+          existing.track = node.track;
+          existing.name = node.name;
+          existing.description = node.description;
+          existing.unlockLevel = this.clampInt(
+            node.unlockLevel ?? existing.unlockLevel,
+            1,
+            100,
+          );
+          existing.engineUnlock = node.engineUnlock ?? existing.engineUnlock;
+          existing.aiStyleModifierJson =
+            node.aiStyleModifierJson ?? existing.aiStyleModifierJson;
+          existing.uiComplexityModifier = Number(
+            this.clamp(
+              node.uiComplexityModifier ?? existing.uiComplexityModifier,
+              -3,
+              3,
+            ).toFixed(3),
+          );
+          await this.skillTreeRepo.save(existing);
+          continue;
+        }
+
+        await this.skillTreeRepo.save(
+          this.skillTreeRepo.create({
+            key: node.key,
+            track: node.track,
+            name: node.name,
+            description: node.description,
+            unlockLevel: this.clampInt(node.unlockLevel ?? 1, 1, 100),
+            engineUnlock: node.engineUnlock ?? null,
+            aiStyleModifierJson: node.aiStyleModifierJson ?? null,
+            uiComplexityModifier: Number(
+              this.clamp(node.uiComplexityModifier ?? 0, -3, 3).toFixed(3),
+            ),
+          }),
         );
       }
-
-      const existing = await this.skillTreeRepo.findOne({
-        where: { key: node.key },
-      });
-      if (existing) {
-        existing.track = node.track;
-        existing.name = node.name;
-        existing.description = node.description;
-        existing.unlockLevel = this.clampInt(
-          node.unlockLevel ?? existing.unlockLevel,
-          1,
-          100,
+    } catch (error) {
+      if (this.isMissingRelation(error, 'skill_tree_nodes')) {
+        this.logger.warn(
+          'skill_tree_nodes table is missing. Skill tree upsert skipped.',
         );
-        existing.engineUnlock = node.engineUnlock ?? existing.engineUnlock;
-        existing.aiStyleModifierJson =
-          node.aiStyleModifierJson ?? existing.aiStyleModifierJson;
-        existing.uiComplexityModifier = Number(
-          this.clamp(
-            node.uiComplexityModifier ?? existing.uiComplexityModifier,
-            -3,
-            3,
-          ).toFixed(3),
-        );
-        await this.skillTreeRepo.save(existing);
-        continue;
+        return;
       }
-
-      await this.skillTreeRepo.save(
-        this.skillTreeRepo.create({
-          key: node.key,
-          track: node.track,
-          name: node.name,
-          description: node.description,
-          unlockLevel: this.clampInt(node.unlockLevel ?? 1, 1, 100),
-          engineUnlock: node.engineUnlock ?? null,
-          aiStyleModifierJson: node.aiStyleModifierJson ?? null,
-          uiComplexityModifier: Number(
-            this.clamp(node.uiComplexityModifier ?? 0, -3, 3).toFixed(3),
-          ),
-        }),
-      );
+      throw error;
     }
   }
 
@@ -369,7 +416,17 @@ export class ProgressionService {
     const baseFeatures = this.staticFeatureUnlocks(track, rank);
     const baseEngines = this.staticEngineUnlocks(track, rank);
 
-    const dynamicNodes = await this.skillTreeRepo.find({ where: { track } });
+    let dynamicNodes: SkillTreeNode[] = [];
+    try {
+      dynamicNodes = await this.skillTreeRepo.find({ where: { track } });
+    } catch (error) {
+      if (!this.isMissingRelation(error, 'skill_tree_nodes')) {
+        throw error;
+      }
+      this.logger.warn(
+        'skill_tree_nodes table is missing. Continuing with static unlock rules.',
+      );
+    }
     const unlockedNodes = dynamicNodes.filter(
       (node) => rank >= node.unlockLevel,
     );
@@ -486,6 +543,31 @@ export class ProgressionService {
     }
 
     return base;
+  }
+
+  private buildFallbackState(userId: string): UserProgression {
+    return this.progressionRepo.create({
+      userId,
+      currentTrack: ProgressionTrack.STRATEGIST,
+      trackExperienceJson: this.emptyTrackExperience(),
+      skillPoints: 0,
+      intelligenceRank: 1,
+      intelligenceRankLabel: this.rankLabelFor(1),
+      unlockedEnginesJson: ['monte_carlo'],
+      unlockedFeaturesJson: ['adaptive_simulation_core'],
+      behaviorStyle: this.trackBehaviorStyle(ProgressionTrack.STRATEGIST),
+      explanationDepth: 1,
+      visualizationRichness: 1,
+      complexityScale: 1,
+    });
+  }
+
+  private isMissingRelation(error: unknown, relation: string): boolean {
+    if (!(error instanceof Error)) {
+      return false;
+    }
+
+    return error.message.includes(`relation "${relation}" does not exist`);
   }
 
   private number(value: unknown, fallback: number): number {

@@ -18,8 +18,8 @@ export class SkillTreeNode {
   key: string;
 
   @Column({
-    type: 'enum',
-    enum: ProgressionTrack,
+    type: 'varchar',
+    length: 60,
     default: ProgressionTrack.STRATEGIST,
   })
   track: ProgressionTrack;

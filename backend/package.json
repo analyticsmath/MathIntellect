@@ -8,6 +8,7 @@
   "scripts": {
     "build": "nest build",
     "db:migrate:foundation": "psql \"$DATABASE_URL\" -f ../database/migrations/20260420_phase1_foundation.sql",
+    "db:migrate:phase16": "psql \"$DATABASE_URL\" -f ../database/migrations/20260421_phase16_progression.sql",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",

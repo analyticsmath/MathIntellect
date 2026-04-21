@@ -42,19 +42,19 @@ export class Simulation {
 
   @Index()
   @Column({
-    type: 'enum',
-    enum: SimulationType,
+    type: 'varchar',
+    length: 100,
     default: SimulationType.CUSTOM,
   })
   type: SimulationType;
 
-  @Column({ type: 'jsonb', nullable: true })
+  @Column({ name: 'config', type: 'jsonb', nullable: true })
   parameters: Record<string, unknown>;
 
   @Index()
   @Column({
-    type: 'enum',
-    enum: SimulationStatus,
+    type: 'varchar',
+    length: 50,
     default: SimulationStatus.PENDING,
   })
   status: SimulationStatus;
@@ -65,7 +65,7 @@ export class Simulation {
     onDelete: 'SET NULL',
     nullable: true,
   })
-  @JoinColumn({ name: 'created_by_id' })
+  @JoinColumn({ name: 'user_id' })
   createdBy: User;
 
   @CreateDateColumn({ name: 'created_at' })

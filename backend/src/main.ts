@@ -34,7 +34,9 @@ function assertRequiredEnv(logger: AppLogger): void {
       undefined,
       'Bootstrap',
     );
-    throw new Error(`Missing required production env vars: ${missing.join(', ')}`);
+    throw new Error(
+      `Missing required production env vars: ${missing.join(', ')}`,
+    );
   }
 }
 
@@ -50,13 +52,7 @@ async function bootstrap() {
   // CORS — restrict to known frontend origins
   const allowedOrigins = parseAllowedOrigins();
   app.enableCors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-        return;
-      }
-      callback(new Error(`CORS blocked for origin ${origin}`), false);
-    },
+    origin: allowedOrigins,
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     credentials: true,
   });

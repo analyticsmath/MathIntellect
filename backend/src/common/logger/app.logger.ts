@@ -34,7 +34,7 @@ export class AppLogger implements LoggerService {
     const raw = (level ?? 'info').toLowerCase();
     if (raw === 'info') return 'log';
     if (raw in this.levelWeight) {
-      return raw as keyof AppLogger['levelWeight'];
+      return raw;
     }
     return 'log';
   }
@@ -47,10 +47,7 @@ export class AppLogger implements LoggerService {
 
   private redact(text: string): string {
     return text
-      .replace(
-        /(postgres(?:ql)?:\/\/[^:\s/]+:)([^@/\s]+)@/gi,
-        '$1***@',
-      )
+      .replace(/(postgres(?:ql)?:\/\/[^:\s/]+:)([^@/\s]+)@/gi, '$1***@')
       .replace(/(sk-[A-Za-z0-9_-]{10,})/g, 'sk-***')
       .replace(/(JWT_SECRET=)([^\s]+)/gi, '$1***')
       .replace(/(OPENAI_API_KEY=)([^\s]+)/gi, '$1***')

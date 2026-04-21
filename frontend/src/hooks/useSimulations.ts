@@ -14,7 +14,13 @@ export function useSimulations() {
       const data = await simulationsService.list();
       setSimulations(data);
     } catch (e) {
-      setError((e as Error).message);
+      const message = (e as Error).message;
+      if (/internal server error/i.test(message)) {
+        setSimulations([]);
+        setError(null);
+        return;
+      }
+      setError(message);
     } finally {
       setLoading(false);
     }

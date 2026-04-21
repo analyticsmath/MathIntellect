@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import type { ReactNode } from 'react';
 
 interface TopbarProps {
@@ -9,6 +9,19 @@ interface TopbarProps {
 }
 
 export function Topbar({ title, subtitle, action, onMenuToggle }: TopbarProps) {
+  const location = useLocation();
+  const routeTitle = (() => {
+    if (location.pathname.startsWith('/app/simulations/new')) return 'Simulations';
+    if (location.pathname.startsWith('/app/feed')) return 'Feed';
+    if (location.pathname.startsWith('/app/profile')) return 'Profile';
+    if (location.pathname.startsWith('/app/analytics')) return 'Analytics';
+    if (location.pathname.startsWith('/app')) return 'Dashboard';
+    return 'Command Center';
+  })();
+
+  const heading = title || routeTitle;
+  const subtitleText = subtitle || 'Command Center';
+
   return (
     <header className="sticky top-0 z-20 px-3 md:px-6 pt-2.5">
       <div
@@ -35,14 +48,12 @@ export function Topbar({ title, subtitle, action, onMenuToggle }: TopbarProps) {
 
           <div className="flex-1 min-w-0">
             <p className="text-[10px] uppercase tracking-[0.18em]" style={{ color: 'var(--text-muted)' }}>
-              Workspace / {title}
+              Math Intellect
             </p>
-            <h1 className="text-sm md:text-base font-semibold truncate tracking-tight mt-0.5" style={{ fontFamily: 'var(--font-display)' }}>{title}</h1>
-            {subtitle && (
-              <p className="text-[11px] mt-0.5 truncate capitalize" style={{ color: 'var(--text-secondary)' }}>
-                {subtitle}
-              </p>
-            )}
+            <h1 className="text-sm md:text-base font-semibold truncate tracking-tight mt-0.5" style={{ fontFamily: 'var(--font-display)' }}>{heading}</h1>
+            <p className="text-[11px] mt-0.5 truncate" style={{ color: 'var(--text-secondary)' }}>
+              {subtitleText}
+            </p>
           </div>
 
           <div className="hidden lg:flex items-center gap-2 min-w-0 w-[34%]">

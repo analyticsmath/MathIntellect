@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import {
   BrowserRouter,
   Navigate,
@@ -12,6 +12,7 @@ import {
 import { ProtectedRoute } from './shared/ui/ProtectedRoute';
 import { useAuth } from './shared/hooks/useAuth';
 import { useMicroInteractions } from './hooks/useMicroInteractions';
+import { AppErrorBoundary } from './components/ui/AppErrorBoundary';
 
 const HomePage = lazy(() => import('./marketing/pages/HomePage'));
 const FeaturesPage = lazy(() => import('./marketing/pages/FeaturesPage'));
@@ -90,6 +91,38 @@ function RouteExperienceManager() {
   return null;
 }
 
+function ApiErrorToast() {
+  const [message, setMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handler = (event: Event) => {
+      const detail = (event as CustomEvent<{ message?: string }>).detail;
+      setMessage(detail?.message ?? 'Internal server error');
+      window.setTimeout(() => setMessage(null), 3200);
+    };
+
+    window.addEventListener('math-intellect:api-error', handler);
+    return () => window.removeEventListener('math-intellect:api-error', handler);
+  }, []);
+
+  if (!message) {
+    return null;
+  }
+
+  return (
+    <div
+      className="fixed right-4 top-4 z-[120] rounded-xl px-4 py-3 text-sm"
+      style={{
+        border: '1px solid rgba(248,113,113,0.46)',
+        background: 'rgba(127,29,29,0.9)',
+        color: '#fee2e2',
+      }}
+    >
+      {message}
+    </div>
+  );
+}
+
 function AppRoutes() {
   const location = useLocation();
   return (
@@ -133,9 +166,12 @@ function AppRoutes() {
 function App() {
   return (
     <BrowserRouter>
-      <Suspense fallback={<PageLoader />}>
-        <AppRoutes />
-      </Suspense>
+      <AppErrorBoundary>
+        <ApiErrorToast />
+        <Suspense fallback={<PageLoader />}>
+          <AppRoutes />
+        </Suspense>
+      </AppErrorBoundary>
     </BrowserRouter>
   );
 }
