@@ -12,25 +12,20 @@ interface SignupFormValues {
 
 function validate(values: SignupFormValues): string | null {
   if (!values.name.trim()) {
-    return 'Name is required.';
+    return 'Full name is required.';
   }
-
   if (values.name.trim().length < 2) {
     return 'Name must be at least 2 characters.';
   }
-
   if (!/^\S+@\S+\.\S+$/.test(values.email)) {
     return 'Enter a valid email address.';
   }
-
   if (values.password.length < 8) {
     return 'Password must be at least 8 characters.';
   }
-
   if (values.password !== values.confirmPassword) {
     return 'Passwords do not match.';
   }
-
   return null;
 }
 
@@ -49,7 +44,6 @@ export default function SignupPage() {
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     const validation = validate(values);
     if (validation) {
       setError(validation);
@@ -65,7 +59,7 @@ export default function SignupPage() {
         email: values.email.trim(),
         password: values.password,
       });
-      navigate('/app', { replace: true, viewTransition: true });
+      navigate('/app', { replace: true });
     } catch (err) {
       setError((err as Error).message || 'Account creation failed. Please try again.');
     } finally {
@@ -75,73 +69,89 @@ export default function SignupPage() {
 
   return (
     <AuthShell
-      title="Create your workspace"
-      subtitle="Launch simulations, analyze outcomes, and collaborate with mathematical intelligence."
+      title="Create account"
+      subtitle="Access the simulation workbench and mathematical modeling tools."
       footerPrompt="Already have an account?"
-      footerLinkLabel="Log in"
+      footerLinkLabel="Sign in"
       footerLinkTo="/login"
     >
       <form onSubmit={onSubmit} className="space-y-4">
-        <label className="block space-y-1.5">
-          <span className="text-xs uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>Full Name</span>
+        <div>
+          <label className="block text-xs font-mono text-mi-muted uppercase mb-1.5" htmlFor="signup-name">
+            Full name
+          </label>
           <input
+            id="signup-name"
             type="text"
             value={values.name}
             autoComplete="name"
-            onChange={(event) => setValues((prev) => ({ ...prev, name: event.target.value }))}
-            className="auth-input"
-            placeholder="Ada Lovelace"
+            onChange={(e) => setValues((prev) => ({ ...prev, name: e.target.value }))}
+            className="mi-input"
+            placeholder="Henri Poincaré"
             required
           />
-        </label>
+        </div>
 
-        <label className="block space-y-1.5">
-          <span className="text-xs uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>Email</span>
+        <div>
+          <label className="block text-xs font-mono text-mi-muted uppercase mb-1.5" htmlFor="signup-email">
+            Email address
+          </label>
           <input
+            id="signup-email"
             type="email"
             value={values.email}
             autoComplete="email"
-            onChange={(event) => setValues((prev) => ({ ...prev, email: event.target.value }))}
-            className="auth-input"
-            placeholder="ada@math-intellect.ai"
+            onChange={(e) => setValues((prev) => ({ ...prev, email: e.target.value }))}
+            className="mi-input"
+            placeholder="poincare@math-intellect.ai"
             required
           />
-        </label>
+        </div>
 
-        <label className="block space-y-1.5">
-          <span className="text-xs uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>Password</span>
+        <div>
+          <label className="block text-xs font-mono text-mi-muted uppercase mb-1.5" htmlFor="signup-password">
+            Password (min. 8 characters)
+          </label>
           <input
+            id="signup-password"
             type="password"
             value={values.password}
             autoComplete="new-password"
-            onChange={(event) => setValues((prev) => ({ ...prev, password: event.target.value }))}
-            className="auth-input"
-            placeholder="Minimum 8 characters"
+            onChange={(e) => setValues((prev) => ({ ...prev, password: e.target.value }))}
+            className="mi-input"
+            placeholder="••••••••"
             required
           />
-        </label>
+        </div>
 
-        <label className="block space-y-1.5">
-          <span className="text-xs uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>Confirm Password</span>
+        <div>
+          <label className="block text-xs font-mono text-mi-muted uppercase mb-1.5" htmlFor="signup-confirm">
+            Confirm password
+          </label>
           <input
+            id="signup-confirm"
             type="password"
             value={values.confirmPassword}
             autoComplete="new-password"
-            onChange={(event) => setValues((prev) => ({ ...prev, confirmPassword: event.target.value }))}
-            className="auth-input"
-            placeholder="Repeat password"
+            onChange={(e) => setValues((prev) => ({ ...prev, confirmPassword: e.target.value }))}
+            className="mi-input"
+            placeholder="••••••••"
             required
           />
-        </label>
+        </div>
 
         {error && (
-          <div className="rounded-xl border px-3 py-2 text-sm" style={{ borderColor: 'rgba(244,63,94,0.4)', background: 'rgba(244,63,94,0.12)', color: '#fecdd3' }}>
+          <div role="alert" className="p-3 bg-mi-danger/10 border border-mi-danger/30 text-xs font-mono text-mi-danger">
             {error}
           </div>
         )}
 
-        <button type="submit" className="primary-cta w-full justify-center" disabled={submitting}>
-          {submitting ? 'Creating account...' : 'Create Account'}
+        <button
+          type="submit"
+          disabled={submitting}
+          className="mi-btn-primary w-full h-12 text-sm mt-2"
+        >
+          {submitting ? 'Creating account...' : 'Create account'}
         </button>
       </form>
     </AuthShell>

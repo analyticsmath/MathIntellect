@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+  <!-- Drafting board surface -->
+  <rect width="600" height="600" fill="#F0F4F2"/>
+  <defs>
+    <pattern id="draft-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#D3DBD7" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+  <rect width="600" height="600" fill="url(#draft-grid)"/>
+
+  <!-- Technical blueprint layers -->
+  <rect x="60" y="60" width="480" height="480" fill="#FFFFFF" stroke="#BAC1BD" stroke-width="1.5"/>
+  <circle cx="300" cy="300" r="180" fill="none" stroke="#111412" stroke-width="1.5"/>
+  <circle cx="300" cy="300" r="120" fill="none" stroke="#78807C" stroke-width="1"/>
+  <circle cx="300" cy="300" r="60" fill="none" stroke="#BAC1BD" stroke-width="1" stroke-dasharray="2 2"/>
+
+  <!-- Compass / divider geometry -->
+  <line x1="120" y1="300" x2="480" y2="300" stroke="#78807C" stroke-width="1" stroke-dasharray="6 4"/>
+  <line x1="300" y1="120" x2="300" y2="480" stroke="#78807C" stroke-width="1" stroke-dasharray="6 4"/>
+
+  <!-- Drafting calipers & arms -->
+  <path d="M 240 160 L 300 300 L 410 220" stroke="#2D3330" stroke-width="3" fill="none"/>
+  <circle cx="300" cy="300" r="5" fill="#E35A35"/>
+  <circle cx="240" cy="160" r="4" fill="#2457E6"/>
+  <circle cx="410" cy="220" r="4" fill="#23755B"/>
+
+  <!-- Hand-drawn mathematical annotations -->
+  <text x="315" y="295" font-family="'STIX Two Math', serif" font-size="14" fill="#E35A35" font-style="italic">r = 180mm</text>
+  <text x="210" y="150" font-family="'STIX Two Math', serif" font-size="13" fill="#505753" font-style="italic">θ = 32.4°</text>
+  <text x="420" y="225" font-family="'STIX Two Math', serif" font-size="13" fill="#505753" font-style="italic">Δx = 0.015</text>
+</svg>

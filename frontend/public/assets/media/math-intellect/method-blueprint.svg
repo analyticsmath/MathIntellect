@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750">
+  <rect width="1200" height="750" fill="#EDF1EE"/>
+  <defs>
+    <pattern id="eng-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#D1D9D4" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="750" fill="url(#eng-grid)"/>
+
+  <!-- Blueprint layout plan -->
+  <rect x="80" y="60" width="1040" height="630" fill="#FFFFFF" stroke="#BAC1BD" stroke-width="2"/>
+
+  <!-- Title block and engineering stamps -->
+  <rect x="840" y="550" width="280" height="140" fill="#F4F6F5" stroke="#BAC1BD" stroke-width="1.5"/>
+  <line x1="840" y1="595" x2="1120" y2="595" stroke="#BAC1BD" stroke-width="1"/>
+  <line x1="840" y1="640" x2="1120" y2="640" stroke="#BAC1BD" stroke-width="1"/>
+  <text x="855" y="580" font-family="'SFMono-Regular', monospace" font-size="12" fill="#505753">MATH INTELLECT METHOD / C55</text>
+  <text x="855" y="622" font-family="'SFMono-Regular', monospace" font-size="11" fill="#78807C">REV: 2026.08.15 | VERIFIED</text>
+  <text x="855" y="668" font-family="'SFMono-Regular', monospace" font-size="11" fill="#111412">SPEC: STOCHASTIC BOUNDARY</text>
+
+  <!-- Structural calculation diagrams -->
+  <circle cx="360" cy="340" r="160" fill="none" stroke="#111412" stroke-width="1.5"/>
+  <circle cx="360" cy="340" r="100" fill="none" stroke="#78807C" stroke-width="1"/>
+  <line x1="200" y1="340" x2="520" y2="340" stroke="#78807C" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="360" y1="180" x2="360" y2="500" stroke="#78807C" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <!-- Calculation vectors and formulas -->
+  <path d="M 600 200 L 760 200 L 760 480 L 600 480 Z" fill="none" stroke="#2D3330" stroke-width="1.5"/>
+  <line x1="600" y1="340" x2="760" y2="340" stroke="#E35A35" stroke-width="2"/>
+  <circle cx="680" cy="340" r="6" fill="#E35A35"/>
+
+  <!-- Annotation callouts -->
+  <line x1="360" y1="180" x2="480" y2="120" stroke="#2457E6" stroke-width="1.5"/>
+  <circle cx="480" cy="120" r="4" fill="#2457E6"/>
+  <text x="500" y="125" font-family="'STIX Two Math', serif" font-size="15" fill="#2457E6" font-style="italic">∂f/∂x = 0 (Equilibrium Point)</text>
+
+  <line x1="680" y1="340" x2="800" y2="280" stroke="#E35A35" stroke-width="1.5"/>
+  <circle cx="800" cy="280" r="4" fill="#E35A35"/>
+  <text x="815" y="285" font-family="'STIX Two Math', serif" font-size="15" fill="#E35A35" font-style="italic">Var(X) ≤ σ²·Δt</text>
+</svg>

@@ -1,5 +1,5 @@
 import { useMemo, useState, type FormEvent } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthShell } from '../components/AuthShell';
 import { useAuth } from '../../shared/hooks/useAuth';
 
@@ -12,15 +12,12 @@ function validate(values: LoginFormValues): string | null {
   if (!values.email.trim()) {
     return 'Email is required.';
   }
-
   if (!/^\S+@\S+\.\S+$/.test(values.email)) {
     return 'Enter a valid email address.';
   }
-
   if (!values.password) {
     return 'Password is required.';
   }
-
   return null;
 }
 
@@ -41,7 +38,6 @@ export default function LoginPage() {
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     const validation = validate(values);
     if (validation) {
       setError(validation);
@@ -53,9 +49,9 @@ export default function LoginPage() {
 
     try {
       await login(values);
-      navigate(nextPath, { replace: true, viewTransition: true });
+      navigate(nextPath, { replace: true });
     } catch (err) {
-      setError((err as Error).message || 'Login failed. Please try again.');
+      setError((err as Error).message || 'Login failed. Please verify your credentials.');
     } finally {
       setSubmitting(false);
     }
@@ -64,51 +60,57 @@ export default function LoginPage() {
   return (
     <AuthShell
       title="Welcome back"
-      subtitle="Log in to access your simulation workspace and live intelligence analytics."
+      subtitle="Return to your models and previous simulations."
       footerPrompt="Need an account?"
       footerLinkLabel="Create one"
       footerLinkTo="/signup"
     >
       <form onSubmit={onSubmit} className="space-y-4">
-        <label className="block space-y-1.5">
-          <span className="text-xs uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>Email</span>
+        <div>
+          <label className="block text-xs font-mono text-mi-muted uppercase mb-1.5" htmlFor="login-email">
+            Email address
+          </label>
           <input
+            id="login-email"
             type="email"
             value={values.email}
             autoComplete="email"
-            onChange={(event) => setValues((prev) => ({ ...prev, email: event.target.value }))}
-            className="auth-input"
-            placeholder="you@company.com"
+            onChange={(e) => setValues((prev) => ({ ...prev, email: e.target.value }))}
+            className={`mi-input ${error && !values.email ? 'mi-input-error' : ''}`}
+            placeholder="analyst@math-intellect.ai"
             required
           />
-        </label>
+        </div>
 
-        <label className="block space-y-1.5">
-          <span className="text-xs uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>Password</span>
+        <div>
+          <label className="block text-xs font-mono text-mi-muted uppercase mb-1.5" htmlFor="login-password">
+            Password
+          </label>
           <input
+            id="login-password"
             type="password"
             value={values.password}
             autoComplete="current-password"
-            onChange={(event) => setValues((prev) => ({ ...prev, password: event.target.value }))}
-            className="auth-input"
-            placeholder="Your secure password"
+            onChange={(e) => setValues((prev) => ({ ...prev, password: e.target.value }))}
+            className="mi-input"
+            placeholder="••••••••"
             required
           />
-        </label>
+        </div>
 
         {error && (
-          <div className="rounded-xl border px-3 py-2 text-sm" style={{ borderColor: 'rgba(244,63,94,0.4)', background: 'rgba(244,63,94,0.12)', color: '#fecdd3' }}>
+          <div role="alert" className="p-3 bg-mi-danger/10 border border-mi-danger/30 text-xs font-mono text-mi-danger">
             {error}
           </div>
         )}
 
-        <button type="submit" className="primary-cta w-full justify-center" disabled={submitting}>
-          {submitting ? 'Logging in...' : 'Log In'}
+        <button
+          type="submit"
+          disabled={submitting}
+          className="mi-btn-primary w-full h-12 text-sm mt-2"
+        >
+          {submitting ? 'Signing in...' : 'Sign in'}
         </button>
-
-        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-          Want to preview first? <Link to="/" viewTransition style={{ color: 'var(--brand-blue)' }}>Explore site</Link>
-        </p>
       </form>
     </AuthShell>
   );

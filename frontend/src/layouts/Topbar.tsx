@@ -1,5 +1,6 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import type { ReactNode } from 'react';
+import { useAuth } from '../shared/hooks/useAuth';
 
 interface TopbarProps {
   title: string;
@@ -9,104 +10,53 @@ interface TopbarProps {
 }
 
 export function Topbar({ title, subtitle, action, onMenuToggle }: TopbarProps) {
-  const location = useLocation();
-  const routeTitle = (() => {
-    if (location.pathname.startsWith('/app/simulations/new')) return 'Simulations';
-    if (location.pathname.startsWith('/app/feed')) return 'Feed';
-    if (location.pathname.startsWith('/app/profile')) return 'Profile';
-    if (location.pathname.startsWith('/app/analytics')) return 'Analytics';
-    if (location.pathname.startsWith('/app')) return 'Dashboard';
-    return 'Command Center';
-  })();
-
-  const heading = title || routeTitle;
-  const subtitleText = subtitle || 'Command Center';
+  const { session, logout } = useAuth();
+  const user = session?.user;
 
   return (
-    <header className="sticky top-0 z-20 px-3 md:px-6 pt-2.5">
-      <div
-        className="rounded-3xl px-4 md:px-5 py-2.5"
-        style={{
-          border: '1px solid var(--glass-stroke)',
-          background: 'rgba(14, 22, 36, 0.82)',
-          backdropFilter: 'blur(16px) saturate(130%)',
-          WebkitBackdropFilter: 'blur(16px) saturate(130%)',
-          boxShadow: '0 16px 36px rgba(2, 8, 20, 0.56)',
-        }}
-      >
-        <div className="flex items-center gap-3 md:gap-4">
+    <header className="sticky top-0 z-20 h-14 bg-mi-paper border-b border-mi-rule px-4 md:px-8 flex items-center justify-between">
+      <div className="flex items-center gap-3 min-w-0">
+        <button
+          onClick={onMenuToggle}
+          className="md:hidden p-1.5 border border-mi-rule text-mi-ink"
+          aria-label="Toggle navigation"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+
+        <div className="min-w-0">
+          <h1 className="text-sm md:text-base font-semibold text-mi-ink truncate">
+            {title}
+          </h1>
+          {subtitle && (
+            <p className="text-[11px] font-mono text-mi-muted truncate">
+              {subtitle}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <div className="flex items-center gap-3">
+        {action && <div>{action}</div>}
+
+        <Link
+          to="/app/simulations/new"
+          className="mi-btn-primary h-8 px-3 text-xs"
+        >
+          + New Simulation
+        </Link>
+
+        <div className="flex items-center gap-2 pl-3 border-l border-mi-rule text-xs font-mono">
+          <span className="text-mi-text hidden sm:inline">{user?.name || user?.email || 'Analyst'}</span>
           <button
-            onClick={onMenuToggle}
-            className="md:hidden flex flex-col gap-1.5 p-2 rounded-lg shrink-0"
-            style={{ border: '1px solid var(--glass-stroke)', background: 'rgba(22, 32, 51, 0.9)' }}
-            aria-label="Toggle menu"
+            onClick={() => logout()}
+            className="text-mi-muted hover:text-mi-danger px-1"
+            title="Sign out"
           >
-            <span className="w-4 h-px rounded-full" style={{ background: 'var(--text-primary)' }} />
-            <span className="w-4 h-px rounded-full" style={{ background: 'var(--text-primary)' }} />
-            <span className="w-2.5 h-px rounded-full" style={{ background: 'var(--text-primary)' }} />
+            Sign out
           </button>
-
-          <div className="flex-1 min-w-0">
-            <p className="text-[10px] uppercase tracking-[0.18em]" style={{ color: 'var(--text-muted)' }}>
-              Math Intellect
-            </p>
-            <h1 className="text-sm md:text-base font-semibold truncate tracking-tight mt-0.5" style={{ fontFamily: 'var(--font-display)' }}>{heading}</h1>
-            <p className="text-[11px] mt-0.5 truncate" style={{ color: 'var(--text-secondary)' }}>
-              {subtitleText}
-            </p>
-          </div>
-
-          <div className="hidden lg:flex items-center gap-2 min-w-0 w-[34%]">
-            <input
-              aria-label="Search"
-              placeholder="Search simulations, users, insights"
-              className="w-full rounded-xl px-3 py-2 text-sm"
-              style={{
-                border: '1px solid var(--line-soft)',
-                background: 'rgba(22, 32, 51, 0.74)',
-                color: 'var(--text-primary)',
-              }}
-            />
-          </div>
-
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              type="button"
-              className="rounded-xl px-2.5 py-2 text-xs hidden sm:inline-flex"
-              style={{ border: '1px solid var(--glass-stroke)', background: 'rgba(22, 32, 51, 0.82)', color: 'var(--text-secondary)' }}
-              aria-label="Quick actions"
-            >
-              + Quick Action
-            </button>
-            <button
-              type="button"
-              className="rounded-xl px-2.5 py-2 text-xs"
-              style={{ border: '1px solid var(--glass-stroke)', background: 'rgba(22, 32, 51, 0.82)', color: 'var(--text-secondary)' }}
-              data-ripple
-              aria-label="Notifications"
-            >
-              🔔
-            </button>
-            <Link to="/app/simulations/new" viewTransition className="secondary-cta hidden md:inline-flex" style={{ paddingTop: 9, paddingBottom: 9 }}>
-              Quick Launch
-            </Link>
-            <Link to="/" viewTransition className="secondary-cta hidden md:inline-flex" style={{ paddingTop: 9, paddingBottom: 9 }}>
-              Visit Main Site
-            </Link>
-            {action && <div className="shrink-0">{action}</div>}
-            <button
-              type="button"
-              className="w-9 h-9 rounded-xl text-xs font-semibold"
-              style={{
-                border: '1px solid rgba(110, 231, 255, 0.36)',
-                background: 'linear-gradient(140deg, rgba(110, 231, 255, 0.2), rgba(139, 92, 246, 0.2))',
-                color: 'var(--text-main)',
-              }}
-              aria-label="Open profile menu"
-            >
-              MI
-            </button>
-          </div>
         </div>
       </div>
     </header>

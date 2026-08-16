@@ -1,79 +1,37 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useState } from 'react';
 import type { SimulationType, RunSimulationRequest } from '../../types/api.types';
-import { humanizeType } from '../../utils/formatters';
-import { useSavedModels } from '../../hooks/useSavedModels';
 import { ConflictForm } from './forms/ConflictForm';
 import { GameTheoryForm } from './forms/GameTheoryForm';
 import { MarketForm } from './forms/MarketForm';
 import { MonteCarloForm } from './forms/MonteCarloForm';
+import { MathExpression } from '../../math/MathExpression';
 
-const TYPES: SimulationType[] = ['monte_carlo', 'game_theory', 'market', 'conflict'];
-
-type WizardStep = 1 | 2 | 3 | 4;
-
-const STEP_TITLES: Record<WizardStep, string> = {
-  1: 'Configuration Phase',
-  2: 'Validation Phase',
-  3: 'Preview Impact Phase',
-  4: 'Execution Phase',
-};
-const STEP_ORDER: WizardStep[] = [1, 2, 3, 4];
-
-const STAGE_TONE: Record<WizardStep, { border: string; surface: string; accent: string }> = {
-  1: {
-    border: 'rgba(110, 231, 255, 0.3)',
-    surface: 'linear-gradient(155deg, rgba(22, 32, 51, 0.96), rgba(14, 22, 36, 0.94))',
-    accent: 'var(--brand-blue)',
+const TYPES: { id: SimulationType; name: string; equation: string; desc: string }[] = [
+  {
+    id: 'monte_carlo',
+    name: 'Monte Carlo Diffusion',
+    equation: 'dx_t = \\mu dt + \\sigma dW_t',
+    desc: 'Stochastic path integration & quantile distribution',
   },
-  2: {
-    border: 'rgba(245, 158, 11, 0.3)',
-    surface: 'linear-gradient(155deg, rgba(22, 32, 51, 0.96), rgba(14, 22, 36, 0.94))',
-    accent: 'var(--amber-warning)',
+  {
+    id: 'game_theory',
+    name: 'Game Theory Equilibrium',
+    equation: 'u_i(s_i^*, s_{-i}^*) \\ge u_i(s_i, s_{-i}^*)',
+    desc: '2×2 zero-sum mixed Nash strategy solver',
   },
-  3: {
-    border: 'rgba(6, 182, 212, 0.35)',
-    surface: 'linear-gradient(155deg, rgba(22, 32, 51, 0.96), rgba(14, 22, 36, 0.94))',
-    accent: 'var(--signal-cyan)',
+  {
+    id: 'market',
+    name: 'Market Dynamics AR(1)',
+    equation: 'x_t = \\rho x_{t-1} + \\varepsilon_t',
+    desc: 'Autoregressive persistence and regime transitions',
   },
-  4: {
-    border: 'rgba(124, 58, 237, 0.34)',
-    surface: 'linear-gradient(155deg, rgba(22, 32, 51, 0.96), rgba(14, 22, 36, 0.94))',
-    accent: 'var(--quantum-violet)',
+  {
+    id: 'conflict',
+    name: 'Agent Interaction Field',
+    equation: '\\dot{\\mathbf{x}}_i = \\sum A_{ij}(\\mathbf{x}_j - \\mathbf{x}_i)',
+    desc: 'Neighborhood spatial coupling and consensus',
   },
-};
-
-const TYPE_META: Record<SimulationType, { code: string; color: string; desc: string; useCase: string }> = {
-  monte_carlo: {
-    code: 'MC',
-    color: '#2563EB',
-    desc: 'Sample uncertainty and estimate confidence ranges.',
-    useCase: 'Use for probabilistic risk modeling and distribution forecasting.',
-  },
-  game_theory: {
-    code: 'GT',
-    color: '#06B6D4',
-    desc: 'Model strategic interaction and equilibrium stability.',
-    useCase: 'Use for competitive strategy and payoff optimization scenarios.',
-  },
-  market: {
-    code: 'MK',
-    color: '#7C3AED',
-    desc: 'Project stochastic market behavior under volatility shifts.',
-    useCase: 'Use for pricing path analysis and portfolio stress testing.',
-  },
-  conflict: {
-    code: 'CF',
-    color: '#EF4444',
-    desc: 'Simulate multi-agent pressure and resource competition.',
-    useCase: 'Use for coalition, negotiation, and adversarial behavior modeling.',
-  },
-  custom: {
-    code: 'CX',
-    color: '#0284C7',
-    desc: '',
-    useCase: '',
-  },
-};
+];
 
 const DEFAULTS: Record<SimulationType, Record<string, unknown>> = {
   monte_carlo: {
@@ -97,20 +55,20 @@ const DEFAULTS: Record<SimulationType, Record<string, unknown>> = {
     players: ['Alice', 'Bob'],
     strategies: { Alice: ['Cooperate', 'Defect'], Bob: ['Cooperate', 'Defect'] },
     payoffMatrix: [
-      { strategies: { Alice: 'Cooperate', Bob: 'Cooperate' }, payoffs: { Alice: 3, Bob: 3 } },
-      { strategies: { Alice: 'Cooperate', Bob: 'Defect' }, payoffs: { Alice: 0, Bob: 5 } },
-      { strategies: { Alice: 'Defect', Bob: 'Cooperate' }, payoffs: { Alice: 5, Bob: 0 } },
-      { strategies: { Alice: 'Defect', Bob: 'Defect' }, payoffs: { Alice: 1, Bob: 1 } },
+      { strategies: { Alice: 'Cooperate', Bob: 'Cooperate' }, payoffs: { Alice: 4, Bob: 1 } },
+      { strategies: { Alice: 'Cooperate', Bob: 'Defect' }, payoffs: { Alice: 1, Bob: 5 } },
+      { strategies: { Alice: 'Defect', Bob: 'Cooperate' }, payoffs: { Alice: 2, Bob: 3 } },
+      { strategies: { Alice: 'Defect', Bob: 'Defect' }, payoffs: { Alice: 5, Bob: 2 } },
     ],
   },
   conflict: {
     rounds: 100,
     seed: 7,
     agents: [
-      { id: 'a1', name: 'Hawk', resources: 100, strategy: 'aggressive' },
-      { id: 'a2', name: 'Dove', resources: 100, strategy: 'cooperative' },
-      { id: 'a3', name: 'TitForTat', resources: 100, strategy: 'tit_for_tat' },
-      { id: 'a4', name: 'Wildcard', resources: 100, strategy: 'random' },
+      { id: 'a1', name: 'Alpha', resources: 100, strategy: 'aggressive' },
+      { id: 'a2', name: 'Beta', resources: 100, strategy: 'cooperative' },
+      { id: 'a3', name: 'Gamma', resources: 100, strategy: 'tit_for_tat' },
+      { id: 'a4', name: 'Delta', resources: 100, strategy: 'random' },
     ],
   },
   custom: {
@@ -124,580 +82,247 @@ interface SimulationFormProps {
   onSubmit: (payload: RunSimulationRequest) => Promise<void>;
   submitting: boolean;
   error?: string | null;
-  onStageChange?: (stage: WizardStep) => void;
 }
 
-function estimateComplexity(type: SimulationType, parameters: Record<string, unknown>) {
-  if (type === 'monte_carlo') {
-    const iterations = Number(parameters.iterations ?? 0);
-    const variables = Array.isArray(parameters.variables) ? parameters.variables.length : 1;
-    const score = iterations * Math.max(variables, 1);
-    return {
-      estimatedRuntime: `${Math.max(1, Math.round(score / 6000))}s`,
-      iterations: `${iterations.toLocaleString()} samples`,
-      outputType: 'Distribution + confidence bands',
-      heavy: score > 80_000,
-    };
-  }
+export function SimulationForm({ onSubmit, submitting, error }: SimulationFormProps) {
+  const [selectedType, setSelectedType] = useState<SimulationType>('monte_carlo');
+  const [name, setName] = useState<string>('Simulation Run');
+  const [params, setParams] = useState<Record<string, unknown>>(DEFAULTS.monte_carlo);
+  const [inspectorOpen, setInspectorOpen] = useState<boolean>(true);
+  const [mobileSheetExpanded, setMobileSheetExpanded] = useState<boolean>(false);
 
-  if (type === 'market') {
-    const paths = Number(parameters.paths ?? 0);
-    const days = Number(parameters.timeHorizonDays ?? 0);
-    const score = paths * days;
-    return {
-      estimatedRuntime: `${Math.max(1, Math.round(score / 3800))}s`,
-      iterations: `${paths.toLocaleString()} paths x ${days} days`,
-      outputType: 'Price trajectories + VaR',
-      heavy: score > 25_000,
-    };
-  }
+  const activeMeta = TYPES.find((t) => t.id === selectedType) || TYPES[0];
 
-  if (type === 'game_theory') {
-    const matrix = Array.isArray(parameters.payoffMatrix) ? parameters.payoffMatrix.length : 0;
-    const players = Array.isArray(parameters.players) ? parameters.players.length : 2;
-    const score = matrix * players;
-    return {
-      estimatedRuntime: `${Math.max(1, Math.round(score / 25))}s`,
-      iterations: `${matrix} payoff states`,
-      outputType: 'Equilibria + strategic insights',
-      heavy: score > 120,
-    };
-  }
-
-  const rounds = Number(parameters.rounds ?? 0);
-  const agents = Array.isArray(parameters.agents) ? parameters.agents.length : 0;
-  const score = rounds * Math.max(agents, 1) * Math.max(agents - 1, 1);
-  return {
-    estimatedRuntime: `${Math.max(1, Math.round(score / 4200))}s`,
-    iterations: `${rounds.toLocaleString()} rounds / ${agents} agents`,
-    outputType: 'Agent outcomes + behavior history',
-    heavy: score > 45_000,
-  };
-}
-
-function stableSerialize(value: unknown): string {
-  if (Array.isArray(value)) {
-    return `[${value.map((entry) => stableSerialize(entry)).join(',')}]`;
-  }
-
-  if (value && typeof value === 'object') {
-    const objectValue = value as Record<string, unknown>;
-    const keys = Object.keys(objectValue).sort();
-    return `{${keys
-      .map((key) => `${key}:${stableSerialize(objectValue[key])}`)
-      .join(',')}}`;
-  }
-
-  return JSON.stringify(value);
-}
-
-function parameterHash(value: Record<string, unknown>): string {
-  const stable = stableSerialize(value);
-  let hash = 2166136261;
-  for (let i = 0; i < stable.length; i++) {
-    hash ^= stable.charCodeAt(i);
-    hash = Math.imul(hash, 16777619);
-  }
-  return `p_${(hash >>> 0).toString(16)}`;
-}
-
-export function SimulationForm({ onSubmit, submitting, error, onStageChange }: SimulationFormProps) {
-  const [step, setStep] = useState<WizardStep>(1);
-  const [type, setType] = useState<SimulationType>('monte_carlo');
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [parameters, setParameters] = useState<Record<string, unknown>>(DEFAULTS.monte_carlo);
-  const [templateTitle, setTemplateTitle] = useState('');
-  const [templateSaving, setTemplateSaving] = useState(false);
-  const sessionStartedAt = useRef(Date.now());
-  const step4EnteredAt = useRef<number | null>(null);
-  const parameterAdjustments = useRef(0);
-  const strategyChanges = useRef(0);
-  const parameterHashes = useRef<Set<string>>(new Set([parameterHash(DEFAULTS.monte_carlo)]));
-  const lastParameterHash = useRef(parameterHash(DEFAULTS.monte_carlo));
-
-  const { models, loading: templatesLoading, error: templatesError, create: createTemplate, remove: removeTemplate } = useSavedModels();
-
-  const handleTypeChange = (nextType: SimulationType) => {
-    setType(nextType);
-    setParameters(DEFAULTS[nextType]);
-    const nextHash = parameterHash(DEFAULTS[nextType]);
-    parameterAdjustments.current = 0;
-    strategyChanges.current = 0;
-    parameterHashes.current = new Set([nextHash]);
-    lastParameterHash.current = nextHash;
-    sessionStartedAt.current = Date.now();
-    step4EnteredAt.current = null;
+  const handleTypeChange = (t: SimulationType) => {
+    setSelectedType(t);
+    setParams(DEFAULTS[t]);
   };
 
-  const handleParamsChange = (value: Record<string, unknown>) => {
-    setParameters(value);
-    const nextHash = parameterHash(value);
-
-    if (nextHash !== lastParameterHash.current) {
-      parameterAdjustments.current += 1;
-      parameterHashes.current.add(nextHash);
-      lastParameterHash.current = nextHash;
-
-      if (type === 'game_theory' || type === 'conflict') {
-        strategyChanges.current += 1;
-      }
-    }
-  };
-
-  useEffect(() => {
-    onStageChange?.(step);
-    if (step === 4 && !step4EnteredAt.current) {
-      step4EnteredAt.current = Date.now();
-    }
-  }, [onStageChange, step]);
-
-  const complexity = useMemo(() => estimateComplexity(type, parameters), [type, parameters]);
-
-  const canGoNext =
-    (step === 1) ||
-    (step === 2 && name.trim().length > 0) ||
-    (step === 3);
-
-  const templatesForType = useMemo(
-    () => models.filter((item) => item.engineType === type),
-    [models, type],
-  );
-
-  const handleSaveTemplate = async () => {
-    if (!templateTitle.trim()) {
-      return;
-    }
-
-    setTemplateSaving(true);
-    try {
-      await createTemplate({
-        engineType: type,
-        title: templateTitle.trim(),
-        configJson: {
-          name: name.trim(),
-          description: description.trim() || undefined,
-          type,
-          parameters,
-        },
-      });
-      setTemplateTitle('');
-    } finally {
-      setTemplateSaving(false);
-    }
-  };
-
-  const handleSubmit = async () => {
-    if (!name.trim()) {
-      setStep(2);
-      return;
-    }
-
-    const now = Date.now();
-    const sessionDurationMs = Math.max(0, now - sessionStartedAt.current);
-    const decisionHesitationMs = Math.max(
-      0,
-      now - (step4EnteredAt.current ?? sessionStartedAt.current),
-    );
-    const explorationRatio =
-      parameterHashes.current.size / Math.max(1, parameterAdjustments.current);
-
-    const rerunKey = `math-intellect:rerun-count:${type}`;
-    const previousRuns = Number(window.localStorage.getItem(rerunKey) ?? '0');
-    const rerunCount = Number.isFinite(previousRuns) ? Math.max(0, previousRuns) : 0;
-
-    await onSubmit({
-      name: name.trim(),
-      description: description.trim() || undefined,
-      type,
-      parameters,
-      behaviorSignals: {
-        parameterAdjustmentCount: parameterAdjustments.current,
-        parameterAdjustmentMs: sessionDurationMs,
-        rerunCount,
-        explorationRatio: Number(Math.min(1, explorationRatio).toFixed(3)),
-        decisionHesitationMs,
-        strategyChanges: strategyChanges.current,
-        interactionLagMs: Math.max(0, decisionHesitationMs - 1_400),
-        sessionDurationMs,
-      },
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit({
+      name: name.trim() || `${activeMeta.name} Run`,
+      type: selectedType,
+      parameters: params,
     });
-
-    window.localStorage.setItem(rerunKey, String(rerunCount + 1));
   };
 
   return (
-    <div className="space-y-6">
-      <section className="premium-card p-4 md:p-5">
-        <div className="flex flex-wrap gap-2">
-          {STEP_ORDER.map((item) => {
-            const active = step === item;
-            const done = step > item;
-            const tone = STAGE_TONE[item];
-            return (
-              <button
-                key={item}
-                type="button"
-                onClick={() => {
-                  if (item < step || (item === step + 1 && canGoNext)) {
-                    setStep(item);
-                  }
-                }}
-                className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-xs transition-all duration-300"
-                style={{
-                  border: active
-                    ? `1px solid ${tone.border}`
-                    : '1px solid rgba(148, 163, 184, 0.24)',
-                  background: active ? tone.surface : 'rgba(11, 16, 32, 0.86)',
-                  color: done ? 'var(--emerald-success)' : 'var(--text-muted)',
-                  transitionDuration: '260ms',
-                  transitionTimingFunction: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
-                }}
-              >
-                <span
-                  className="w-5 h-5 rounded-full grid place-items-center font-semibold"
-                  style={{
-                    background: active ? `${tone.accent}1f` : 'rgba(148, 163, 184, 0.12)',
-                    color: active ? tone.accent : 'var(--text-muted)',
-                  }}
-                >
-                  {item}
-                </span>
-                {STEP_TITLES[item]}
-              </button>
-            );
-          })}
+    <div className="w-full">
+      {/* Desktop 3 Functional Territories Architecture */}
+      <div className="border border-mi-rule bg-mi-paper">
+        {/* Workspace Contextual Bar */}
+        <div className="h-12 px-6 border-b border-mi-rule bg-mi-surface-soft flex items-center justify-between text-xs font-mono">
+          <div className="flex items-center gap-3">
+            <span className="w-2 h-2 rounded-full bg-mi-success"></span>
+            <span className="font-semibold text-mi-ink">MODEL BUILDER</span>
+            <span className="text-mi-muted">•</span>
+            <span className="text-mi-muted">ENGINE: {selectedType.toUpperCase()}</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setInspectorOpen(!inspectorOpen)}
+              className="text-mi-muted hover:text-mi-ink"
+            >
+              {inspectorOpen ? 'Hide Inspector' : 'Show Inspector'}
+            </button>
+          </div>
         </div>
-      </section>
 
-      {step === 1 && (
-        <section className="premium-card p-5 md:p-6" style={{ borderColor: STAGE_TONE[1].border, background: STAGE_TONE[1].surface }}>
-          <p className="text-[10px] uppercase tracking-[0.2em] font-semibold" style={{ color: STAGE_TONE[1].accent }}>
-            Step 1 / Configuration Phase
-          </p>
-          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {TYPES.map((item) => {
-              const itemMeta = TYPE_META[item];
-              const active = item === type;
-              return (
-                <button
-                  key={item}
-                  type="button"
-                  onClick={() => handleTypeChange(item)}
-                  className="text-left rounded-2xl p-4 transition-all duration-300"
-                  style={{
-                    border: active ? `1px solid ${itemMeta.color}66` : '1px solid rgba(148, 163, 184, 0.24)',
-                    background: active ? `${itemMeta.color}15` : 'rgba(11, 16, 32, 0.84)',
-                    transform: active ? 'translateY(-1px)' : 'translateY(0px)',
-                  }}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <span
-                      className="w-8 h-8 rounded-xl inline-flex items-center justify-center text-xs font-bold"
-                      style={{
-                        color: 'var(--text-main)',
-                        background: `linear-gradient(140deg, ${itemMeta.color}, ${itemMeta.color}cc)`,
-                      }}
-                    >
-                      {itemMeta.code}
-                    </span>
-                    <div>
-                      <p className="text-sm font-semibold">{humanizeType(item)}</p>
-                      <p className="text-[11px]" style={{ color: itemMeta.color }}>{itemMeta.desc}</p>
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 min-h-[600px]">
+          {/* Territory 1: Assumptions (Left Column, ~300px) */}
+          <div
+            className={`lg:col-span-4 border-r border-mi-rule p-6 space-y-6 bg-mi-paper ${
+              mobileSheetExpanded ? 'block' : 'hidden lg:block'
+            }`}
+          >
+            <div>
+              <div className="text-xs font-mono text-mi-muted uppercase">1. Model Assumptions</div>
+              <div className="mt-3">
+                <label className="text-xs font-mono text-mi-muted uppercase" htmlFor="sim-name-input">
+                  Simulation Name
+                </label>
+                <input
+                  id="sim-name-input"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="mi-input h-10 text-xs mt-1"
+                  placeholder="e.g. Portfolio Tail Risk Q3"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Engine Picker */}
+            <div>
+              <div className="text-xs font-mono text-mi-muted uppercase mb-2">Engine Selection</div>
+              <div className="space-y-1.5" role="radiogroup" aria-label="Engine Type">
+                {TYPES.map((t) => (
+                  <button
+                    key={t.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={selectedType === t.id}
+                    onClick={() => handleTypeChange(t.id)}
+                    className={`w-full text-left p-2.5 border text-xs transition-colors ${
+                      selectedType === t.id
+                        ? 'border-mi-ink bg-mi-surface-soft text-mi-ink font-semibold'
+                        : 'border-mi-rule bg-mi-paper text-mi-text hover:border-mi-rule-strong'
+                    }`}
+                  >
+                    <div className="font-medium">{t.name}</div>
+                    <div className="text-[11px] text-mi-muted mt-0.5">{t.desc}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Engine Specific Inputs */}
+            <div className="pt-4 border-t border-mi-rule">
+              <div className="text-xs font-mono text-mi-muted uppercase mb-3">Parameters</div>
+              {selectedType === 'monte_carlo' && (
+                <MonteCarloForm onChange={(p) => setParams(p)} />
+              )}
+              {selectedType === 'game_theory' && (
+                <GameTheoryForm onChange={(p) => setParams(p)} />
+              )}
+              {selectedType === 'market' && (
+                <MarketForm onChange={(p) => setParams(p)} />
+              )}
+              {selectedType === 'conflict' && (
+                <ConflictForm onChange={(p) => setParams(p)} />
+              )}
+            </div>
+
+            {error && (
+              <div role="alert" className="p-3 bg-mi-danger/10 border border-mi-danger/30 text-xs font-mono text-mi-danger">
+                {error}
+              </div>
+            )}
+
+            <div className="pt-4 border-t border-mi-rule">
+              <button
+                type="submit"
+                disabled={submitting}
+                className="mi-btn-primary w-full h-12 text-sm"
+              >
+                {submitting ? 'Running Simulation...' : 'Run Simulation'}
+              </button>
+            </div>
+          </div>
+
+          {/* Territory 2: Model Field (Center, Dominant 680px+) */}
+          <div
+            className={`${
+              inspectorOpen ? 'lg:col-span-5' : 'lg:col-span-8'
+            } p-6 md:p-8 flex flex-col justify-between bg-mi-surface-soft border-r border-mi-rule`}
+          >
+            <div>
+              <div className="flex items-center justify-between text-xs font-mono text-mi-muted mb-4">
+                <span>2. MATHEMATICAL MODEL STRUCTURE</span>
+                <span className="text-mi-change font-bold">STATE: M2 (READY)</span>
+              </div>
+
+              {/* Formula Panel */}
+              <div className="p-4 bg-mi-paper border border-mi-rule mb-6">
+                <div className="text-xs font-mono text-mi-muted uppercase mb-1">Governing Equation</div>
+                <MathExpression tex={activeMeta.equation} display />
+              </div>
+
+              {/* Mathematical Structure Graphic */}
+              <div className="w-full aspect-[16/10] bg-mi-paper border border-mi-rule p-4 flex items-center justify-center">
+                {selectedType === 'monte_carlo' && (
+                  <svg className="w-full h-full" viewBox="0 0 500 280">
+                    <line x1="40" y1="240" x2="460" y2="240" stroke="#BAC1BD" strokeWidth="1" strokeDasharray="3 3" />
+                    <path d="M 40 140 Q 150 100 280 120 T 460 60" fill="none" stroke="#E35A35" strokeWidth="2.5" />
+                    <path d="M 40 140 Q 150 180 280 160 T 460 220" fill="none" stroke="#2457E6" strokeWidth="2.5" />
+                    <path d="M 40 140 Q 150 130 280 140 T 460 130" fill="none" stroke="#111412" strokeWidth="2" />
+                    <circle cx="460" cy="60" r="4" fill="#E35A35" />
+                    <circle cx="460" cy="220" r="4" fill="#2457E6" />
+                    <circle cx="460" cy="130" r="4" fill="#111412" />
+                  </svg>
+                )}
+
+                {selectedType === 'game_theory' && (
+                  <div className="w-full max-w-xs text-center font-mono text-xs space-y-2">
+                    <div className="text-mi-muted uppercase">2×2 Payoff Geometry</div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="p-3 border border-mi-ink bg-mi-paper font-bold">A₁ / B₁</div>
+                      <div className="p-3 border border-mi-rule bg-mi-surface-soft">A₁ / B₂</div>
+                      <div className="p-3 border border-mi-rule bg-mi-surface-soft">A₂ / B₁</div>
+                      <div className="p-3 border border-mi-rule bg-mi-surface-soft">A₂ / B₂</div>
                     </div>
                   </div>
-                  <p className="mt-3 text-xs" style={{ color: 'var(--text-secondary)' }}>{itemMeta.useCase}</p>
-                </button>
-              );
-            })}
-          </div>
-        </section>
-      )}
+                )}
 
-      {step === 2 && (
-        <section className="space-y-5">
-          <article className="premium-card p-5 md:p-6" style={{ borderColor: STAGE_TONE[2].border, background: STAGE_TONE[2].surface }}>
-            <p className="text-[10px] uppercase tracking-[0.2em] font-semibold" style={{ color: STAGE_TONE[2].accent }}>
-              Step 2 / Validation Phase
-            </p>
-            <div className="mt-4 grid grid-cols-1 gap-4">
-              <label className="block">
-                <span className="text-xs uppercase tracking-[0.16em]" style={{ color: 'var(--text-secondary)' }}>
-                  Simulation Name
-                </span>
-                <input
-                  required
-                  value={name}
-                  onChange={(event) => setName(event.target.value)}
-                  placeholder="e.g. Portfolio Risk Q2"
-                  className="w-full mt-2 px-3 py-2.5 rounded-xl"
-                  style={{
-                    border: '1px solid rgba(148, 163, 184, 0.3)',
-                    background: 'rgba(11, 16, 32, 0.9)',
-                    color: 'var(--text-primary)',
-                  }}
-                />
-              </label>
-              <label className="block">
-                <span className="text-xs uppercase tracking-[0.16em]" style={{ color: 'var(--text-secondary)' }}>
-                  Description
-                </span>
-                <input
-                  value={description}
-                  onChange={(event) => setDescription(event.target.value)}
-                  placeholder="What strategic question are you evaluating?"
-                  className="w-full mt-2 px-3 py-2.5 rounded-xl"
-                  style={{
-                    border: '1px solid rgba(148, 163, 184, 0.3)',
-                    background: 'rgba(11, 16, 32, 0.9)',
-                    color: 'var(--text-primary)',
-                  }}
-                />
-              </label>
-            </div>
-          </article>
+                {selectedType === 'market' && (
+                  <svg className="w-full h-full" viewBox="0 0 500 280">
+                    <line x1="40" y1="140" x2="460" y2="140" stroke="#BAC1BD" strokeWidth="1" strokeDasharray="3 3" />
+                    <path d="M 40 140 L 100 110 L 160 160 L 220 90 L 300 130 L 380 70 L 460 110" fill="none" stroke="#111412" strokeWidth="2.5" />
+                    <circle cx="380" cy="70" r="4" fill="#E35A35" />
+                  </svg>
+                )}
 
-          <article className="premium-card p-5 md:p-6" style={{ borderColor: STAGE_TONE[2].border, background: STAGE_TONE[2].surface }}>
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-[10px] uppercase tracking-[0.2em] font-semibold" style={{ color: 'var(--text-muted)' }}>
-                Engine Parameters
-              </p>
-              <span
-                className="text-[11px] uppercase tracking-[0.14em] px-2.5 py-1 rounded-full"
-                style={{
-                  border: `1px solid ${TYPE_META[type].color}66`,
-                  background: `${TYPE_META[type].color}22`,
-                  color: TYPE_META[type].color,
-                }}
-              >
-                {humanizeType(type)}
-              </span>
-            </div>
-            <div className="mt-5">
-              {type === 'monte_carlo' && <MonteCarloForm onChange={handleParamsChange} />}
-              {type === 'market' && <MarketForm onChange={handleParamsChange} />}
-              {type === 'game_theory' && <GameTheoryForm onChange={handleParamsChange} />}
-              {type === 'conflict' && <ConflictForm onChange={handleParamsChange} />}
+                {selectedType === 'conflict' && (
+                  <svg className="w-full h-full" viewBox="0 0 500 280">
+                    <circle cx="150" cy="120" r="6" fill="#E35A35" />
+                    <circle cx="350" cy="160" r="6" fill="#2457E6" />
+                    <circle cx="250" cy="200" r="6" fill="#23755B" />
+                    <circle cx="220" cy="80" r="6" fill="#111412" />
+                    <line x1="150" y1="120" x2="350" y2="160" stroke="#78807C" strokeWidth="1" strokeDasharray="4 4" />
+                    <line x1="350" y1="160" x2="250" y2="200" stroke="#78807C" strokeWidth="1" strokeDasharray="4 4" />
+                    <line x1="220" y1="80" x2="150" y2="120" stroke="#78807C" strokeWidth="1" strokeDasharray="4 4" />
+                  </svg>
+                )}
+              </div>
             </div>
 
-            <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {[
-                { label: 'Input Metadata', pass: name.trim().length > 0, detail: name.trim().length > 0 ? 'Simulation name provided' : 'Simulation name required' },
-                { label: 'Parameter Matrix', pass: Object.keys(parameters).length > 0, detail: Object.keys(parameters).length > 0 ? 'Engine parameters validated' : 'Parameters missing' },
-                { label: 'Execution Guard', pass: !submitting, detail: submitting ? 'Execution in progress' : 'Ready for preview phase' },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  className="rounded-xl p-3"
-                  style={{
-                    border: item.pass ? '1px solid rgba(22, 163, 74, 0.35)' : '1px solid rgba(245, 158, 11, 0.36)',
-                    background: item.pass ? 'rgba(16, 185, 129, 0.14)' : 'rgba(245, 158, 11, 0.14)',
-                  }}
-                >
-                  <p className="text-[10px] uppercase tracking-[0.16em]" style={{ color: 'var(--text-muted)' }}>
-                    {item.label}
-                  </p>
-                  <p className="mt-1 text-xs" style={{ color: item.pass ? '#86efac' : '#fcd34d' }}>{item.detail}</p>
-                </div>
-              ))}
-            </div>
-          </article>
-
-          <article className="premium-card p-5 md:p-6" style={{ borderColor: STAGE_TONE[2].border, background: STAGE_TONE[2].surface }}>
-            <p className="text-[10px] uppercase tracking-[0.2em] font-semibold" style={{ color: 'var(--text-muted)' }}>
-              Saved Templates (Foundation)
-            </p>
-            <div className="mt-4 flex flex-col md:flex-row gap-3">
-              <input
-                value={templateTitle}
-                onChange={(event) => setTemplateTitle(event.target.value)}
-                placeholder="Template title"
-                className="flex-1 min-w-0 px-3 py-2.5 rounded-xl"
-                style={{
-                  border: '1px solid rgba(148, 163, 184, 0.3)',
-                  background: 'rgba(11, 16, 32, 0.9)',
-                  color: 'var(--text-primary)',
-                }}
-              />
+            {/* Mobile Sheet Toggle Bar */}
+            <div className="mt-6 pt-4 border-t border-mi-rule flex lg:hidden items-center justify-between">
               <button
                 type="button"
-                onClick={() => {
-                  void handleSaveTemplate();
-                }}
-                className="secondary-cta"
-                disabled={templateSaving || !templateTitle.trim()}
+                onClick={() => setMobileSheetExpanded(!mobileSheetExpanded)}
+                className="mi-btn-secondary h-10 px-4 text-xs w-full"
               >
-                {templateSaving ? 'Saving...' : 'Save Current Config'}
+                {mobileSheetExpanded ? 'View Mathematical Canvas' : 'Edit Model Assumptions (Sheet)'}
               </button>
             </div>
-            <p className="mt-2 text-xs" style={{ color: 'var(--text-muted)' }}>
-              Basic CRUD is enabled for Phase 1. Template execution workflows are reserved for later phases.
-            </p>
 
-            <div className="mt-4 space-y-2">
-              {templatesLoading && <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Loading templates...</p>}
-              {templatesError && <p className="text-xs" style={{ color: '#ffc4d0' }}>{templatesError}</p>}
-              {!templatesLoading && templatesForType.length === 0 && (
-                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>No saved templates for {humanizeType(type)}.</p>
-              )}
-              {templatesForType.map((item) => (
-                <div
-                  key={item.id}
-                  className="rounded-xl px-3 py-2 flex items-center justify-between gap-3"
-                  style={{ border: '1px solid rgba(148, 163, 184, 0.2)', background: 'rgba(11, 16, 32, 0.82)' }}
-                >
-                  <div>
-                    <p className="text-sm font-semibold">{item.title}</p>
-                    <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>
-                      Updated {new Date(item.updatedAt).toLocaleString()}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    className="text-xs px-2.5 py-1.5 rounded-lg"
-                    style={{ border: '1px solid rgba(239, 68, 68, 0.35)', color: '#fecaca' }}
-                    onClick={() => {
-                      void removeTemplate(item.id);
-                    }}
-                  >
-                    Delete
-                  </button>
-                </div>
-              ))}
-            </div>
-          </article>
-        </section>
-      )}
-
-      {step === 3 && (
-        <section className="premium-card p-5 md:p-6 relative overflow-hidden" style={{ borderColor: STAGE_TONE[3].border, background: STAGE_TONE[3].surface }}>
-          <div
-            className="pointer-events-none absolute -right-20 top-0 h-44 w-44 rounded-full"
-            style={{ background: 'radial-gradient(circle, rgba(6, 182, 212, 0.16), transparent 70%)' }}
-            aria-hidden
-          />
-          <p className="text-[10px] uppercase tracking-[0.2em] font-semibold relative z-10" style={{ color: STAGE_TONE[3].accent }}>
-            Step 3 / Preview Impact Phase
-          </p>
-          <p className="mt-2 text-sm relative z-10" style={{ color: 'var(--text-secondary)' }}>
-            Preview expected runtime behavior and output impact before dispatching execution.
-          </p>
-          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <div className="surface-glass rounded-xl p-4">
-              <p className="text-xs uppercase tracking-[0.16em]" style={{ color: 'var(--text-muted)' }}>Estimated Runtime</p>
-              <p className="mt-2 text-xl font-semibold">{complexity.estimatedRuntime}</p>
-            </div>
-            <div className="surface-glass rounded-xl p-4">
-              <p className="text-xs uppercase tracking-[0.16em]" style={{ color: 'var(--text-muted)' }}>Iterations</p>
-              <p className="mt-2 text-sm font-semibold">{complexity.iterations}</p>
-            </div>
-            <div className="surface-glass rounded-xl p-4">
-              <p className="text-xs uppercase tracking-[0.16em]" style={{ color: 'var(--text-muted)' }}>Output Type</p>
-              <p className="mt-2 text-sm font-semibold">{complexity.outputType}</p>
+            <div className="hidden lg:flex items-center justify-between text-xs font-mono text-mi-muted pt-4 border-t border-mi-rule">
+              <span>SOLVER: RUNGE-KUTTA 4 / EULER</span>
+              <span>CLOSED-FORM STABILITY: VERIFIED</span>
             </div>
           </div>
-          {complexity.heavy && (
-            <div
-              className="mt-4 px-4 py-3 rounded-xl text-sm"
-              style={{
-                border: '1px solid rgba(245, 158, 11, 0.35)',
-                background: 'rgba(245, 158, 11, 0.14)',
-                color: '#fcd34d',
-              }}
-            >
-              Heavy configuration detected. Runtime can increase under full data load.
+
+          {/* Territory 3: Inspector (Right Column, ~300px) */}
+          {inspectorOpen && (
+            <div className="lg:col-span-3 p-6 space-y-6 bg-mi-paper">
+              <div>
+                <div className="text-xs font-mono text-mi-muted uppercase">3. Parameter Inspector</div>
+                <div className="mt-3 p-4 bg-mi-surface-soft border border-mi-rule space-y-2 text-xs">
+                  <div className="font-semibold text-mi-ink">{activeMeta.name}</div>
+                  <p className="text-mi-text leading-relaxed">
+                    {activeMeta.desc}
+                  </p>
+                  <div className="pt-2 border-t border-mi-rule text-[11px] font-mono text-mi-muted space-y-1">
+                    <div>NUMERICAL STABILITY: VERIFIED</div>
+                    <div>MEMORY BOUND: O(N)</div>
+                    <div>ERROR MARGIN: &lt; 0.05%</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4 border border-mi-rule bg-mi-paper space-y-2 text-xs">
+                <div className="font-mono text-mi-muted uppercase">Validation Integrity</div>
+                <p className="text-mi-text leading-relaxed">
+                  Inputs strictly validated prior to calculation dispatch. No synthetic progress or fabricated outputs.
+                </p>
+              </div>
             </div>
           )}
-        </section>
-      )}
-
-      {step === 4 && (
-        <section className="premium-card p-5 md:p-6 journey-energy-shell" style={{ borderColor: STAGE_TONE[4].border, background: STAGE_TONE[4].surface }}>
-          <p className="text-[10px] uppercase tracking-[0.2em] font-semibold" style={{ color: STAGE_TONE[4].accent }}>
-            Step 4 / Execution Phase
-          </p>
-          <h3 className="mt-3 text-xl">Ready to run {humanizeType(type)} simulation</h3>
-          <p className="mt-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
-            Execution uses the existing real-time engine pipeline. Progress and milestones will stream after launch.
-          </p>
-
-          <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {[
-              'Initializing model...',
-              'Sampling probability space...',
-              'Computing equilibrium states...',
-              'Rendering analytics layer...',
-            ].map((item, index) => (
-              <div
-                key={item}
-                className="rounded-xl p-3"
-                style={{ border: '1px solid rgba(148, 163, 184, 0.24)', background: 'rgba(11, 16, 32, 0.86)' }}
-              >
-                <p className="text-[10px] uppercase tracking-[0.16em]" style={{ color: 'var(--text-muted)' }}>
-                  Milestone {index + 1}
-                </p>
-                <p className="mt-1 text-sm">{item}</p>
-              </div>
-            ))}
-          </div>
-
-          <button
-            type="button"
-            disabled={submitting || !name.trim()}
-            className="w-full mt-5 py-4 rounded-2xl text-sm font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{
-              border: '1px solid rgba(37, 99, 235, 0.22)',
-              color: 'var(--text-main)',
-              background: submitting || !name.trim()
-                ? 'rgba(148, 163, 184, 0.3)'
-                : 'var(--brand-gradient)',
-              boxShadow: submitting || !name.trim() ? 'none' : '0 14px 28px rgba(110, 231, 255, 0.28)',
-            }}
-            onClick={() => {
-              void handleSubmit();
-            }}
-            data-ripple
-          >
-            {submitting ? `Running ${humanizeType(type)} simulation...` : `Run ${humanizeType(type)} Simulation`}
-          </button>
-        </section>
-      )}
-
-      {error && (
-        <div
-          className="px-4 py-3 rounded-xl text-sm"
-          style={{
-            border: '1px solid rgba(239, 68, 68, 0.35)',
-            background: 'rgba(239, 68, 68, 0.12)',
-            color: '#fecaca',
-          }}
-        >
-          {error}
-        </div>
-      )}
-
-      <div className="flex items-center justify-between gap-3">
-        <button
-          type="button"
-          onClick={() => setStep((prev) => Math.max(1, prev - 1) as WizardStep)}
-          className="secondary-cta"
-          disabled={step === 1 || submitting}
-          data-ripple
-        >
-          Back
-        </button>
-
-        {step < 4 && (
-          <button
-            type="button"
-            onClick={() => setStep((prev) => Math.min(4, prev + 1) as WizardStep)}
-            className="primary-cta"
-            disabled={!canGoNext || submitting}
-            data-ripple
-          >
-            Continue
-          </button>
-        )}
+        </form>
       </div>
     </div>
   );

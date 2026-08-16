@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Topbar } from './Topbar';
-import { useSidebarToggle } from './MainLayout';
+import { useSidebarToggle } from './sidebar-context';
 
 interface PageShellProps {
   title: string;
@@ -9,10 +9,6 @@ interface PageShellProps {
   children: ReactNode;
 }
 
-/**
- * Drop-in replacement for the manual <Topbar> + content pattern used in pages.
- * Automatically wires the mobile sidebar toggle.
- */
 export function PageShell({ title, subtitle, action, children }: PageShellProps) {
   const toggle = useSidebarToggle();
 

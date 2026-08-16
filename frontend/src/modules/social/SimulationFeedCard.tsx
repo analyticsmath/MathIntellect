@@ -1,6 +1,4 @@
-import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { FeedInteractionBar } from './FeedInteractionBar';
+import { Link } from 'react-router-dom';
 import type { FeedPost } from '../../types/phase5.types';
 
 interface SimulationFeedCardProps {
@@ -14,183 +12,90 @@ interface SimulationFeedCardProps {
 const TYPE_LABELS: Record<string, string> = {
   monte_carlo: 'Monte Carlo',
   game_theory: 'Game Theory',
-  market: 'Market',
-  conflict: 'Conflict',
-  custom: 'Custom',
+  market: 'Market Dynamics',
+  conflict: 'Agent Interaction',
+  custom: 'Custom Model',
 };
 
 function relativeTime(iso: string) {
   const ms = Date.now() - new Date(iso).getTime();
   const m = Math.floor(ms / 60_000);
-  if (m < 60) {
-    return `${m}m ago`;
-  }
+  if (m < 60) return `${m}m ago`;
   const h = Math.floor(m / 60);
-  if (h < 24) {
-    return `${h}h ago`;
-  }
+  if (h < 24) return `${h}h ago`;
   return `${Math.floor(h / 24)}d ago`;
 }
 
-function initials(name: string) {
-  return name
-    .split(' ')
-    .map((part) => part.charAt(0).toUpperCase())
-    .slice(0, 2)
-    .join('');
-}
-
-function previewPath(values: number[]) {
-  if (!values.length) {
-    return '';
-  }
-
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-
-  return values.map((value, index) => {
-    const x = (index / Math.max(1, values.length - 1)) * 100;
-    const y = max === min ? 50 : 100 - ((value - min) / (max - min)) * 90;
-    return `${x.toFixed(2)},${y.toFixed(2)}`;
-  }).join(' ');
-}
-
-export function SimulationFeedCard({ post, index, onLike, onFork, highlighted = false }: SimulationFeedCardProps) {
-  const cardRef = useRef<HTMLElement | null>(null);
-
-  useEffect(() => {
-    const el = cardRef.current;
-    if (!el) {
-      return;
-    }
-    const ctx = gsap.context(() => {
-      gsap.from(el, {
-        y: 20,
-        opacity: 0,
-        duration: 0.55,
-        ease: 'power3.out',
-        delay: (index % 8) * 0.05,
-      });
-    });
-    return () => ctx.revert();
-  }, [index]);
+export function SimulationFeedCard({
+  post,
+  onLike,
+  onFork,
+  highlighted = false,
+}: SimulationFeedCardProps) {
+  const label = TYPE_LABELS[post.simulationType] ?? 'Simulation';
 
   return (
     <article
-      ref={cardRef}
-      className="premium-card p-5 md:p-6 space-y-4 transition-all duration-300"
-      style={{
-        borderColor: highlighted ? 'rgba(34,211,238,0.6)' : `${post.thumbnailColor}40`,
-        boxShadow: highlighted ? '0 18px 38px rgba(34,211,238,0.24)' : undefined,
-        borderRadius: 24,
-        overflow: 'visible',
-      }}
-      data-tilt
+      className={`border bg-mi-paper p-5 transition-colors ${
+        highlighted ? 'border-mi-ink' : 'border-mi-rule'
+      }`}
     >
-      <div
-        className="w-full h-1.5 rounded-full"
-        style={{ background: `linear-gradient(90deg, ${post.thumbnailColor}88, ${post.thumbnailColor}28, transparent)` }}
-      />
-
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5 min-w-0">
-          {post.userAvatar ? (
-            <img
-              src={post.userAvatar}
-              alt={post.userName}
-              className="w-10 h-10 rounded-full border object-cover"
-              style={{ borderColor: `${post.thumbnailColor}66`, background: 'rgba(11,16,32,0.9)' }}
-              loading="lazy"
-              decoding="async"
-            />
-          ) : (
-            <div
-              className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
-              style={{
-                background: `linear-gradient(135deg, ${post.thumbnailColor}44, ${post.thumbnailColor}16)`,
-                border: `1px solid ${post.thumbnailColor}42`,
-                color: post.thumbnailColor,
-              }}
-            >
-              {initials(post.userName)}
-            </div>
-          )}
-
-          <div className="min-w-0">
-            <p className="text-sm font-semibold truncate" style={{ color: 'var(--text-primary)' }}>{post.userName}</p>
-            <p className="text-[11px] truncate" style={{ color: 'var(--text-muted)' }}>
-              Rank #{post.userRank ?? '--'} · XP {post.userXp?.toLocaleString() ?? '--'} · {post.userBehaviorTag}
-            </p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 text-xs font-mono">
+            <span className="font-semibold text-mi-ink">{post.userName}</span>
+            <span className="text-mi-muted">•</span>
+            <span className="text-mi-muted">{relativeTime(post.createdAt)}</span>
+            <span className="text-mi-muted">•</span>
+            <span className="uppercase text-mi-change font-bold">{label}</span>
           </div>
+
+          <h3 className="text-base font-semibold text-mi-ink mt-1">
+            {post.simulationName}
+          </h3>
+
+          <p className="text-xs text-mi-text mt-1.5 leading-relaxed">
+            {post.aiSummary}
+          </p>
         </div>
 
-        <span className="text-[11px] shrink-0" style={{ color: 'var(--text-muted)' }}>
-          {relativeTime(post.createdAt)}
+        <span className="text-xs font-mono uppercase px-2 py-0.5 border border-mi-rule bg-mi-surface-soft text-mi-muted shrink-0">
+          Level {post.userLevel}
         </span>
       </div>
 
-      <div>
-        <div className="flex items-center gap-2 flex-wrap mb-2">
-          <span
-            className="text-[10px] uppercase tracking-[0.16em] px-2 py-0.5 rounded-full font-semibold"
-            style={{ background: `${post.thumbnailColor}1c`, color: post.thumbnailColor, border: `1px solid ${post.thumbnailColor}40` }}
-          >
-            {TYPE_LABELS[post.simulationType] ?? post.simulationType}
-          </span>
-          <span className="inline-flex items-center gap-1 text-[11px] font-semibold" style={{ color: 'var(--signal-cyan)' }}>
-            +{post.xpGained} XP
-          </span>
-          <span
-            className="text-[10px] rounded-full px-2 py-0.5"
-            style={{ background: 'rgba(59,130,246,0.15)', color: 'var(--brand-blue)', border: '1px solid rgba(59,130,246,0.35)' }}
-          >
-            Score {post.resultScore}
-          </span>
-        </div>
-        <h3 className="text-[1.04rem] font-semibold leading-tight" style={{ color: 'var(--text-primary)' }}>{post.simulationName}</h3>
-      </div>
-
-      <div
-        className="rounded-xl px-3 py-2.5"
-        style={{ border: '1px solid var(--glass-stroke)', background: 'rgba(11,16,32,0.78)' }}
-      >
-        <div className="h-16 rounded-lg px-1 py-1" style={{ border: '1px solid var(--glass-stroke)', background: 'rgba(17,24,39,0.72)' }}>
-          <svg viewBox="0 0 100 100" className="w-full h-full">
-            <polyline
-              points={previewPath(post.chartPreview)}
-              fill="none"
-              stroke={post.thumbnailColor}
-              strokeWidth="2.4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </div>
-      </div>
-
-      <div
-        className="px-3 py-2.5 rounded-xl text-xs leading-relaxed"
-        style={{ background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.25)', color: 'var(--text-secondary)' }}
-      >
-        <span className="text-[10px] font-semibold uppercase tracking-[0.12em] mr-1.5" style={{ color: 'var(--brand-blue)' }}>AI Insight:</span>
-        {post.aiSummary}
-      </div>
-
-      {post.topComment && (
-        <div className="px-3 py-2 rounded-xl text-xs" style={{ border: '1px solid var(--glass-stroke)', background: 'rgba(17,24,39,0.72)', color: 'var(--text-secondary)' }}>
-          “{post.topComment}”
+      {post.chartPreview && post.chartPreview.length > 0 && (
+        <div className="mt-4 p-3 bg-mi-surface-soft border border-mi-rule flex items-center justify-between">
+          <span className="text-[10px] font-mono text-mi-muted uppercase">Trajectory trace</span>
+          <span className="text-xs font-mono text-mi-ink">{post.chartPreview.length} points sampled</span>
         </div>
       )}
 
-      <FeedInteractionBar
-        postId={post.id}
-        likeCount={post.likeCount}
-        commentCount={post.commentCount ?? 0}
-        forkCount={post.forkCount}
-        liked={post.liked}
-        onLike={onLike}
-        onFork={onFork}
-      />
+      <div className="mt-4 pt-3 border-t border-mi-rule flex items-center justify-between text-xs font-mono">
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => onLike(post.id)}
+            className={`hover:text-mi-ink flex items-center gap-1 ${
+              post.liked ? 'text-mi-change font-bold' : 'text-mi-muted'
+            }`}
+          >
+            ★ {post.likeCount}
+          </button>
+          <button
+            onClick={() => onFork(post.id)}
+            className="text-mi-muted hover:text-mi-ink flex items-center gap-1"
+          >
+            Fork variant ({post.forkCount})
+          </button>
+        </div>
+
+        <Link
+          to={`/app/analytics/${post.simulationId}`}
+          className="text-mi-ink font-semibold hover:text-mi-change"
+        >
+          Inspect Workbench →
+        </Link>
+      </div>
     </article>
   );
 }

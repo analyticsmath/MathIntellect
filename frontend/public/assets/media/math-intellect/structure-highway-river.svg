@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675">
+  <rect width="1200" height="675" fill="#E2E7E4"/>
+
+  <!-- Water channel & basin -->
+  <path d="M 0 300 C 300 280 500 400 700 410 C 900 420 1050 350 1200 370 L 1200 675 L 0 675 Z" fill="#CCD5D0"/>
+
+  <!-- Urban grid matrix -->
+  <defs>
+    <pattern id="urban-mesh" width="60" height="60" patternUnits="userSpaceOnUse">
+      <rect width="50" height="50" fill="#D5DDD8" opacity="0.6"/>
+    </pattern>
+  </defs>
+  <rect x="0" y="0" width="1200" height="320" fill="url(#urban-mesh)"/>
+
+  <!-- High-capacity bridge & intersecting structure -->
+  <path d="M 150 0 L 350 675" stroke="#78807C" stroke-width="20" fill="none"/>
+  <path d="M 1050 0 L 850 675" stroke="#78807C" stroke-width="20" fill="none"/>
+  <path d="M 0 350 Q 600 320 1200 350" stroke="#111412" stroke-width="26" fill="none"/>
+
+  <!-- Structural nodes and trusses -->
+  <line x1="280" y1="350" x2="350" y2="200" stroke="#2457E6" stroke-width="2" stroke-dasharray="3 3"/>
+  <line x1="920" y1="350" x2="850" y2="200" stroke="#2457E6" stroke-width="2" stroke-dasharray="3 3"/>
+  <circle cx="280" cy="350" r="6" fill="#111412"/>
+  <circle cx="920" cy="350" r="6" fill="#111412"/>
+  <circle cx="600" cy="335" r="7" fill="#E35A35"/>
+</svg>

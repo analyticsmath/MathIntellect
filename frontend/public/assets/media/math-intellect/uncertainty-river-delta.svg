@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750">
+  <rect width="1200" height="750" fill="#E8ECE9"/>
+
+  <!-- Fluvial sediment bed -->
+  <path d="M 0 0 C 400 100 800 100 1200 0 L 1200 750 L 0 750 Z" fill="#DEE5E1" opacity="0.7"/>
+
+  <!-- Main trunk channel branching into stochastic delta pathways -->
+  <path d="M 600 0 C 600 150 580 250 550 320" stroke="#78807C" stroke-width="32" fill="none"/>
+
+  <!-- Secondary and tertiary braided channels showing distribution spread -->
+  <!-- Branch 1 (Left tail) -->
+  <path d="M 550 320 C 450 400 300 480 120 750" stroke="#2D3330" stroke-width="16" fill="none"/>
+  <path d="M 380 440 C 260 520 200 620 180 750" stroke="#505753" stroke-width="10" fill="none"/>
+
+  <!-- Branch 2 (Mean / center) -->
+  <path d="M 550 320 C 560 420 540 550 570 750" stroke="#111412" stroke-width="22" fill="none"/>
+  <path d="M 560 470 C 500 560 480 660 470 750" stroke="#505753" stroke-width="12" fill="none"/>
+  <path d="M 560 510 C 640 590 670 670 690 750" stroke="#505753" stroke-width="12" fill="none"/>
+
+  <!-- Branch 3 (Right tail) -->
+  <path d="M 550 320 C 700 400 900 480 1080 750" stroke="#2D3330" stroke-width="16" fill="none"/>
+  <path d="M 780 440 C 880 520 960 620 980 750" stroke="#505753" stroke-width="10" fill="none"/>
+
+  <!-- Variance dispersion envelope -->
+  <path d="M 550 320 L 120 750 L 1080 750 Z" fill="#E35A35" opacity="0.04"/>
+  <line x1="120" y1="750" x2="1080" y2="750" stroke="#E35A35" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <circle cx="550" cy="320" r="6" fill="#111412"/>
+  <circle cx="570" cy="750" r="6" fill="#111412"/>
+  <circle cx="120" cy="750" r="5" fill="#E35A35"/>
+  <circle cx="1080" cy="750" r="5" fill="#E35A35"/>
+</svg>

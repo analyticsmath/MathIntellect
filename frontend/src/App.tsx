@@ -11,13 +11,12 @@ import {
 } from 'react-router-dom';
 import { ProtectedRoute } from './shared/ui/ProtectedRoute';
 import { useAuth } from './shared/hooks/useAuth';
-import { useMicroInteractions } from './hooks/useMicroInteractions';
 import { AppErrorBoundary } from './components/ui/AppErrorBoundary';
 
 const HomePage = lazy(() => import('./marketing/pages/HomePage'));
-const FeaturesPage = lazy(() => import('./marketing/pages/FeaturesPage'));
-const ProductPage = lazy(() => import('./marketing/pages/ProductPage'));
-const PricingPage = lazy(() => import('./marketing/pages/PricingPage'));
+const ModelsPage = lazy(() => import('./marketing/pages/ModelsPage'));
+const WorkbenchPage = lazy(() => import('./marketing/pages/WorkbenchPage'));
+const MethodPage = lazy(() => import('./marketing/pages/MethodPage'));
 const LoginPage = lazy(() => import('./auth/pages/LoginPage'));
 const SignupPage = lazy(() => import('./auth/pages/SignupPage'));
 const AppDashboardPage = lazy(() => import('./app/pages/AppDashboardPage'));
@@ -28,8 +27,8 @@ const AppProfilePage = lazy(() => import('./app/pages/AppProfilePage'));
 
 function PageLoader() {
   return (
-    <div className="min-h-screen grid place-items-center" style={{ background: 'var(--bg-base)' }}>
-      <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+    <div className="min-h-screen grid place-items-center bg-mi-canvas">
+      <div className="text-xs font-mono text-mi-muted">
         Loading workspace...
       </div>
     </div>
@@ -54,7 +53,6 @@ function LegacyAnalyticsRedirect() {
 function RouteExperienceManager() {
   const location = useLocation();
   const navigationType = useNavigationType();
-  useMicroInteractions(location.pathname);
   const positions = useRef<Record<string, number>>({});
   const lastKey = useRef(location.key);
   const lastPath = useRef(location.pathname);
@@ -82,8 +80,9 @@ function RouteExperienceManager() {
       return;
     }
 
-    const preserveAppScroll = location.pathname.startsWith('/app/analytics/')
-      && lastPath.current.startsWith('/app/analytics/');
+    const preserveAppScroll =
+      location.pathname.startsWith('/app/analytics/') &&
+      lastPath.current.startsWith('/app/analytics/');
     window.scrollTo({ top: preserveAppScroll ? window.scrollY : 0, behavior: 'auto' });
     lastPath.current = location.pathname;
   }, [location, navigationType]);
@@ -97,8 +96,8 @@ function ApiErrorToast() {
   useEffect(() => {
     const handler = (event: Event) => {
       const detail = (event as CustomEvent<{ message?: string }>).detail;
-      setMessage(detail?.message ?? 'Internal server error');
-      window.setTimeout(() => setMessage(null), 3200);
+      setMessage(detail?.message ?? 'Simulation error occurred');
+      window.setTimeout(() => setMessage(null), 3500);
     };
 
     window.addEventListener('math-intellect:api-error', handler);
@@ -111,14 +110,13 @@ function ApiErrorToast() {
 
   return (
     <div
-      className="fixed right-4 top-4 z-[120] rounded-xl px-4 py-3 text-sm"
-      style={{
-        border: '1px solid rgba(248,113,113,0.46)',
-        background: 'rgba(127,29,29,0.9)',
-        color: '#fee2e2',
-      }}
+      role="alert"
+      className="fixed right-6 top-6 z-[120] border border-mi-danger/40 bg-mi-paper text-mi-danger px-4 py-3 text-xs font-mono shadow-modal"
     >
-      {message}
+      <div className="flex items-center gap-2">
+        <span className="w-2 h-2 rounded-full bg-mi-danger"></span>
+        <span>{message}</span>
+      </div>
     </div>
   );
 }
@@ -129,23 +127,31 @@ function AppRoutes() {
     <>
       <RouteExperienceManager />
       <Routes location={location}>
+        {/* Public Routes */}
         <Route path="/" element={<HomePage />} />
-        <Route path="/features" element={<FeaturesPage />} />
-        <Route path="/product" element={<ProductPage />} />
-        <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/models" element={<ModelsPage />} />
+        <Route path="/workbench" element={<WorkbenchPage />} />
+        <Route path="/method" element={<MethodPage />} />
 
+        {/* Legacy Public Redirects */}
+        <Route path="/features" element={<Navigate to="/models" replace />} />
+        <Route path="/product" element={<Navigate to="/workbench" replace />} />
+        <Route path="/pricing" element={<Navigate to="/workbench" replace />} />
+
+        {/* Unauthenticated Auth Routes */}
         <Route element={<PublicOnlyRoute />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
         </Route>
 
+        {/* Protected Application Routes */}
         <Route
           path="/app"
-          element={(
+          element={
             <ProtectedRoute>
               <Outlet />
             </ProtectedRoute>
-          )}
+          }
         >
           <Route index element={<AppDashboardPage />} />
           <Route path="simulations/new" element={<AppSimulationPage />} />
@@ -154,9 +160,11 @@ function AppRoutes() {
           <Route path="profile" element={<AppProfilePage />} />
         </Route>
 
+        {/* Legacy Protected Redirects */}
         <Route path="/simulations/new" element={<Navigate to="/app/simulations/new" replace />} />
         <Route path="/analytics/:id" element={<LegacyAnalyticsRedirect />} />
 
+        {/* Catch-all */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>

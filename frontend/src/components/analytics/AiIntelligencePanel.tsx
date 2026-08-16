@@ -2,10 +2,8 @@ import type {
   AiDecisionResponse,
   AiExplainResponse,
   AiGamificationEvent,
-  AiRiskLevel,
   AiInsightResponse,
 } from '../../types/api.types';
-import { Card } from '../ui/Card';
 import { ErrorState } from '../ui/ErrorState';
 import { Loader } from '../ui/Loader';
 
@@ -28,54 +26,27 @@ interface AiExplainModalProps {
   onClose: () => void;
 }
 
-const RISK_STYLES: Record<
-  AiRiskLevel,
-  { text: string; border: string; background: string }
-> = {
-  low: {
-    text: '#6EE7B7',
-    border: 'rgba(22, 163, 74, 0.38)',
-    background: 'rgba(22, 163, 74, 0.16)',
-  },
-  medium: {
-    text: '#FCD34D',
-    border: 'rgba(245, 158, 11, 0.38)',
-    background: 'rgba(245, 158, 11, 0.18)',
-  },
-  high: {
-    text: '#FDBA74',
-    border: 'rgba(217, 119, 6, 0.38)',
-    background: 'rgba(217, 119, 6, 0.2)',
-  },
-  critical: {
-    text: '#FDA4AF',
-    border: 'rgba(239, 68, 68, 0.38)',
-    background: 'rgba(239, 68, 68, 0.2)',
-  },
-};
-
 export function AiIntelligencePanel({
   loading,
   error,
   insight,
   decision,
-  gamificationEvent,
   onRetry,
   onExplain,
 }: AiIntelligencePanelProps) {
   if (loading) {
     return (
-      <Card title="AI Intelligence Layer" subtitle="Generating interpretation and decision guidance" glow="cyan">
-        <Loader size="md" message="Analyzing simulation intelligence..." />
-      </Card>
+      <div className="border border-mi-rule bg-mi-paper p-6">
+        <Loader size="md" message="Deriving mathematical interpretation..." />
+      </div>
     );
   }
 
   if (error) {
     return (
-      <Card title="AI Intelligence Layer" subtitle="Unable to generate insights" glow="rose">
+      <div className="border border-mi-rule bg-mi-paper p-6">
         <ErrorState message={error} onRetry={onRetry} />
-      </Card>
+      </div>
     );
   }
 
@@ -83,155 +54,74 @@ export function AiIntelligencePanel({
     return null;
   }
 
-  const riskStyle = RISK_STYLES[insight.risk_analysis.level];
-
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-      <Card title="AI Insight Card" subtitle="Simulation interpretation" glow="cyan">
-        <div className="space-y-5">
-          <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-            {insight.summary}
-          </p>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 border-t border-mi-rule pt-6">
+      {/* AI Structural Interpretation */}
+      <div className="border border-mi-rule bg-mi-paper p-5 space-y-4">
+        <div className="flex items-center justify-between border-b border-mi-rule pb-3">
+          <h4 className="text-xs font-mono uppercase font-semibold text-mi-ink">
+            Mathematical Interpretation
+          </h4>
+          <span className="text-xs font-mono text-mi-muted">
+            CONFIDENCE: {Math.round(insight.confidence_score)}%
+          </span>
+        </div>
 
-          <div className="flex items-center gap-3 flex-wrap">
-            <span
-              className="text-[11px] uppercase tracking-[0.14em] px-3 py-1.5 rounded-full font-semibold"
-              style={{
-                color: riskStyle.text,
-                border: `1px solid ${riskStyle.border}`,
-                background: riskStyle.background,
-              }}
-            >
-              Risk: {insight.risk_analysis.level}
-            </span>
-            <div
-              className="text-[11px] px-3 py-1.5 rounded-full"
-              style={{
-                border: '1px solid var(--glass-stroke)',
-                background: 'rgba(17, 24, 39, 0.8)',
-                color: 'var(--text-primary)',
-              }}
-            >
-              Confidence: {Math.round(insight.confidence_score)}%
-            </div>
-            {gamificationEvent && (
-              <div
-                className="text-[11px] px-3 py-1.5 rounded-full"
-                style={{
-                  border: '1px solid rgba(34,211,238,0.34)',
-                  background: 'rgba(34,211,238,0.16)',
-                  color: 'var(--signal-cyan)',
-                }}
-              >
-                +{gamificationEvent.xp_gain} XP ({gamificationEvent.behavior_tag})
-              </div>
-            )}
+        <p className="text-xs text-mi-text leading-relaxed">
+          {insight.summary}
+        </p>
+
+        <div className="p-3 bg-mi-surface-soft border border-mi-rule text-xs space-y-1">
+          <div className="text-[10px] font-mono text-mi-muted uppercase">Risk Classification</div>
+          <div className="font-semibold text-mi-ink uppercase">{insight.risk_analysis.level}</div>
+        </div>
+
+        <div>
+          <button
+            onClick={onExplain}
+            className="mi-btn-secondary h-9 px-4 text-xs w-full"
+          >
+            Inspect Formal Derivation
+          </button>
+        </div>
+      </div>
+
+      {/* Decision Sensitivity Guidance */}
+      <div className="border border-mi-rule bg-mi-paper p-5 space-y-4">
+        <div className="flex items-center justify-between border-b border-mi-rule pb-3">
+          <h4 className="text-xs font-mono uppercase font-semibold text-mi-ink">
+            Strategic Decision Guidance
+          </h4>
+          <span className="text-xs font-mono text-mi-muted">
+            STATUS: EVALUATED
+          </span>
+        </div>
+
+        <div className="space-y-2">
+          <div className="text-xs font-mono text-mi-muted uppercase">Recommended Decision:</div>
+          <div className="text-xs font-semibold text-mi-ink p-3 bg-mi-surface-soft border border-mi-rule">
+            {decision.decision}
           </div>
+        </div>
 
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] mb-2" style={{ color: 'var(--text-muted)' }}>
-              Confidence Meter
-            </p>
-            <div className="w-full h-2 rounded-full overflow-hidden" style={{ background: 'rgba(148, 163, 184, 0.24)' }}>
-              <div
-                className="h-2 rounded-full transition-all duration-300"
-                style={{
-                  width: `${Math.max(2, Math.min(100, insight.confidence_score))}%`,
-                  background: 'linear-gradient(90deg, var(--brand-blue), var(--signal-cyan), var(--quantum-violet))',
-                }}
-              />
-            </div>
-          </div>
-
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] mb-2" style={{ color: 'var(--text-muted)' }}>
-              Key Findings
-            </p>
-            <ul className="space-y-2">
-              {insight.key_findings.map((item, index) => (
-                <li key={index} className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-                  • {item}
-                </li>
+        {decision.reasoning && decision.reasoning.length > 0 && (
+          <div className="space-y-1.5 pt-2 border-t border-mi-rule">
+            <div className="text-[10px] font-mono text-mi-muted uppercase">Reasoning &amp; Rationale</div>
+            <ul className="text-xs space-y-1 list-disc list-inside text-mi-text">
+              {decision.reasoning.map((item: string, i: number) => (
+                <li key={i}>{item}</li>
               ))}
             </ul>
           </div>
-        </div>
-      </Card>
-
-      <Card
-        title="Decision Panel"
-        subtitle="Action recommendation and trade-offs"
-        glow="emerald"
-        action={(
-          <button
-            type="button"
-            onClick={onExplain}
-            className="secondary-cta text-xs"
-            style={{ paddingTop: 7, paddingBottom: 7 }}
-          >
-            Explain This Result
-          </button>
         )}
-      >
-        <div className="space-y-4">
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] mb-2" style={{ color: 'var(--text-muted)' }}>
-              Recommended Action
-            </p>
-            <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-              {decision.decision}
-            </p>
-          </div>
 
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] mb-2" style={{ color: 'var(--text-muted)' }}>
-              Risk Tradeoff
-            </p>
-            <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-              {decision.risk_tradeoff}
-            </p>
+        {decision.risk_tradeoff && (
+          <div className="pt-2 border-t border-mi-rule text-xs">
+            <span className="font-mono text-mi-muted uppercase">Risk Tradeoff: </span>
+            <span className="text-mi-text">{decision.risk_tradeoff}</span>
           </div>
-
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] mb-2" style={{ color: 'var(--text-muted)' }}>
-              Tradeoff Table
-            </p>
-            <div className="overflow-x-auto rounded-xl" style={{ border: '1px solid rgba(148, 163, 184, 0.24)' }}>
-              <table className="w-full text-xs">
-                <thead style={{ background: 'rgba(17, 24, 39, 0.9)' }}>
-                  <tr>
-                    <th className="text-left px-3 py-2">Option</th>
-                    <th className="text-left px-3 py-2">Pros</th>
-                    <th className="text-left px-3 py-2">Cons</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {decision.alternatives.map((alt, index) => (
-                    <tr
-                      key={`${alt.option}-${index}`}
-                      style={{ borderTop: '1px solid rgba(148, 163, 184, 0.16)' }}
-                    >
-                      <td className="px-3 py-2 align-top font-semibold" style={{ color: 'var(--text-primary)' }}>
-                        {alt.option}
-                      </td>
-                      <td className="px-3 py-2 align-top" style={{ color: 'var(--text-secondary)' }}>
-                        {alt.pros.join(' | ')}
-                      </td>
-                      <td className="px-3 py-2 align-top" style={{ color: 'var(--text-secondary)' }}>
-                        {alt.cons.join(' | ')}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div className="text-xs" style={{ color: 'var(--text-muted)' }}>
-            Decision confidence: {Math.round(decision.confidence)}%
-          </div>
-        </div>
-      </Card>
+        )}
+      </div>
     </div>
   );
 }
@@ -244,75 +134,60 @@ export function AiExplainModal({
   onRetry,
   onClose,
 }: AiExplainModalProps) {
-  if (!open) {
-    return null;
-  }
+  if (!open) return null;
 
   return (
     <div
-      className="fixed inset-0 z-[70] flex items-center justify-center px-4"
-      style={{ background: 'rgba(2, 6, 23, 0.52)' }}
+      className="fixed inset-0 z-50 bg-mi-ink/40 flex items-center justify-center p-4"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-3xl max-h-[85vh] overflow-y-auto rounded-2xl p-5"
-        style={{
-          border: '1px solid var(--glass-stroke)',
-          background: 'linear-gradient(180deg, rgba(17,24,39,0.96), rgba(11,16,32,0.94))',
-          boxShadow: '0 30px 70px rgba(2, 6, 23, 0.58)',
-        }}
-        onClick={(event) => event.stopPropagation()}
+        className="bg-mi-paper border border-mi-rule max-w-2xl w-full max-h-[85vh] overflow-y-auto p-6 space-y-5"
+        onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-base font-semibold">Step-by-Step Math Explanation</h3>
-          <button type="button" className="secondary-cta text-xs" onClick={onClose}>
-            Close
+        <div className="flex items-center justify-between border-b border-mi-rule pb-3">
+          <div>
+            <div className="text-[10px] font-mono text-mi-muted uppercase">METHOD EXPLANATION</div>
+            <h3 className="text-base font-semibold text-mi-ink">
+              Mathematical Derivation &amp; Assumptions
+            </h3>
+          </div>
+          <button
+            onClick={onClose}
+            className="text-mi-muted hover:text-mi-ink text-sm font-mono"
+          >
+            ✕ Close
           </button>
         </div>
 
-        {loading && <Loader size="sm" message="Building explanation..." />}
-
-        {!loading && error && <ErrorState message={error} onRetry={onRetry} />}
+        {loading && <Loader message="Generating derivation breakdown..." />}
+        {error && <ErrorState message={error} onRetry={onRetry} />}
 
         {!loading && !error && explanation && (
-          <div className="space-y-4">
-            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-              {explanation.summary}
-            </p>
+          <div className="space-y-4 text-xs">
+            <div className="space-y-1">
+              <div className="font-mono text-mi-muted uppercase">Summary</div>
+              <p className="text-mi-text leading-relaxed">{explanation.summary}</p>
+            </div>
 
-            <div className="space-y-3">
-              {explanation.steps.map((step, index) => (
-                <div
-                  key={`${step.step}-${index}`}
-                  className="rounded-xl p-4"
-                style={{
-                    border: '1px solid var(--glass-stroke)',
-                    background: 'rgba(17, 24, 39, 0.8)',
-                  }}
-                >
-                  <p className="text-xs uppercase tracking-[0.16em] mb-1" style={{ color: 'var(--text-muted)' }}>
-                    Step {index + 1}
-                  </p>
-                  <p className="text-sm font-semibold mb-1">{step.step}</p>
-                  <p className="text-xs font-mono mb-2" style={{ color: 'var(--brand-blue)' }}>{step.formula}</p>
-                  <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                    {step.interpretation}
-                  </p>
+            {explanation.steps && explanation.steps.length > 0 && (
+              <div className="space-y-3 pt-3 border-t border-mi-rule">
+                <div className="font-mono text-mi-muted uppercase">Mathematical Steps</div>
+                <div className="space-y-2">
+                  {explanation.steps.map((s, i) => (
+                    <div key={i} className="p-3 bg-mi-surface-soft border border-mi-rule space-y-1">
+                      <div className="font-semibold text-mi-ink">{s.step}</div>
+                      {s.formula && (
+                        <div className="font-mono text-mi-change text-[11px] py-1">
+                          {s.formula}
+                        </div>
+                      )}
+                      <div className="text-mi-text text-[11px]">{s.interpretation}</div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-
-            <div className="rounded-xl p-4" style={{ border: '1px solid rgba(34, 211, 238, 0.34)', background: 'rgba(34, 211, 238, 0.12)' }}>
-              <p className="text-xs uppercase tracking-[0.16em] mb-1" style={{ color: 'var(--text-muted)' }}>
-                Final Takeaway
-              </p>
-              <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                {explanation.final_takeaway}
-              </p>
-              <p className="text-xs mt-2" style={{ color: 'var(--text-muted)' }}>
-                Confidence: {Math.round(explanation.confidence_score)}%
-              </p>
-            </div>
+              </div>
+            )}
           </div>
         )}
       </div>

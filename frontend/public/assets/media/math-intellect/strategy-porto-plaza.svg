@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 750" width="1000" height="750">
+  <!-- Paving stones and plaza geometry -->
+  <rect width="1000" height="750" fill="#ECEFEA"/>
+  <defs>
+    <pattern id="plaza-tiles" width="50" height="50" patternUnits="userSpaceOnUse">
+      <rect width="50" height="50" fill="none" stroke="#D3D9D5" stroke-width="0.8"/>
+      <circle cx="25" cy="25" r="1.5" fill="#BAC1BD"/>
+    </pattern>
+  </defs>
+  <rect width="1000" height="750" fill="url(#plaza-tiles)"/>
+
+  <!-- Plaza architectural landmarks -->
+  <rect x="100" y="80" width="160" height="120" fill="#D8DDDA" stroke="#BAC1BD"/>
+  <rect x="740" y="520" width="180" height="150" fill="#D8DDDA" stroke="#BAC1BD"/>
+  <circle cx="500" cy="375" r="60" fill="none" stroke="#BAC1BD" stroke-width="2"/>
+
+  <!-- Multi-agent clusters in game theoretic spatial layout -->
+  <!-- Cluster A -->
+  <g fill="#111412">
+    <circle cx="480" cy="360" r="4"/><circle cx="495" cy="355" r="4"/><circle cx="510" cy="370" r="4"/>
+    <circle cx="475" cy="385" r="4"/><circle cx="520" cy="390" r="4"/>
+  </g>
+  <!-- Cluster B -->
+  <g fill="#2D3330">
+    <circle cx="280" cy="240" r="4"/><circle cx="295" cy="250" r="4"/><circle cx="270" cy="260" r="4"/>
+    <circle cx="310" cy="245" r="4"/>
+  </g>
+  <!-- Cluster C -->
+  <g fill="#505753">
+    <circle cx="680" cy="460" r="4"/><circle cx="700" cy="450" r="4"/><circle cx="715" cy="470" r="4"/>
+    <circle cx="690" cy="485" r="4"/>
+  </g>
+  <!-- Dispersed agents -->
+  <g fill="#78807C">
+    <circle cx="380" cy="500" r="3.5"/><circle cx="620" cy="200" r="3.5"/><circle cx="820" cy="300" r="3.5"/>
+    <circle cx="180" cy="450" r="3.5"/><circle cx="450" cy="620" r="3.5"/><circle cx="550" cy="140" r="3.5"/>
+  </g>
+
+  <!-- Equilibrium lines & best response vectors -->
+  <line x1="280" y1="240" x2="500" y2="375" stroke="#E35A35" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <line x1="700" y1="450" x2="500" y2="375" stroke="#2457E6" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <circle cx="500" cy="375" r="8" fill="none" stroke="#E35A35" stroke-width="2"/>
+</svg>

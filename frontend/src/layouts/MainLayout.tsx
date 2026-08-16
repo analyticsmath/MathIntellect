@@ -1,39 +1,25 @@
-/* eslint-disable react-refresh/only-export-components */
-
 import { useState, type ReactNode } from 'react';
-import { createContext, useContext } from 'react';
 import { Sidebar } from './Sidebar';
 import { MobileDock } from './MobileDock';
-
-const SidebarContext = createContext<(() => void) | undefined>(undefined);
-
-export function useSidebarToggle() {
-  return useContext(SidebarContext);
-}
+import { SidebarContext } from './sidebar-context';
 
 export function MainLayout({ children }: { children: ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const toggle = () => setSidebarOpen((prev) => !prev);
+  const close = () => setSidebarOpen(false);
+
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{ color: 'var(--text-primary)' }}>
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            'radial-gradient(42% 30% at 6% 0%, rgba(110, 231, 255, 0.14), transparent 72%), radial-gradient(38% 28% at 92% 12%, rgba(139, 92, 246, 0.12), transparent 72%), linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-main) 84%)',
-        }}
-        aria-hidden
-      />
+    <SidebarContext.Provider value={{ open: sidebarOpen, toggle, close }}>
+      <div className="min-h-screen bg-mi-canvas text-mi-ink flex flex-col">
+        <Sidebar open={sidebarOpen} onClose={close} />
 
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-
-      <main className="relative md:ml-72 min-h-screen flex flex-col pb-24 md:pb-0">
-        <SidebarContext.Provider value={() => setSidebarOpen((value) => !value)}>
+        <main className="flex-1 md:ml-56 min-h-screen flex flex-col pb-20 md:pb-0">
           {children}
-        </SidebarContext.Provider>
-      </main>
+        </main>
 
-      <MobileDock />
-    </div>
+        <MobileDock />
+      </div>
+    </SidebarContext.Provider>
   );
 }

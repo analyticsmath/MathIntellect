@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { SurfacePlot3D, ThreeDResponse, Visualization3D } from '../../types/api.types';
-import { Card } from '../ui/Card';
 import { ErrorState } from '../ui/ErrorState';
 import { Loader } from '../ui/Loader';
 
@@ -184,18 +183,16 @@ function colorByStop(t: number, stops: string[], THREE: typeof import('three')) 
 }
 
 function buildEnvironment(THREE: typeof import('three'), scene: import('three').Scene) {
-  scene.fog = new THREE.FogExp2('#0b1220', 0.08);
-  scene.background = new THREE.Color('#081120');
+  scene.fog = new THREE.FogExp2('#F4F6F5', 0.02);
+  scene.background = new THREE.Color('#F4F6F5');
 
-  const ambient = new THREE.AmbientLight('#dbeafe', 0.38);
-  const key = new THREE.DirectionalLight('#6ee7ff', 0.95);
+  const ambient = new THREE.AmbientLight('#FFFFFF', 0.85);
+  const key = new THREE.DirectionalLight('#111412', 0.7);
   key.position.set(4.2, 8.4, 6.8);
-  const rim = new THREE.DirectionalLight('#8b5cf6', 0.42);
+  const rim = new THREE.DirectionalLight('#BAC1BD', 0.4);
   rim.position.set(-5.2, 4.1, -7.3);
-  const accent = new THREE.PointLight('#22d3ee', 0.85, 22);
-  accent.position.set(0, 5, 0);
 
-  scene.add(ambient, key, rim, accent);
+  scene.add(ambient, key, rim);
 }
 
 function buildMonteCarlo(ctx: BuildContext): SceneController {
@@ -816,35 +813,28 @@ function ThreeDScene({ data }: ThreeDSceneProps) {
 
       <div
         ref={hostRef}
-        className="relative rounded-3xl overflow-hidden"
+        className="relative border border-mi-rule overflow-hidden bg-mi-canvas"
         style={{
           height: 'min(66vh, 620px)',
-          border: '1px solid var(--glass-stroke)',
-          background: 'linear-gradient(180deg, rgba(14, 22, 36, 0.94), rgba(8, 14, 24, 0.98))',
         }}
       >
         {!visible && (
           <div className="absolute inset-0 grid place-items-center">
-            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Preparing adaptive 3D engine…</p>
+            <p className="text-xs font-mono text-mi-muted">Preparing 3D spatial field…</p>
           </div>
         )}
 
         {hover && (
           <div
-            className="absolute z-30 pointer-events-none rounded-xl px-3 py-2"
+            className="absolute z-30 pointer-events-none p-2 border border-mi-ink bg-mi-paper text-mi-ink shadow-sm"
             style={{
               left: hover.x,
               top: hover.y,
               transform: 'translate3d(0, 0, 0)',
-              border: '1px solid rgba(110, 231, 255, 0.34)',
-              background: 'rgba(8, 14, 24, 0.9)',
-              color: 'var(--text-main)',
-              boxShadow: '0 16px 34px rgba(2, 8, 20, 0.55)',
-              backdropFilter: 'blur(10px)',
             }}
           >
-            <p className="text-[11px] font-semibold">{hover.title}</p>
-            <p className="text-[11px]" style={{ color: 'var(--text-soft)' }}>{hover.value}</p>
+            <p className="text-xs font-semibold">{hover.title}</p>
+            <p className="text-xs font-mono text-mi-text">{hover.value}</p>
           </div>
         )}
       </div>
@@ -860,7 +850,7 @@ interface ThreeDTabPanelProps {
 
 export default function ThreeDTabPanel({ threeD, loading, error }: ThreeDTabPanelProps) {
   if (loading) {
-    return <Loader size="md" message="Loading premium 3D intelligence layer..." />;
+    return <Loader size="md" message="Loading 3D visualization layer..." />;
   }
 
   if (error) {
@@ -868,14 +858,12 @@ export default function ThreeDTabPanel({ threeD, loading, error }: ThreeDTabPane
   }
 
   if (!threeD) {
-    return <Loader size="md" message="Preparing adaptive 3D scene..." />;
+    return <Loader size="md" message="Preparing 3D scene..." />;
   }
 
   return (
-    <Card className="p-0" glow="cyan">
-      <div className="p-5 md:p-6">
-        <ThreeDScene data={threeD} />
-      </div>
-    </Card>
+    <div className="border border-mi-rule bg-mi-paper p-5">
+      <ThreeDScene data={threeD} />
+    </div>
   );
 }

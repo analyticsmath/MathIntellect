@@ -19,9 +19,7 @@ export function IntelligenceFeed() {
 
   useEffect(() => {
     const el = sentinelRef.current;
-    if (!el) {
-      return;
-    }
+    if (!el) return;
     const observer = new IntersectionObserver(handleIntersect, { rootMargin: '220px' });
     observer.observe(el);
     return () => observer.disconnect();
@@ -30,39 +28,29 @@ export function IntelligenceFeed() {
   const handleFork = async (postId: string) => {
     const { simulationId } = await socialService.forkSimulation(postId);
     if (simulationId) {
-      navigate(`/app/analytics/${simulationId}`, { viewTransition: true });
+      navigate(`/app/analytics/${simulationId}`);
     }
   };
 
   if (loading) {
-    return <Loader message="Loading intelligence feed…" />;
+    return <Loader message="Loading activity stream…" />;
   }
   if (error) {
     return <ErrorState message={error} />;
   }
 
   return (
-    <div className="space-y-5">
-      <div
-        className="flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs"
-        style={{ background: 'rgba(59,130,246,0.12)', border: '1px solid rgba(59,130,246,0.32)' }}
-      >
-        <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'var(--brand-blue)' }} />
-        <span style={{ color: 'var(--text-primary)' }}>
-          Live intelligence feed · {posts.length} simulations in stream
+    <div className="space-y-4">
+      <div className="border border-mi-rule bg-mi-surface-soft px-4 py-3 flex items-center justify-between text-xs font-mono">
+        <span className="text-mi-ink font-semibold">
+          EDITORIAL ACTIVITY STREAM
+        </span>
+        <span className="text-mi-muted">
+          {posts.length} published models recorded
         </span>
       </div>
 
-      {newestPostId && (
-        <div
-          className="rounded-2xl px-4 py-2.5 text-xs"
-          style={{ border: '1px solid rgba(34,211,238,0.35)', background: 'rgba(34,211,238,0.12)', color: 'var(--signal-cyan)' }}
-        >
-          New simulation insight inserted live.
-        </div>
-      )}
-
-      <div className="space-y-5">
+      <div className="space-y-4">
         {posts.map((post, i) => (
           <SimulationFeedCard
             key={post.id}
@@ -78,18 +66,15 @@ export function IntelligenceFeed() {
       <div ref={sentinelRef} className="h-4" />
 
       {loadingMore && (
-        <div className="flex justify-center py-5">
-          <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--text-muted)' }}>
-            <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--brand-blue)' }} />
-            Loading more...
-          </div>
+        <div className="text-center py-4 text-xs font-mono text-mi-muted">
+          Loading additional stream records...
         </div>
       )}
 
       {!hasMore && posts.length > 0 && (
-        <p className="text-center text-xs py-4" style={{ color: 'var(--text-muted)' }}>
-          All {posts.length} simulations loaded
-        </p>
+        <div className="text-center text-xs font-mono text-mi-muted py-6 border-t border-mi-rule">
+          End of activity stream
+        </div>
       )}
     </div>
   );

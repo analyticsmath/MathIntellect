@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750">
+  <rect width="1200" height="750" fill="#E8EDE9"/>
+
+  <!-- Landscape park contours -->
+  <path d="M 0 100 Q 400 300 800 200 T 1200 150 L 1200 750 L 0 750 Z" fill="#DDE4DF" opacity="0.6"/>
+  <path d="M 100 750 Q 500 500 900 650 L 1200 750 Z" fill="#D2DBD5" opacity="0.5"/>
+
+  <!-- Paths / walkways -->
+  <path d="M 0 350 C 400 300 700 450 1200 400" stroke="#BAC1BD" stroke-width="24" fill="none"/>
+  <path d="M 600 0 C 550 350 650 550 600 750" stroke="#BAC1BD" stroke-width="20" fill="none"/>
+
+  <!-- Interaction field & multi-agent clusters -->
+  <!-- Central congregation -->
+  <g fill="#111412">
+    <circle cx="580" cy="360" r="5"/><circle cx="610" cy="350" r="5"/><circle cx="590" cy="380" r="5"/>
+    <circle cx="630" cy="370" r="5"/><circle cx="570" cy="340" r="5"/><circle cx="620" cy="395" r="5"/>
+  </g>
+  <!-- Interaction radius / influence aura -->
+  <circle cx="600" cy="370" r="90" fill="none" stroke="#2457E6" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.8"/>
+
+  <!-- Secondary cluster -->
+  <g fill="#2D3330">
+    <circle cx="320" cy="280" r="4.5"/><circle cx="340" cy="270" r="4.5"/><circle cx="310" cy="295" r="4.5"/>
+    <circle cx="335" cy="310" r="4.5"/>
+  </g>
+  <circle cx="325" cy="290" r="60" fill="none" stroke="#E35A35" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.8"/>
+
+  <!-- Coupling force vectors -->
+  <line x1="325" y1="290" x2="600" y2="370" stroke="#E35A35" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <line x1="880" y1="480" x2="600" y2="370" stroke="#2457E6" stroke-width="1.5" stroke-dasharray="3 3"/>
+
+  <!-- Outlier group -->
+  <g fill="#505753">
+    <circle cx="870" cy="470" r="4.5"/><circle cx="890" cy="490" r="4.5"/><circle cx="860" cy="495" r="4.5"/>
+  </g>
+</svg>
