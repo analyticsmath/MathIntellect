@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import MarketingLayout from '../components/MarketingLayout';
+import { MarketingLayout } from '../components/MarketingLayout';
 import { MathExpression } from '../../math/MathExpression';
 import { ResponsiveMedia } from '../../media/ResponsiveMedia';
 
@@ -96,7 +96,7 @@ export const MethodPage: React.FC = () => {
           {/* Right 4 cols: Sticky Blueprint Reference & Navigation */}
           <div className="lg:col-span-4 space-y-6">
             <div className="border border-mi-rule bg-mi-paper p-4">
-              <ResponsiveMedia mediaKey="mi-08" aspectRatio="16/10" className="w-full" />
+              <ResponsiveMedia mediaKey="world-08" aspectRatio="16/10" className="w-full" />
               <div className="mt-3 text-xs font-mono text-mi-muted">
                 METHOD BLUEPRINT VALIDATION • C55
               </div>

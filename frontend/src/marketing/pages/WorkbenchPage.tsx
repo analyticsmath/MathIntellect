@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import MarketingLayout from '../components/MarketingLayout';
+import { MarketingLayout } from '../components/MarketingLayout';
 
 export const WorkbenchPage: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(1);

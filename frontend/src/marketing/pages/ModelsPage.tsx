@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import MarketingLayout from '../components/MarketingLayout';
+import { MarketingLayout } from '../components/MarketingLayout';
 import { MathExpression } from '../../math/MathExpression';
 import { ResponsiveMedia } from '../../media/ResponsiveMedia';
 
@@ -13,7 +13,7 @@ export const ModelsPage: React.FC = () => {
       name: 'Monte Carlo & Diffusion',
       category: 'STOCHASTIC SYSTEMS',
       equation: 'dx_t = \\mu dt + \\sigma dW_t',
-      mediaKey: 'mi-05' as const,
+      mediaKey: 'world-01' as const,
       inputParams: ['Initial State (x₀)', 'Drift Rate (μ)', 'Diffusion Scale (σ)', 'Time Horizon (T)', 'Sample Count (N)'],
       outputs: ['Path Realization Ensembles', 'Terminal State Quantiles', 'Empirical Probability Density', 'Value-at-Risk / Tail Probability'],
       inspectable: ['Sample paths variance', 'Upper/lower quantile bounds (5%, 95%)', 'Convergence stability'],
@@ -25,7 +25,7 @@ export const ModelsPage: React.FC = () => {
       name: 'Game Theory & Equilibria',
       category: 'STRATEGIC INTERACTIONS',
       equation: 'u_i(s_i^*, s_{-i}^*) \\ge u_i(s_i, s_{-i}^*)',
-      mediaKey: 'mi-02' as const,
+      mediaKey: 'world-03' as const,
       inputParams: ['Payoff Tensor Matrix [A]', 'Player Strategy Sets', 'Discount Factor (δ)', 'Information Horizon'],
       outputs: ['Pure / Mixed Nash Equilibrium', 'Minimax Value Bounds', 'Best-Response Trajectories', 'Regret Minimization Metric'],
       inspectable: ['Dominant strategy conditions', 'Equilibrium probability distribution', 'Payoff sensitivity to deviations'],
@@ -37,7 +37,7 @@ export const ModelsPage: React.FC = () => {
       name: 'Market Dynamics & AR(1)',
       category: 'TIME-SERIES DYNAMICS',
       equation: 'x_t = \\rho x_{t-1} + \\varepsilon_t, \\quad \\varepsilon_t \\sim \\mathcal{N}(0, \\sigma^2)',
-      mediaKey: 'mi-06' as const,
+      mediaKey: 'world-05' as const,
       inputParams: ['Autoregressive Persistence (ρ)', 'Innovation Variance (σ²)', 'Regime Thresholds', 'Observation Window'],
       outputs: ['State Realization Curves', 'Autocorrelation Function (ACF)', 'Asymptotic Variance Bounds', 'Regime Switching Durations'],
       inspectable: ['Mean reversion half-life', 'Stationarity criteria (|ρ| < 1)', 'State transition frequencies'],
@@ -49,7 +49,7 @@ export const ModelsPage: React.FC = () => {
       name: 'Agent Interaction & Network',
       category: 'MULTI-AGENT TOPOLOGY',
       equation: '\\dot{\\mathbf{x}}_i = \\sum_{j \\in \\mathcal{N}_i} A_{ij}(\\mathbf{x}_j - \\mathbf{x}_i) + \\mathbf{F}_{ext}',
-      mediaKey: 'mi-07' as const,
+      mediaKey: 'world-06' as const,
       inputParams: ['Spatial Density (N)', 'Interaction Coupling Radius (r)', 'Alignment Strength (γ)', 'Boundary Permeability'],
       outputs: ['Spatial Coordinate Vectors', 'Global Order Parameter (Φ)', 'Cluster Separation Metrics', 'Phase Transition Boundaries'],
       inspectable: ['Individual agent velocity vectors', 'Local flocking density', 'Network connectivity graph'],
@@ -61,7 +61,7 @@ export const ModelsPage: React.FC = () => {
       name: 'Custom Model Builder',
       category: 'COMPOSITIONAL WORKBENCH',
       equation: '\\mathbf{x}_{t+1} = f(\\mathbf{x}_t, \\mathbf{u}_t; \\mathbf{\\theta}) + \\mathbf{\\omega}_t',
-      mediaKey: 'mi-08' as const,
+      mediaKey: 'world-04' as const,
       inputParams: ['Custom State Variables', 'Differential Equation Specifications', 'Parameter Vectors', 'Boundary Constraints'],
       outputs: ['User-Defined Metric Fields', 'Multi-Dimensional State Surfaces', 'Realtime Parameter Sensitivity', 'Exportable Tensor Traces'],
       inspectable: ['Symbolic equation validation', 'Numerical stability conditions', 'Stepwise tensor inspector'],

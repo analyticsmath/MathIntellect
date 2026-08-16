@@ -3,13 +3,22 @@
 @tailwind utilities;
 
 :root {
-  /* High-luminance neutral foundation */
+  /* Deep atmospheric editorial palette (Visual Gate A) */
+  --mi-dark-0: #071714;
+  --mi-dark-1: #0B201C;
+  --mi-dark-2: #102A24;
+  --mi-cream: #F0E8D7;
+  --mi-copy: #C3BBAA;
+  --mi-sage: #9CB5A7;
+  --mi-photo-line: rgba(240, 232, 215, 0.14);
+
+  /* High-luminance neutral foundation (protected app) */
   --mi-canvas: #F4F6F5;
   --mi-paper: #FFFFFF;
   --mi-ink: #111412;
   --mi-ink-2: #2D3330;
   --mi-text: #505753;
-  --mi-muted: #78807C;
+  --mi-muted: #839087;
   --mi-rule: #D8DDDA;
   --mi-rule-strong: #BAC1BD;
   --mi-surface-soft: #ECEFEE;
@@ -27,12 +36,13 @@
   --mi-radius-md: 12px;
   --mi-radius-lg: 18px;
 
-  /* Restrained elevation shadows (only for transient/floating sheets, menus, dialogs) */
+  /* Restrained elevation shadows */
   --mi-shadow-elevated: 0 4px 20px rgba(17, 20, 18, 0.08), 0 1px 3px rgba(17, 20, 18, 0.04);
   --mi-shadow-modal: 0 12px 36px rgba(17, 20, 18, 0.14), 0 2px 8px rgba(17, 20, 18, 0.06);
 
-  /* Typography Fallback Architecture: Intended ABC Diatype + STIX2 math */
-  --font-diatype: "ABC Diatype", Arial, "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  /* Typography Fallback Architecture: STIX Two Text + ABC Diatype + STIX2 math */
+  --font-stix: "STIX Two Text", "STIX2", Georgia, "Times New Roman", serif;
+  --font-diatype: "ABC Diatype", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
   --font-mono: "ABC Diatype Semi Mono", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
   --font-math: "STIX Two Math", "STIX2", "Cambria Math", "TeX Gyre Termes Math", "Times New Roman", serif;
 

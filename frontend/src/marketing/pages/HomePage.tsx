@@ -1,40 +1,41 @@
-import React from 'react';
-import { SystemsAtlasHero } from '../scenes/SystemsAtlasHero';
-import { WorldStructureTransition } from '../scenes/WorldStructureTransition';
-import { ModelWorlds } from '../scenes/ModelWorlds';
-import { EvidenceSequence } from '../scenes/EvidenceSequence';
-import { ScenarioCompare } from '../scenes/ScenarioCompare';
-import { WorkbenchBridge } from '../scenes/WorkbenchBridge';
-import { ResolveScene } from '../scenes/ResolveScene';
-import MarketingLayout from '../components/MarketingLayout';
+import { MarketingLayout } from '../components/MarketingLayout';
+import { ScandiHero } from '../scenes/ScandiHero';
+import { ModelWorldsScroller } from '../scenes/ModelWorldsScroller';
+import { MathPracticeScroller } from '../scenes/MathPracticeScroller';
+import { CircularConstellation } from '../scenes/CircularConstellation';
+import { MethodsScroller } from '../scenes/MethodsScroller';
+import { ProductWorkbenchReveal } from '../scenes/ProductWorkbenchReveal';
+import { MethodJournalStrip } from '../scenes/MethodJournalStrip';
+import { TrustBoundariesScene } from '../scenes/TrustBoundariesScene';
 
-export const HomePage: React.FC = () => {
+export function HomePage() {
   return (
     <MarketingLayout>
-      <div className="w-full flex flex-col bg-mi-canvas text-mi-ink">
-        {/* Chapter 01: Systems Atlas */}
-        <SystemsAtlasHero />
+      {/* 1. Full Photographic Opening Hero */}
+      <ScandiHero />
 
-        {/* Chapter 02: World → Structure */}
-        <WorldStructureTransition />
+      {/* 2. First Image Scroller: Model Worlds (Embla Carousel) */}
+      <ModelWorldsScroller />
 
-        {/* Chapter 03: Model Worlds */}
-        <ModelWorlds />
+      {/* 3. Second Image Scroller: Mathematics in Practice */}
+      <MathPracticeScroller />
 
-        {/* Chapter 04: Evidence */}
-        <EvidenceSequence />
+      {/* 4. Circular Image Constellation: From Assumption to Decision */}
+      <CircularConstellation />
 
-        {/* Chapter 05: Compare */}
-        <ScenarioCompare />
+      {/* 5. Third Image Scroller: Methods & Formulas */}
+      <MethodsScroller />
 
-        {/* Chapter 06: Workbench Bridge */}
-        <WorkbenchBridge />
+      {/* 6. Product Reveal: Real Simulation Workbench */}
+      <ProductWorkbenchReveal />
 
-        {/* Chapter 07: Resolve */}
-        <ResolveScene />
-      </div>
+      {/* 7. Journal / Method Editorial Objects Strip */}
+      <MethodJournalStrip />
+
+      {/* 8. Trust Boundaries & Final Terminal Action */}
+      <TrustBoundariesScene />
     </MarketingLayout>
   );
-};
+}
 
 export default HomePage;

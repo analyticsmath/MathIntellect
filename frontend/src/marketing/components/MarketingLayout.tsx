@@ -1,89 +1,70 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useState, useEffect, type ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../shared/hooks/useAuth';
 
 interface MarketingLayoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-export const MarketingLayout: React.FC<MarketingLayoutProps> = ({ children }) => {
+export function MarketingLayout({ children }: MarketingLayoutProps) {
   const { isAuthenticated } = useAuth();
-  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 40);
+      setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-
-
   return (
-    <div className="min-h-screen flex flex-col bg-mi-canvas text-mi-ink font-sans">
+    <div className="min-h-screen flex flex-col bg-mi-dark-0 text-mi-cream font-sans selection:bg-mi-cream selection:text-mi-dark-0">
       {/* Accessibility Skip Link */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 z-50 px-4 py-2 bg-mi-ink text-mi-paper text-sm font-medium"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 z-50 px-4 py-2 bg-mi-cream text-mi-dark-0 text-sm font-medium rounded"
       >
         Skip to main content
       </a>
 
       {/* Header */}
       <header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-200 ${
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
           isScrolled
-            ? 'bg-mi-paper/95 border-b border-mi-rule shadow-sm py-3.5'
-            : 'bg-transparent py-5'
+            ? 'bg-mi-dark-0/95 border-b border-mi-photo-line py-4'
+            : 'bg-transparent py-6'
         }`}
       >
-        <div className="max-w-[1720px] mx-auto px-6 md:px-12 lg:px-16 flex items-center justify-between">
+        <div className="max-w-[1380px] mx-auto px-6 md:px-12 lg:px-16 flex items-center justify-between">
           {/* Wordmark */}
           <Link
             to="/"
-            className="flex items-center gap-2.5 font-medium text-lg md:text-xl tracking-tight text-mi-ink focus-visible:ring-2 focus-visible:ring-mi-focus"
+            className="flex items-center gap-2.5 font-serif text-xl md:text-2xl text-mi-cream tracking-tight hover:text-white transition-colors"
           >
-            <span className="w-3.5 h-3.5 bg-mi-ink inline-block" aria-hidden="true" />
             <span>Math Intellect</span>
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-8 text-[14px] font-medium" aria-label="Main Navigation">
-            <Link
-              to="/models"
-              className={`transition-colors hover:text-mi-ink ${
-                location.pathname === '/models' ? 'text-mi-ink font-semibold' : 'text-mi-text'
-              }`}
-            >
+          <nav className="hidden md:flex items-center gap-8 text-sm font-sans text-mi-copy" aria-label="Main Navigation">
+            <Link to="/models" className="hover:text-mi-cream transition-colors">
               Models
             </Link>
-            <Link
-              to="/method"
-              className={`transition-colors hover:text-mi-ink ${
-                location.pathname === '/method' ? 'text-mi-ink font-semibold' : 'text-mi-text'
-              }`}
-            >
+            <Link to="/method" className="hover:text-mi-cream transition-colors">
               Method
             </Link>
-            <Link
-              to="/workbench"
-              className={`transition-colors hover:text-mi-ink ${
-                location.pathname === '/workbench' ? 'text-mi-ink font-semibold' : 'text-mi-text'
-              }`}
-            >
+            <Link to="/workbench" className="hover:text-mi-cream transition-colors">
               Workbench
             </Link>
           </nav>
 
-          {/* Action / Auth Button */}
-          <div className="hidden md:flex items-center gap-4">
+          {/* Desktop Authentication & Action */}
+          <div className="hidden md:flex items-center gap-5">
             {isAuthenticated ? (
               <Link
                 to="/app"
-                className="mi-btn-primary px-4 py-2 text-xs"
+                className="inline-flex items-center justify-center px-5 py-2 rounded-full bg-mi-cream text-mi-dark-0 text-xs font-medium tracking-tight hover:bg-white transition-colors"
               >
                 Go to Workspace
               </Link>
@@ -91,39 +72,33 @@ export const MarketingLayout: React.FC<MarketingLayoutProps> = ({ children }) =>
               <>
                 <Link
                   to="/login"
-                  className="text-xs font-medium text-mi-text hover:text-mi-ink px-2 py-1.5"
+                  className="text-xs font-sans text-mi-copy hover:text-mi-cream transition-colors"
                 >
                   Sign in
                 </Link>
                 <Link
-                  to="/signup"
-                  className="mi-btn-primary px-4 py-2 text-xs"
+                  to="/app"
+                  className="inline-flex items-center justify-center px-5 py-2 rounded-full bg-mi-cream text-mi-dark-0 text-xs font-medium tracking-tight hover:bg-white transition-colors"
                 >
-                  Get started
+                  Open workbench
                 </Link>
               </>
             )}
           </div>
 
-          {/* Mobile Menu Trigger */}
-          <div className="flex md:hidden items-center gap-3">
-            <Link
-              to="/workbench"
-              className="mi-btn-primary px-3 py-1.5 text-xs"
-            >
-              Workbench
-            </Link>
+          {/* Mobile Menu Button (44px target) */}
+          <div className="md:hidden flex items-center">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="w-11 h-11 flex items-center justify-center text-mi-cream hover:text-white"
+              aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
               aria-expanded={mobileMenuOpen}
-              aria-label="Toggle navigation menu"
-              className="p-2 text-mi-ink border border-mi-rule bg-mi-paper"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {mobileMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
                 ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
                 )}
               </svg>
             </button>
@@ -132,25 +107,45 @@ export const MarketingLayout: React.FC<MarketingLayoutProps> = ({ children }) =>
 
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-mi-paper border-b border-mi-rule px-6 py-6 space-y-4">
-            <nav className="flex flex-col space-y-3 text-base font-medium">
-              <Link to="/" onClick={() => setMobileMenuOpen(false)} className="text-mi-ink hover:text-mi-change">Overview</Link>
-              <Link to="/models" onClick={() => setMobileMenuOpen(false)} className="text-mi-ink hover:text-mi-change">Models Atlas</Link>
-              <Link to="/workbench" onClick={() => setMobileMenuOpen(false)} className="text-mi-ink hover:text-mi-change">Workbench</Link>
-              <Link to="/method" onClick={() => setMobileMenuOpen(false)} className="text-mi-ink hover:text-mi-change">Methodology</Link>
+          <div className="md:hidden bg-mi-dark-1 border-b border-mi-photo-line px-6 py-6 space-y-5">
+            <nav className="flex flex-col space-y-4 text-base font-sans text-mi-copy">
+              <Link to="/" onClick={() => setMobileMenuOpen(false)} className="hover:text-mi-cream">
+                Overview
+              </Link>
+              <Link to="/models" onClick={() => setMobileMenuOpen(false)} className="hover:text-mi-cream">
+                Models
+              </Link>
+              <Link to="/method" onClick={() => setMobileMenuOpen(false)} className="hover:text-mi-cream">
+                Method
+              </Link>
+              <Link to="/workbench" onClick={() => setMobileMenuOpen(false)} className="hover:text-mi-cream">
+                Workbench
+              </Link>
             </nav>
-            <div className="pt-4 border-t border-mi-rule flex flex-col gap-3">
+            <div className="pt-4 border-t border-mi-photo-line flex flex-col gap-3">
               {isAuthenticated ? (
-                <Link to="/app" onClick={() => setMobileMenuOpen(false)} className="mi-btn-primary w-full text-center py-2.5 text-sm">
+                <Link
+                  to="/app"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center py-3 rounded-full bg-mi-cream text-mi-dark-0 font-medium text-sm"
+                >
                   Go to Workspace
                 </Link>
               ) : (
                 <>
-                  <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="mi-btn-secondary w-full text-center py-2.5 text-sm">
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full text-center py-3 rounded-full border border-mi-photo-line text-mi-cream text-sm"
+                  >
                     Sign in
                   </Link>
-                  <Link to="/signup" onClick={() => setMobileMenuOpen(false)} className="mi-btn-primary w-full text-center py-2.5 text-sm">
-                    Get started
+                  <Link
+                    to="/app"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full text-center py-3 rounded-full bg-mi-cream text-mi-dark-0 font-medium text-sm"
+                  >
+                    Open workbench
                   </Link>
                 </>
               )}
@@ -164,50 +159,64 @@ export const MarketingLayout: React.FC<MarketingLayoutProps> = ({ children }) =>
         {children}
       </main>
 
-      {/* Quiet Authored Utility Footer */}
-      <footer className="w-full border-t border-mi-rule bg-mi-paper py-12 px-6 md:px-12 lg:px-16 mt-auto">
-        <div className="max-w-[1720px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+      {/* Atmospheric Integrated Scandi Footer */}
+      <footer className="w-full border-t border-mi-photo-line bg-mi-dark-0 py-16 px-6 md:px-12 lg:px-16 text-mi-cream">
+        <div className="max-w-[1380px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
+          <div className="md:col-span-5 space-y-4">
+            <Link to="/" className="font-serif text-2xl text-mi-cream block">
+              Math Intellect
+            </Link>
+            <p className="font-sans text-sm text-mi-copy max-w-sm leading-relaxed">
+              A continuous mathematical simulation and decision workbench for uncertainty, strategy, dynamics, and interacting systems.
+            </p>
+            <div className="pt-2 text-xs font-sans text-mi-muted">
+              © {new Date().getFullYear()} Math Intellect. All mathematical derivations preserved.
+            </div>
+          </div>
+
+          <div className="md:col-span-3 space-y-3">
+            <div className="font-sans text-xs text-mi-muted uppercase tracking-wider">Atlas &amp; Workbench</div>
+            <ul className="space-y-2.5 text-sm font-sans text-mi-copy">
+              <li>
+                <Link to="/models" className="hover:text-mi-cream transition-colors">
+                  Model Atlas
+                </Link>
+              </li>
+              <li>
+                <Link to="/workbench" className="hover:text-mi-cream transition-colors">
+                  Simulation Workbench
+                </Link>
+              </li>
+              <li>
+                <Link to="/method" className="hover:text-mi-cream transition-colors">
+                  Epistemic Method
+                </Link>
+              </li>
+            </ul>
+          </div>
+
           <div className="md:col-span-4 space-y-3">
-            <div className="flex items-center gap-2 font-medium text-base text-mi-ink">
-              <span className="w-3 h-3 bg-mi-ink inline-block" aria-hidden="true" />
-              <span>Math Intellect</span>
-            </div>
-            <p className="text-xs text-mi-text max-w-sm leading-relaxed">
-              Scientific simulation and decision workbench. Designed according to Valtum architectural doctrine.
-            </p>
-          </div>
-
-          <div className="md:col-span-2 space-y-2 text-xs font-mono">
-            <div className="text-mi-muted uppercase">NAVIGATION</div>
-            <ul className="space-y-1.5 text-mi-text">
-              <li><Link to="/models" className="hover:text-mi-ink">Models Atlas</Link></li>
-              <li><Link to="/workbench" className="hover:text-mi-ink">Workbench</Link></li>
-              <li><Link to="/method" className="hover:text-mi-ink">Methodology</Link></li>
+            <div className="font-sans text-xs text-mi-muted uppercase tracking-wider">Access &amp; Account</div>
+            <ul className="space-y-2.5 text-sm font-sans text-mi-copy">
+              <li>
+                <Link to="/app" className="hover:text-mi-cream transition-colors">
+                  Open Interactive App
+                </Link>
+              </li>
+              <li>
+                <Link to="/login" className="hover:text-mi-cream transition-colors">
+                  Sign in
+                </Link>
+              </li>
+              <li>
+                <Link to="/signup" className="hover:text-mi-cream transition-colors">
+                  Create Analyst Account
+                </Link>
+              </li>
             </ul>
-          </div>
-
-          <div className="md:col-span-3 space-y-2 text-xs font-mono">
-            <div className="text-mi-muted uppercase">PLATFORM</div>
-            <ul className="space-y-1.5 text-mi-text">
-              <li><Link to="/login" className="hover:text-mi-ink">Sign in</Link></li>
-              <li><Link to="/signup" className="hover:text-mi-ink">Create account</Link></li>
-              <li><Link to="/app" className="hover:text-mi-ink">Simulation Workspace</Link></li>
-            </ul>
-          </div>
-
-          <div className="md:col-span-3 space-y-2 text-xs font-mono text-mi-muted">
-            <div className="text-mi-muted uppercase">PROVENANCE</div>
-            <p className="text-[11px] leading-normal">
-              Continuous models, closed-form verification and deterministic reproducibility.
-            </p>
-            <div className="text-[11px] pt-1">
-              © {new Date().getFullYear()} Math Intellect. All rights reserved.
-            </div>
           </div>
         </div>
       </footer>
     </div>
   );
-};
-
-export default MarketingLayout;
+}

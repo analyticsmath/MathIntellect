@@ -1,7 +1,7 @@
-import { MEDIA_REGISTRY, type MediaItem } from './mediaRegistry';
+import { PHOTO_MEDIA, type MediaItem } from './mediaRegistry';
 
 interface ResponsiveMediaProps {
-  mediaKey: keyof typeof MEDIA_REGISTRY | MediaItem;
+  mediaKey: keyof typeof PHOTO_MEDIA | MediaItem;
   className?: string;
   priority?: boolean;
   aspectRatio?: string;
@@ -15,7 +15,7 @@ export const ResponsiveMedia: React.FC<ResponsiveMediaProps> = ({
   aspectRatio,
   style,
 }) => {
-  const item = typeof mediaKey === 'string' ? MEDIA_REGISTRY[mediaKey] : mediaKey;
+  const item = typeof mediaKey === 'string' ? PHOTO_MEDIA[mediaKey] : mediaKey;
 
   if (!item) {
     return null;
@@ -23,10 +23,8 @@ export const ResponsiveMedia: React.FC<ResponsiveMediaProps> = ({
 
   return (
     <picture className={`block overflow-hidden ${className}`} style={{ aspectRatio: aspectRatio || item.aspectRatio, ...style }}>
-      <source media="(max-width: 640px)" srcSet={item.mobileSrc} />
-      <source media="(min-width: 641px)" srcSet={item.desktopSrc} />
       <img
-        src={item.desktopSrc}
+        src={item.src}
         alt={item.alt}
         loading={priority ? 'eager' : 'lazy'}
         fetchPriority={priority ? 'high' : 'auto'}
