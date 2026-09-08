@@ -32,9 +32,10 @@ export default {
         },
       },
       fontFamily: {
+        display: ['"Space Grotesk"', 'sans-serif'],
         serif: ['"STIX Two Text"', '"STIX2"', 'Georgia', '"Times New Roman"', 'serif'],
         math: ['"STIX Two Math"', '"STIX2"', '"Cambria Math"', 'serif'],
-        sans: ['"ABC Diatype"', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Arial', 'sans-serif'],
+        sans: ['"Space Grotesk"', '"ABC Diatype"', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Arial', 'sans-serif'],
         mono: ['"ABC Diatype Semi Mono"', '"SFMono-Regular"', 'Consolas', 'monospace'],
       },
       borderRadius: {

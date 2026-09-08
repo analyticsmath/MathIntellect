@@ -15,13 +15,26 @@ export function SystemAnchorOverlay({
 }: SystemAnchorProps) {
   return (
     <div className="absolute inset-0 pointer-events-none z-20">
-      {/* 12-Column Hairline Software Grid (8% Opacity) */}
-      <div className="absolute inset-0 grid grid-cols-12 gap-0 px-6 opacity-[0.08]">
+      {/* 12-Column Hairline Software Grid (5% Opacity) */}
+      <div className="absolute inset-0 grid grid-cols-12 gap-0 px-6 opacity-[0.05]">
         {Array.from({ length: 12 }).map((_, i) => (
-          <div key={i} className="border-r border-white h-full relative">
-            <span className="absolute top-4 left-2 text-[8px] font-mono text-white">
-              C_{String(i + 1).padStart(2, "0")}
-            </span>
+          <div key={i} className="border-r border-white h-full relative" />
+        ))}
+      </div>
+
+      {/* Subtle Crosshair Marks (+) at 25%, 50%, 75% Intersections */}
+      <div className="absolute inset-0 pointer-events-none">
+        {[25, 50, 75].map(y => (
+          <div key={y}>
+            {[25, 50, 75].map(x => (
+              <div
+                key={`${x}-${y}`}
+                className="absolute font-mono text-[10px] text-white/25 -translate-x-1/2 -translate-y-1/2 select-none"
+                style={{ left: `${x}%`, top: `${y}%` }}
+              >
+                +
+              </div>
+            ))}
           </div>
         ))}
       </div>

@@ -36,16 +36,16 @@ export function Movement01Axiom() {
         // Inner image counter-translation against container pin
         tl.fromTo(
           primaryImage.current,
-          { yPercent: -8, scale: 1.05 },
-          { yPercent: 8, scale: 1.0, ease: "none" },
+          { yPercent: -6, scale: 1.05 },
+          { yPercent: 6, scale: 1.0, ease: "none" },
           0
         )
 
         // Asymmetric macro optical inset counter-drift
         tl.fromTo(
           macroInset.current,
-          { yPercent: 12 },
-          { yPercent: -12, ease: "none" },
+          { yPercent: 10 },
+          { yPercent: -10, ease: "none" },
           0
         )
       }, root)
@@ -66,21 +66,32 @@ export function Movement01Axiom() {
           verificationState="VERIFIED // REPLAY READY"
         />
 
-        {/* Primary Photographic Mass: Ahmed's Brutalist Concrete Cantilever */}
-        <div className="absolute left-[5vw] top-[10svh] w-[90vw] lg:w-[65vw] h-[78svh] overflow-hidden bg-[#0E1015] z-10">
+        {/* Primary Photographic Mass: Concrete anchored to left edge (w-[72vw] h-[85vh] top-0 left-0) */}
+        <div className="absolute left-0 top-0 w-full lg:w-[72vw] h-[85vh] overflow-hidden bg-[#0E1015] z-10 border-b border-r border-white/10">
           <img
             ref={primaryImage}
             src="/media/math/ahmed-brutalist-concrete.jpg"
             alt="Monolithic concrete structural mass under raking light"
-            className="absolute left-0 top-[-14%] h-[128%] w-full object-cover grayscale contrast-125 brightness-90 will-change-transform"
+            className="absolute left-0 top-[-10%] h-[120%] w-full object-cover grayscale contrast-125 brightness-90 will-change-transform"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#07080B]/70 via-transparent to-transparent pointer-events-none" />
+          {/* Smooth horizontal right-edge gradient fade to #07080B */}
+          <div className="absolute inset-y-0 right-0 w-[45%] bg-gradient-to-r from-transparent to-[#07080B] pointer-events-none" />
+          {/* Bottom gradient fade to void */}
+          <div className="absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-t from-[#07080B] via-[#07080B]/60 to-transparent pointer-events-none" />
         </div>
 
-        {/* Secondary Macro Optical Laser Inset: Asymmetric Counter-Plane */}
+        {/* 1px Coordinate Line connecting concrete frame (72vw) to docked laser inset (76vw) */}
+        <div className="absolute top-[28svh] left-[72vw] right-[24vw] h-[1px] bg-white/20 z-20 pointer-events-none hidden lg:block">
+          <span className="absolute -top-3.5 left-3 font-mono text-[8px] tracking-[0.14em] text-[#5F6575] uppercase">
+            COORD // TENSOR REF
+          </span>
+          <span className="absolute -top-[3px] left-0 w-[7px] h-[7px] border-l border-t border-[#2D5BFF]" />
+        </div>
+
+        {/* Secondary Macro Optical Laser Inset: Docked on right plane */}
         <div
           ref={macroInset}
-          className="absolute right-[5vw] top-[18svh] w-[22vw] h-[34svh] overflow-hidden bg-[#0E1015] border border-white/10 z-20 hidden lg:block"
+          className="absolute right-[4vw] top-[14svh] w-[20vw] h-[32svh] overflow-hidden bg-[#0E1015] border border-white/15 z-20 hidden lg:block"
         >
           <img
             src="/media/math/optical-laser-refraction.jpg"
@@ -92,13 +103,13 @@ export function Movement01Axiom() {
           </div>
         </div>
 
-        {/* Spatial Syntax Typographic Block: Zero Dashes, Zero Commas */}
-        <div className="absolute left-[8vw] bottom-[12svh] z-30 max-w-2xl">
-          <h1 className="font-sans text-[clamp(2.5rem,5vw,4.75rem)] font-medium leading-[0.92] tracking-[-0.035em] text-[#ECEFF5] uppercase">
+        {/* Embedded Headline & Spatial Syntax Block: Overlapping bottom third and bleeding into right canvas */}
+        <div className="absolute left-[6vw] bottom-[10svh] z-30 max-w-5xl">
+          <h1 className="font-['Space_Grotesk',sans-serif] text-[clamp(3rem,6.5vw,5.75rem)] font-medium leading-[0.88] tracking-[-0.045em] text-[#ECEFF5] uppercase">
             Reality without approximation
           </h1>
 
-          <div className="mt-5 space-y-1.5 font-mono text-[11px] uppercase tracking-[0.08em] text-[#5F6575]">
+          <div className="mt-6 space-y-1.5 font-mono text-[11px] uppercase tracking-[0.08em] text-[#5F6575]">
             <p className="text-[#ECEFF5]">
               Deterministic computation replaces generative guesswork
             </p>
@@ -110,12 +121,17 @@ export function Movement01Axiom() {
             </p>
           </div>
 
+          {/* Milled Button Upgrade */}
           <div className="mt-8 flex items-center gap-6">
             <a
               href="/app/simulations/new"
-              className="inline-block bg-[#ECEFF5] text-[#07080B] font-mono text-[11px] uppercase tracking-[0.12em] px-6 py-3.5 hover:bg-white transition-colors"
+              className="group inline-flex items-center gap-3 bg-[#0E1015] text-[#ECEFF5] border border-white/20 rounded-xl px-6 py-3.5 font-mono text-[11px] uppercase tracking-[0.12em] shadow-[inset_0_2px_4px_rgba(0,0,0,0.7),0_1px_0_rgba(255,255,255,0.04)] hover:border-white/40 hover:shadow-[inset_0_2px_6px_rgba(0,0,0,0.9),0_0_0_1px_rgba(255,255,255,0.25)] transition-all duration-200"
             >
-              Initialize Run
+              <span className="w-1.5 h-1.5 rounded-full bg-[#2D5BFF] shadow-[0_0_8px_#2D5BFF] animate-pulse" />
+              <span>Initialize Run</span>
+              <span className="text-[#5F6575] group-hover:text-[#ECEFF5] group-hover:translate-x-0.5 transition-all duration-150">
+                →
+              </span>
             </a>
             <span className="font-mono text-[9px] tracking-[0.14em] text-[#5F6575]">
               LOCK: SHA256_ACTIVE
