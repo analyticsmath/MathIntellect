@@ -2,160 +2,86 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* Deep atmospheric editorial palette (Visual Gate A) */
-  --mi-dark-0: #071714;
-  --mi-dark-1: #0B201C;
-  --mi-dark-2: #102A24;
-  --mi-cream: #F0E8D7;
-  --mi-copy: #C3BBAA;
-  --mi-sage: #9CB5A7;
-  --mi-photo-line: rgba(240, 232, 215, 0.14);
+@layer base {
+  :root {
+    --color-void: #07080B;
+    --color-blackboard: #0E1015;
+    --color-axis: #1A1D26;
+    --color-ink-muted: #5F6575;
+    --color-ink-primary: #ECEFF5;
+    --color-signal-cobalt: #2D5BFF;
 
-  /* High-luminance neutral foundation (protected app) */
-  --mi-canvas: #F4F6F5;
-  --mi-paper: #FFFFFF;
-  --mi-ink: #111412;
-  --mi-ink-2: #2D3330;
-  --mi-text: #505753;
-  --mi-muted: #839087;
-  --mi-rule: #D8DDDA;
-  --mi-rule-strong: #BAC1BD;
-  --mi-surface-soft: #ECEFEE;
+    /* High-luminance neutral foundation (protected app fallback) */
+    --mi-canvas: #F4F6F5;
+    --mi-paper: #FFFFFF;
+    --mi-ink: #111412;
+    --mi-ink-2: #2D3330;
+    --mi-text: #505753;
+    --mi-muted: #839087;
+    --mi-rule: #D8DDDA;
+    --mi-rule-strong: #BAC1BD;
+    --mi-surface-soft: #ECEFEE;
+    --mi-focus: #2457E6;
+    --mi-danger: #B64049;
+    --mi-radius-sm: 8px;
+    --mi-radius-xs: 4px;
+    --mi-shadow-modal: 0 12px 36px rgba(17, 20, 18, 0.14), 0 2px 8px rgba(17, 20, 18, 0.06);
+  }
 
-  /* State and semantic signals (never identity paint) */
-  --mi-change: #E35A35;
-  --mi-focus: #2457E6;
-  --mi-success: #23755B;
-  --mi-warning: #9D6814;
-  --mi-danger: #B64049;
-
-  /* Functional radius scale */
-  --mi-radius-xs: 4px;
-  --mi-radius-sm: 8px;
-  --mi-radius-md: 12px;
-  --mi-radius-lg: 18px;
-
-  /* Restrained elevation shadows */
-  --mi-shadow-elevated: 0 4px 20px rgba(17, 20, 18, 0.08), 0 1px 3px rgba(17, 20, 18, 0.04);
-  --mi-shadow-modal: 0 12px 36px rgba(17, 20, 18, 0.14), 0 2px 8px rgba(17, 20, 18, 0.06);
-
-  /* Typography Fallback Architecture: STIX Two Text + ABC Diatype + STIX2 math */
-  --font-stix: "STIX Two Text", "STIX2", Georgia, "Times New Roman", serif;
-  --font-diatype: "ABC Diatype", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-  --font-mono: "ABC Diatype Semi Mono", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-  --font-math: "STIX Two Math", "STIX2", "Cambria Math", "TeX Gyre Termes Math", "Times New Roman", serif;
-
-  font-family: var(--font-diatype);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  color: var(--mi-ink);
-  background-color: var(--mi-canvas);
-  line-height: 1.5;
-  font-weight: 400;
+  body {
+    background-color: var(--color-void);
+    color: var(--color-ink-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 }
 
-* {
-  box-sizing: border-box;
+/* Institutional Milled Input Token System */
+.milled-input {
+  background-color: #0E1015;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.7), 0 1px 0 rgba(255, 255, 255, 0.04);
+  color: #ECEFF5;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  padding: 16px 20px;
+  transition: border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  min-height: 100%;
-  background-color: var(--mi-canvas);
-  color: var(--mi-ink);
+.milled-input:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.25);
 }
 
-#root {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+/* 3% Monochromatic Noise Filter Overlay */
+.bg-noise-overlay {
+  position: relative;
 }
 
-/* Typography styles */
-h1, h2, h3, h4, h5, h6 {
-  margin: 0;
-  font-family: var(--font-diatype);
-  font-weight: 500;
-  color: var(--mi-ink);
-  letter-spacing: -0.015em;
-  line-height: 1.15;
+.bg-noise-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+  z-index: 15;
 }
 
-p {
-  margin: 0;
-  color: var(--mi-text);
-  line-height: 1.6;
+/* Touch Fallback: Hide virtual desktop controls */
+@media (min-width: 1024px) and (pointer: fine) {
+  .touch-fallback-only { display: none !important; }
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+@media (max-width: 1023px), (pointer: coarse) {
+  .desktop-pinned-only { display: none !important; }
 }
 
-button, input, select, textarea {
-  font: inherit;
-  color: inherit;
-}
-
-button {
-  cursor: pointer;
-  border: none;
-  background: transparent;
-  padding: 0;
-}
-
-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-code, pre, .font-mono {
-  font-family: var(--font-mono);
-}
-
-.font-math {
-  font-family: var(--font-math);
-  font-style: italic;
-}
-
-/* Accessible focus visible */
-:focus-visible {
-  outline: 2px solid var(--mi-focus);
-  outline-offset: 2px;
-}
-
-/* Selection */
-::selection {
-  background-color: #E2E8F0;
-  color: var(--mi-ink);
-}
-
-/* Scrollbar - calm neutral */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--mi-canvas);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--mi-rule);
-  border-radius: var(--mi-radius-xs);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--mi-rule-strong);
-}
-
-/* Form controls baseline */
+/* Workbench Component Baselines */
 .mi-input {
   width: 100%;
   height: 48px;
@@ -177,16 +103,6 @@ code, pre, .font-mono {
   border-color: var(--mi-focus);
 }
 
-.mi-input:disabled {
-  background: var(--mi-surface-soft);
-  color: var(--mi-muted);
-}
-
-.mi-input-error {
-  border-color: var(--mi-danger) !important;
-}
-
-/* Primary and secondary button baseline */
 .mi-btn-primary {
   display: inline-flex;
   align-items: center;
@@ -222,12 +138,6 @@ code, pre, .font-mono {
   transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
-.mi-btn-secondary:hover:not(:disabled) {
-  border-color: var(--mi-rule-strong);
-  background: var(--mi-surface-soft);
-}
-
-/* Table baseline */
 .mi-table {
   width: 100%;
   border-collapse: collapse;
@@ -247,18 +157,4 @@ code, pre, .font-mono {
   padding: 12px 14px;
   border-bottom: 1px solid var(--mi-rule);
   color: var(--mi-ink-2);
-}
-
-.mi-table tr:last-child td {
-  border-bottom: none;
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  *, ::before, ::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
 }

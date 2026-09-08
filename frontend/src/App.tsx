@@ -13,12 +13,18 @@ import { ProtectedRoute } from './shared/ui/ProtectedRoute';
 import { useAuth } from './shared/hooks/useAuth';
 import { AppErrorBoundary } from './components/ui/AppErrorBoundary';
 
-const HomePage = lazy(() => import('./marketing/pages/HomePage'));
+const MarketingLayout = lazy(() =>
+  import('./marketing/MarketingLayout').then(m => ({ default: m.MarketingLayout }))
+);
 const ModelsPage = lazy(() => import('./marketing/pages/ModelsPage'));
 const WorkbenchPage = lazy(() => import('./marketing/pages/WorkbenchPage'));
 const MethodPage = lazy(() => import('./marketing/pages/MethodPage'));
-const LoginPage = lazy(() => import('./auth/pages/LoginPage'));
-const SignupPage = lazy(() => import('./auth/pages/SignupPage'));
+const LoginPage = lazy(() =>
+  import('./auth/LoginPage').then(m => ({ default: m.LoginPage }))
+);
+const SignupPage = lazy(() =>
+  import('./auth/SignupPage').then(m => ({ default: m.SignupPage }))
+);
 const AppDashboardPage = lazy(() => import('./app/pages/AppDashboardPage'));
 const AppSimulationPage = lazy(() => import('./app/pages/AppSimulationPage'));
 const AppAnalyticsPage = lazy(() => import('./app/pages/AppAnalyticsPage'));
@@ -128,7 +134,7 @@ function AppRoutes() {
       <RouteExperienceManager />
       <Routes location={location}>
         {/* Public Routes */}
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<MarketingLayout />} />
         <Route path="/models" element={<ModelsPage />} />
         <Route path="/workbench" element={<WorkbenchPage />} />
         <Route path="/method" element={<MethodPage />} />
