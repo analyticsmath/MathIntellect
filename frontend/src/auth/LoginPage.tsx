@@ -29,7 +29,7 @@ export function LoginPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#07080B]" />
         <div className="absolute top-8 left-8 font-mono text-[9px] uppercase tracking-[0.14em] text-[#5F6575]">
-          SESSION GATE 01 // AIRLOCK VERIFIED
+          SESSION GATE 01 AIRLOCK VERIFIED
         </div>
         <div className="absolute bottom-8 left-8 font-mono text-[9px] uppercase tracking-[0.14em] text-[#2D5BFF]">
           HARDWARE SHA256 ENCRYPTION ACTIVE
@@ -42,7 +42,7 @@ export function LoginPage() {
           <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-[#5F6575] block mb-2">
             PORTAL GATEWAY
           </span>
-          <h1 className="font-sans text-3xl font-medium tracking-[-0.03em] uppercase text-[#ECEFF5]">
+          <h1 className="font-['Space_Grotesk',sans-serif] text-3xl font-medium tracking-[-0.03em] uppercase text-[#ECEFF5]">
             Enter Laboratory
           </h1>
         </div>

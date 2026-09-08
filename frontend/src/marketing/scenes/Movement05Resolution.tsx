@@ -12,12 +12,12 @@ export function Movement05Resolution() {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#07080B] via-transparent to-transparent pointer-events-none" />
           <div className="absolute bottom-6 left-6 font-mono text-[9px] uppercase tracking-[0.14em] text-[#5F6575]">
-            SHA256 // LOCKED REPLAY DIGEST
+            SHA256 LOCKED REPLAY DIGEST
           </div>
         </div>
 
         {/* Spatial Syntax Text Resolution */}
-        <h2 className="font-sans text-[clamp(2rem,4.5vw,4.25rem)] font-medium leading-[0.92] tracking-[-0.035em] uppercase max-w-3xl">
+        <h2 className="font-['Space_Grotesk',sans-serif] text-[clamp(2rem,4.5vw,4.25rem)] font-medium leading-[0.92] tracking-[-0.035em] uppercase max-w-3xl">
           Identical seeds produce identical histories
         </h2>
 
@@ -44,9 +44,9 @@ export function Movement05Resolution() {
 
         {/* Telemetry Footer */}
         <div className="mt-20 pt-8 border-t border-[#1A1D26] w-full flex flex-col sm:flex-row justify-between items-center font-mono text-[9px] uppercase tracking-[0.14em] text-[#5F6575] gap-4">
-          <span>SYSTEM COLD RESTART: SECURE</span>
-          <span>TIMEOUT: 5000MS</span>
-          <span>MEMORY CAP: 256MB</span>
+          <span>SYSTEM COLD RESTART SECURE</span>
+          <span>TIMEOUT 5000MS</span>
+          <span>MEMORY CAP 256MB</span>
         </div>
 
       </div>

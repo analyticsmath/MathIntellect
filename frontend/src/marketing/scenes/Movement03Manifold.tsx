@@ -34,7 +34,6 @@ export function Movement03Manifold() {
         const width = container.clientWidth
         const height = container.clientHeight
 
-        // Test context creation
         const testCanvas = document.createElement("canvas")
         const gl = testCanvas.getContext("webgl2")
         if (!gl) throw new Error("WebGL2 Unsupported")
@@ -115,10 +114,10 @@ export function Movement03Manifold() {
     <section ref={root} className="relative bg-[#07080B] text-[#ECEFF5] border-b border-[#1A1D26]">
       <div ref={stage} className="relative h-[100svh] w-full overflow-hidden">
         <SystemAnchorOverlay
-          systemTag="ENGINE 02 // MARKET DYNAMICS"
-          telemetryMetric="GARCH(1,1) // VOLATILITY ACTIVE"
-          coordSystem="MANIFOLD // LAT 24.7136 LNG 46.6753"
-          verificationState="DRIFT // +0.03 PERCENT"
+          systemTag="ENGINE 02 MARKET DYNAMICS"
+          telemetryMetric="GARCH VOLATILITY ACTIVE"
+          coordSystem="MANIFOLD LAT 24.7136 LNG 46.6753"
+          verificationState="DRIFT RATE +0.03%"
         />
 
         {/* 100vw Topological Manifold Takeover */}
@@ -140,7 +139,7 @@ export function Movement03Manifold() {
 
           {/* Spatial Syntax Typographic Overlay */}
           <div className="absolute left-8 bottom-8 z-30 max-w-xl">
-            <h2 className="font-sans text-[clamp(2rem,4vw,3.75rem)] font-medium leading-[0.94] tracking-[-0.03em] uppercase">
+            <h2 className="font-['Space_Grotesk',sans-serif] text-[clamp(2rem,4vw,3.75rem)] font-medium leading-[0.94] tracking-[-0.03em] uppercase">
               Volatility builds physical geometry
             </h2>
             <div className="mt-3 space-y-1 font-mono text-[11px] uppercase tracking-[0.08em] text-[#5F6575]">

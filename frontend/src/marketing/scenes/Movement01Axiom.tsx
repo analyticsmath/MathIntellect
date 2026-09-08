@@ -3,6 +3,7 @@ import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { DESKTOP_MOTION } from "../components/DesktopLenisBridge"
 import { SystemAnchorOverlay } from "../components/SystemAnchorOverlay"
+import { KaTeXBlock } from "../../math/KaTeXBlock"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -33,7 +34,6 @@ export function Movement01Axiom() {
           }
         })
 
-        // Inner image counter-translation against container pin
         tl.fromTo(
           primaryImage.current,
           { yPercent: -6, scale: 1.05 },
@@ -41,7 +41,6 @@ export function Movement01Axiom() {
           0
         )
 
-        // Asymmetric macro optical inset counter-drift
         tl.fromTo(
           macroInset.current,
           { yPercent: 10 },
@@ -60,35 +59,31 @@ export function Movement01Axiom() {
     <section ref={root} className="relative bg-[#07080B] text-[#ECEFF5] border-b border-[#1A1D26]">
       <div ref={stage} className="relative h-[100svh] w-full overflow-hidden">
         <SystemAnchorOverlay
-          systemTag="SYSTEM // AXIOM LOAD MATRIX"
-          telemetryMetric="PRNG // MULBERRY32 : 0x77A1F9"
-          coordSystem="COORD // X 847.22 Y 119.04 Z 0.91"
-          verificationState="VERIFIED // REPLAY READY"
+          systemTag="AXIOM LOAD MATRIX"
+          telemetryMetric="SEED 0x77A1F9"
+          coordSystem="STATE 847.22 119.04 0.91"
+          verificationState="DETERMINISTIC VERIFIED"
         />
 
-        {/* Primary Photographic Mass: Concrete anchored to left edge (w-[72vw] h-[85vh] top-0 left-0) */}
-        <div className="absolute left-0 top-0 w-full lg:w-[72vw] h-[85vh] overflow-hidden bg-[#0E1015] z-10 border-b border-r border-white/10">
+        {/* Primary Photographic Mass: Concrete anchored to left edge with crisp architectural framing */}
+        <div className="absolute left-0 top-0 w-full lg:w-[68vw] h-[85vh] overflow-hidden bg-[#0E1015] z-10 border-b border-r border-white/10 [mask-image:linear-gradient(to_right,black_88%,transparent_100%)]">
           <img
             ref={primaryImage}
             src="/media/math/ahmed-brutalist-concrete.jpg"
             alt="Monolithic concrete structural mass under raking light"
-            className="absolute left-0 top-[-10%] h-[120%] w-full object-cover grayscale contrast-125 brightness-90 will-change-transform"
+            className="absolute left-0 top-[-8%] h-[116%] w-full object-cover grayscale contrast-125 brightness-95 will-change-transform"
           />
-          {/* Smooth horizontal right-edge gradient fade to #07080B */}
-          <div className="absolute inset-y-0 right-0 w-[45%] bg-gradient-to-r from-transparent to-[#07080B] pointer-events-none" />
-          {/* Bottom gradient fade to void */}
-          <div className="absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-t from-[#07080B] via-[#07080B]/60 to-transparent pointer-events-none" />
         </div>
 
-        {/* 1px Coordinate Line connecting concrete frame (72vw) to docked laser inset (76vw) */}
-        <div className="absolute top-[28svh] left-[72vw] right-[24vw] h-[1px] bg-white/20 z-20 pointer-events-none hidden lg:block">
+        {/* 1px Coordinate Bridge connecting concrete boundary (68vw) to laser inset */}
+        <div className="absolute top-[26svh] left-[68vw] right-[24vw] h-[1px] bg-white/20 z-20 pointer-events-none hidden lg:block">
           <span className="absolute -top-3.5 left-3 font-mono text-[8px] tracking-[0.14em] text-[#5F6575] uppercase">
-            COORD // TENSOR REF
+            TENSOR REFERENCE
           </span>
           <span className="absolute -top-[3px] left-0 w-[7px] h-[7px] border-l border-t border-[#2D5BFF]" />
         </div>
 
-        {/* Secondary Macro Optical Laser Inset: Docked on right plane */}
+        {/* Secondary Macro Optical Laser Inset: Crisp 1px framed docked plane */}
         <div
           ref={macroInset}
           className="absolute right-[4vw] top-[14svh] w-[20vw] h-[32svh] overflow-hidden bg-[#0E1015] border border-white/15 z-20 hidden lg:block"
@@ -99,17 +94,17 @@ export function Movement01Axiom() {
             className="w-full h-full object-cover grayscale contrast-150 brightness-75"
           />
           <div className="absolute bottom-2 right-2 font-mono text-[8px] tracking-wider text-white/50 bg-black/60 px-1.5 py-0.5">
-            TENSOR // 01
+            TENSOR 01
           </div>
         </div>
 
-        {/* Embedded Headline & Spatial Syntax Block: Overlapping bottom third and bleeding into right canvas */}
-        <div className="absolute left-[6vw] bottom-[10svh] z-30 max-w-5xl">
-          <h1 className="font-['Space_Grotesk',sans-serif] text-[clamp(3rem,6.5vw,5.75rem)] font-medium leading-[0.88] tracking-[-0.045em] text-[#ECEFF5] uppercase">
+        {/* Embedded Headline & Spatial Syntax Block */}
+        <div className="absolute left-[6vw] bottom-[6svh] z-30 max-w-5xl">
+          <h1 className="font-['Space_Grotesk',sans-serif] text-[clamp(2.75rem,5.5vw,5rem)] font-medium leading-[0.88] tracking-[-0.045em] text-[#ECEFF5] uppercase">
             Reality without approximation
           </h1>
 
-          <div className="mt-6 space-y-1.5 font-mono text-[11px] uppercase tracking-[0.08em] text-[#5F6575]">
+          <div className="mt-4 space-y-1 font-mono text-[11px] uppercase tracking-[0.08em] text-[#5F6575]">
             <p className="text-[#ECEFF5]">
               Deterministic computation replaces generative guesswork
             </p>
@@ -121,8 +116,23 @@ export function Movement01Axiom() {
             </p>
           </div>
 
-          {/* Milled Button Upgrade */}
-          <div className="mt-8 flex items-center gap-6">
+          {/* Live KaTeX Cholesky Covariance Matrix Block */}
+          <div className="mt-5 p-3.5 bg-[#0E1015] border border-white/10 rounded-xl inline-block shadow-[inset_0_2px_4px_rgba(0,0,0,0.7),0_1px_0_rgba(255,255,255,0.04)]">
+            <div className="flex items-center justify-between gap-6 mb-1.5">
+              <span className="font-mono text-[8px] uppercase tracking-[0.14em] text-[#5F6575]">
+                CHOLESKY FACTORIZATION MATRIX
+              </span>
+              <span className="font-mono text-[8px] uppercase tracking-[0.14em] text-[#2D5BFF]">
+                POSITIVE DEFINITE
+              </span>
+            </div>
+            <div className="text-[#ECEFF5] overflow-x-auto text-[11px] sm:text-xs">
+              <KaTeXBlock math="\mathbf{\Sigma} = \mathbf{L}\mathbf{L}^T = \begin{bmatrix} 1.00 & 0.00 & 0.00 \\ 0.45 & 0.89 & 0.00 \\ 0.20 & 0.57 & 0.79 \end{bmatrix} \begin{bmatrix} 1.00 & 0.45 & 0.20 \\ 0.00 & 0.89 & 0.57 \\ 0.00 & 0.00 & 0.79 \end{bmatrix}" />
+            </div>
+          </div>
+
+          {/* Milled Button Action */}
+          <div className="mt-6 flex items-center gap-6">
             <a
               href="/app/simulations/new"
               className="group inline-flex items-center gap-3 bg-[#0E1015] text-[#ECEFF5] border border-white/20 rounded-xl px-6 py-3.5 font-mono text-[11px] uppercase tracking-[0.12em] shadow-[inset_0_2px_4px_rgba(0,0,0,0.7),0_1px_0_rgba(255,255,255,0.04)] hover:border-white/40 hover:shadow-[inset_0_2px_6px_rgba(0,0,0,0.9),0_0_0_1px_rgba(255,255,255,0.25)] transition-all duration-200"

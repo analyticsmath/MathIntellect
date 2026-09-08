@@ -33,7 +33,6 @@ export function Movement02Stochastic() {
           }
         })
 
-        // Expanding path fan simulating Cholesky dispersion
         tl.fromTo(
           paths || [],
           { strokeDashoffset: 1000, opacity: 0.1 },
@@ -51,10 +50,10 @@ export function Movement02Stochastic() {
     <section ref={root} className="relative bg-[#07080B] text-[#ECEFF5] border-b border-[#1A1D26]">
       <div ref={stage} className="relative h-[100svh] w-full overflow-hidden">
         <SystemAnchorOverlay
-          systemTag="ENGINE 01 // STOCHASTIC PROCESSES"
-          telemetryMetric="ITERATIONS // 1000000 RUNS"
-          coordSystem="FACTOR // LL^T = SIGMA"
-          verificationState="VAR 95 // -3.88 PERCENT"
+          systemTag="ENGINE 01 STOCHASTIC PROCESSES"
+          telemetryMetric="1000000 REALIZATIONS"
+          coordSystem="FACTORIZATION LL^T = SIGMA"
+          verificationState="VALUE AT RISK 95 -3.88%"
         />
 
         {/* Dual Photographic & Vector Assembly */}
@@ -68,7 +67,7 @@ export function Movement02Stochastic() {
               className="w-full h-full object-cover grayscale contrast-125 brightness-85"
             />
             <div className="absolute bottom-4 left-4 font-mono text-[8px] uppercase tracking-wider text-white/50 bg-black/60 px-2 py-1">
-              DISPERSION DYNAMICS // MACRO
+              DISPERSION DYNAMICS MACRO
             </div>
           </div>
 
@@ -100,7 +99,7 @@ export function Movement02Stochastic() {
 
             {/* Spatial Syntax Text */}
             <div className="max-w-xl">
-              <h2 className="font-sans text-[clamp(1.75rem,3.5vw,3rem)] font-medium leading-[0.94] tracking-[-0.03em] uppercase">
+              <h2 className="font-['Space_Grotesk',sans-serif] text-[clamp(1.75rem,3.5vw,3rem)] font-medium leading-[0.94] tracking-[-0.03em] uppercase">
                 One million realizations
               </h2>
               <div className="mt-3 space-y-1 font-mono text-[11px] uppercase tracking-[0.08em] text-[#5F6575]">
