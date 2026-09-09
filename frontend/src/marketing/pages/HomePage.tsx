@@ -1,41 +1,45 @@
-import { MarketingLayout } from '../components/MarketingLayout';
-import { ScandiHero } from '../scenes/ScandiHero';
-import { ModelWorldsScroller } from '../scenes/ModelWorldsScroller';
-import { MathPracticeScroller } from '../scenes/MathPracticeScroller';
-import { CircularConstellation } from '../scenes/CircularConstellation';
-import { MethodsScroller } from '../scenes/MethodsScroller';
-import { ProductWorkbenchReveal } from '../scenes/ProductWorkbenchReveal';
-import { MethodJournalStrip } from '../scenes/MethodJournalStrip';
-import { TrustBoundariesScene } from '../scenes/TrustBoundariesScene';
+import React from 'react';
+import { RealityStructureScene } from '../scenes/home/RealityStructureScene';
+import { UncertaintyScene } from '../scenes/home/UncertaintyScene';
+import { SystemsReelScene } from '../scenes/home/SystemsReelScene';
+import { StrategyScene } from '../scenes/home/StrategyScene';
+import { MarketRegimeScene } from '../scenes/home/MarketRegimeScene';
+import { ConflictInteractionScene } from '../scenes/home/ConflictInteractionScene';
+import { PerturbCompareScene } from '../scenes/home/PerturbCompareScene';
+import { ReplayScene } from '../scenes/home/ReplayScene';
+import { ReturnScene } from '../scenes/home/ReturnScene';
 
-export function HomePage() {
+export const HomePage: React.FC = () => {
   return (
-    <MarketingLayout>
-      {/* 1. Full Photographic Opening Hero */}
-      <ScandiHero />
+    <div className="w-full">
+      {/* Movement 00 & 01: Reality -> Structure */}
+      <RealityStructureScene />
 
-      {/* 2. First Image Scroller: Model Worlds (Embla Carousel) */}
-      <ModelWorldsScroller />
+      {/* Movement 02: Uncertainty */}
+      <UncertaintyScene />
 
-      {/* 3. Second Image Scroller: Mathematics in Practice */}
-      <MathPracticeScroller />
+      {/* Movement 03: Systems Reel */}
+      <SystemsReelScene />
 
-      {/* 4. Circular Image Constellation: From Assumption to Decision */}
-      <CircularConstellation />
+      {/* Movement 04: Strategy */}
+      <StrategyScene />
 
-      {/* 5. Third Image Scroller: Methods & Formulas */}
-      <MethodsScroller />
+      {/* Movement 05: Regime */}
+      <MarketRegimeScene />
 
-      {/* 6. Product Reveal: Real Simulation Workbench */}
-      <ProductWorkbenchReveal />
+      {/* Movement 06: Interaction */}
+      <ConflictInteractionScene />
 
-      {/* 7. Journal / Method Editorial Objects Strip */}
-      <MethodJournalStrip />
+      {/* Movement 07 & 08: Perturbation & Comparison */}
+      <PerturbCompareScene />
 
-      {/* 8. Trust Boundaries & Final Terminal Action */}
-      <TrustBoundariesScene />
-    </MarketingLayout>
+      {/* Movement 09: Replay */}
+      <ReplayScene />
+
+      {/* Movement 10: Finale / Return */}
+      <ReturnScene />
+    </div>
   );
-}
+};
 
 export default HomePage;

@@ -1,257 +1,297 @@
-import { KaTeXBlock } from "../../math/KaTeXBlock"
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { KaTeXBlock } from '../../math/KaTeXBlock';
+import { MediaPicture } from '../components/MediaPicture';
 
-export function MethodPage() {
-  const sections = [
-    { id: "section-01", num: "01", title: "Numerical Discretization" },
-    { id: "section-02", num: "02", title: "Fokker Planck Diffusion" },
-    { id: "section-03", num: "03", title: "Strategic Equilibria" },
-    { id: "section-04", num: "04", title: "Empirical Quantile Metric" },
-    { id: "section-05", num: "05", title: "Operational AI Boundaries" }
-  ]
+interface Chapter {
+  id: string;
+  num: string;
+  title: string;
+}
 
+const CHAPTERS: Chapter[] = [
+  { id: 'ch-01', num: '01', title: 'Deterministic State' },
+  { id: 'ch-02', num: '02', title: 'Monte Carlo Integration' },
+  { id: 'ch-03', num: '03', title: 'Strategic Equilibrium' },
+  { id: 'ch-04', num: '04', title: 'Market Processes' },
+  { id: 'ch-05', num: '05', title: 'Repeated Interaction' },
+  { id: 'ch-06', num: '06', title: 'AI Interpretation' },
+  { id: 'ch-07', num: '07', title: 'Adaptive Progression' },
+  { id: 'ch-08', num: '08', title: 'Limits and Boundaries' },
+];
+
+export const MethodPage: React.FC = () => {
   return (
-    <main className="min-h-[100svh] bg-[#07080B] text-[#ECEFF5] selection:bg-[#2D5BFF] selection:text-white">
-      {/* Architectural Navigation Header */}
-      <header className="fixed top-0 inset-x-0 z-50 h-16 border-b border-white/10 bg-[#07080B]/80 backdrop-blur-md px-6 flex justify-between items-center">
-        <a href="/" className="font-mono text-[11px] uppercase tracking-[0.16em] text-[#ECEFF5] font-semibold">
-          MATHINTELLECT
-        </a>
-
-        <nav className="flex items-center gap-8 font-mono text-[10px] uppercase tracking-[0.12em] text-[#5F6575]">
-          <a href="/models" className="hover:text-[#ECEFF5] transition-colors">Models</a>
-          <a href="/method" className="text-[#ECEFF5] transition-colors">Method</a>
-          <a
-            href="/login"
-            className="text-[#ECEFF5] border border-white/20 px-3.5 py-1.5 hover:border-white transition-colors"
-          >
-            Access
-          </a>
-        </nav>
-      </header>
-
-      {/* Main Container */}
-      <div className="pt-28 pb-24 px-[5vw] max-w-7xl mx-auto">
-        {/* Paper Header Dossier */}
-        <div className="border-b border-white/10 pb-10 mb-14">
-          <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-[#2D5BFF] block mb-2">
-            RESEARCH PUBLICATION DOSSIER
-          </span>
-          <h1 className="font-['Space_Grotesk',sans-serif] text-[clamp(2.5rem,5vw,4.5rem)] font-medium leading-[0.9] tracking-[-0.035em] uppercase">
-            The Method
-          </h1>
-          <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.08em] text-[#5F6575] max-w-2xl">
-            Mathematical doctrine and epistemic foundations governing deterministic simulation
-          </p>
-          <div className="mt-6 flex flex-wrap items-center gap-6 font-mono text-[9px] uppercase tracking-[0.12em] text-[#5F6575]">
-            <span>DOCUMENT VERSION 2.4</span>
-            <span>SOLVER KERNEL C99/WASM</span>
-            <span>CONVERGENCE TOLERANCE 1E-8</span>
+    <div className="w-full bg-mi-canvas text-mi-ink">
+      {/* Dossier Header */}
+      <section className="border-b border-mi-rule bg-mi-paper py-16 px-6 sm:px-8 lg:px-16">
+        <div className="max-w-[1400px] mx-auto">
+          <div className="max-w-3xl space-y-4">
+            <span className="font-mono text-xs text-mi-muted uppercase tracking-wider block">
+              Methodology & Epistemic Framework
+            </span>
+            <h1 className="font-sans font-medium text-[clamp(2.5rem,4.5vw,5rem)] leading-[0.92] tracking-tight text-mi-ink">
+              How the evidence is produced.
+            </h1>
+            <p className="font-sans text-base sm:text-lg text-mi-ink-2 leading-relaxed">
+              Mathematical formulations, algorithmic boundaries, and computational invariants governing reproducible simulation in Math Intellect.
+            </p>
           </div>
         </div>
+      </section>
 
-        {/* Academic Research Paper Two-Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          
-          {/* Sticky Analytical Left Navigation */}
+      {/* Main Dossier Content with Sticky Desktop Navigation */}
+      <div className="max-w-[1400px] mx-auto py-16 px-6 sm:px-8 lg:px-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          {/* Sticky Table of Contents (Left 3 Cols) */}
           <aside className="hidden lg:block lg:col-span-3 sticky top-24 space-y-4">
-            <span className="font-mono text-[8px] uppercase tracking-[0.16em] text-[#5F6575] block mb-2">
-              SECTION DIRECTORY
+            <span className="font-mono text-xs text-mi-muted uppercase tracking-wider block">
+              Table of Contents
             </span>
-            <nav className="space-y-1">
-              {sections.map(sec => (
+            <nav className="space-y-1 font-mono text-xs" aria-label="Method dossier chapters">
+              {CHAPTERS.map((ch) => (
                 <a
-                  key={sec.id}
-                  href={`#${sec.id}`}
-                  className="block py-2 px-3 rounded-lg border border-transparent font-mono text-[10px] uppercase tracking-[0.08em] text-[#5F6575] hover:text-[#ECEFF5] hover:border-white/10 hover:bg-[#0E1015] transition-all"
+                  key={ch.id}
+                  href={`#${ch.id}`}
+                  className="flex items-baseline gap-2 py-2 px-2.5 text-mi-muted hover:text-mi-ink hover:bg-mi-paper border border-transparent hover:border-mi-rule transition-colors"
                 >
-                  <span className="text-[#2D5BFF] mr-2">{sec.num}</span>
-                  <span>{sec.title}</span>
+                  <span className="text-mi-ink-2 font-medium">{ch.num}</span>
+                  <span className="truncate">{ch.title}</span>
                 </a>
               ))}
             </nav>
 
-            <div className="pt-6 border-t border-white/10 font-mono text-[8px] uppercase tracking-[0.1em] text-[#5F6575] space-y-1">
-              <p>DETERMINISTIC KERNEL</p>
-              <p className="text-[#ECEFF5]">ZERO GENERATIVE GUESSWORK</p>
+            {/* Contextual Figure in Sidebar */}
+            <div className="pt-6 border-t border-mi-rule space-y-2">
+              <div className="aspect-[4/3] bg-mi-paper border border-mi-rule overflow-hidden">
+                <MediaPicture
+                  id="MI-PH-004"
+                  className="w-full h-full"
+                  imgClassName="w-full h-full object-cover"
+                  alt="Overhead geometric intersection showing constrained traffic pathways"
+                />
+              </div>
+              <span className="font-mono text-[10px] text-mi-muted block">
+                Figure: Overhead geometric constraints
+              </span>
             </div>
           </aside>
 
-          {/* Right Column: Dense KaTeX Derivations & Analytical Flow */}
-          <div className="lg:col-span-9 space-y-20">
-            
-            {/* Section 01 */}
-            <section id="section-01" className="scroll-mt-24 space-y-6">
-              <div className="flex items-center gap-3">
-                <span className="font-mono text-[9px] text-[#2D5BFF] uppercase tracking-[0.14em]">01</span>
-                <span className="font-mono text-[9px] text-[#5F6575] uppercase tracking-[0.14em]">NUMERICAL DISCRETIZATION</span>
-              </div>
-              <h2 className="font-['Space_Grotesk',sans-serif] text-2xl sm:text-3xl font-medium tracking-tight uppercase text-[#ECEFF5]">
-                Stochastic differential equation integration
+          {/* Chapters Reading Flow (Right 9 Cols) */}
+          <main className="lg:col-span-9 space-y-20">
+            {/* Chapter 01: Deterministic State */}
+            <article id="ch-01" className="scroll-mt-24 space-y-6 pb-12 border-b border-mi-rule">
+              <div className="font-mono text-xs text-mi-muted uppercase">Chapter 01</div>
+              <h2 className="font-sans font-medium text-3xl sm:text-4xl text-mi-ink tracking-tight">
+                Deterministic State &amp; Invariants
               </h2>
-              <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-[#ECEFF5]/80 leading-relaxed">
-                Continuous physical state vectors evolve under Ito stochastic differential equations.
-                Math Intellect computes discrete step realizations using the Euler Maruyama discretization scheme.
+              <p className="text-mi-ink-2 text-base leading-relaxed">
+                Reproducibility requires that simulation runs are not accidental one-offs. Every numerical execution in Math Intellect binds to an explicit deterministic seed, an immutable input parameter snapshot, and a verified pseudorandom number generator (PRNG).
+              </p>
+              <p className="text-mi-ink-2 text-base leading-relaxed">
+                When an analyst perturbs an assumption, all other environmental constants remain pinned. The state can be replayed repeatedly, reproducing the exact floating-point trajectory and enabling rigorous counterfactual comparison without statistical drift.
+              </p>
+            </article>
+
+            {/* Chapter 02: Monte Carlo Integration */}
+            <article id="ch-02" className="scroll-mt-24 space-y-6 pb-12 border-b border-mi-rule">
+              <div className="font-mono text-xs text-mi-muted uppercase">Chapter 02</div>
+              <h2 className="font-sans font-medium text-3xl sm:text-4xl text-mi-ink tracking-tight">
+                Monte Carlo Integration &amp; Covariance
+              </h2>
+              <p className="text-mi-ink-2 text-base leading-relaxed">
+                Stochastic outcomes are sampled across continuous time using Euler-Maruyama discretization. Multiple continuous and discrete distribution forms are supported, including Gaussian, uniform, exponential, and Bernoulli distributions.
+              </p>
+              <KaTeXBlock math="x_{t+\Delta t} = x_t + \mu(x_t, t)\Delta t + \sigma(x_t, t)\sqrt{\Delta t} Z_t, \quad Z_t \sim \mathcal{N}(0, \mathbf{I})" />
+              <p className="text-mi-ink-2 text-base leading-relaxed">
+                For correlated multidimensional variables, the system executes Cholesky decomposition on the user-supplied correlation matrix <KaTeXBlock math="\mathbf{\Sigma} = \mathbf{L}\mathbf{L}^T" display={false} />, generating correlated random vectors <KaTeXBlock math="\mathbf{Z}^* = \mathbf{L}\mathbf{Z}" display={false} /> that preserve empirical cross-variable dependencies across up to 1,000,000 iterations.
               </p>
 
-              {/* KaTeX Derivation Plate */}
-              <div className="p-6 bg-[#0E1015] border border-white/10 rounded-xl space-y-4 shadow-[inset_0_2px_4px_rgba(0,0,0,0.7),0_1px_0_rgba(255,255,255,0.04)]">
-                <div className="text-center py-2 overflow-x-auto text-sm sm:text-base text-[#ECEFF5]">
-                  <KaTeXBlock math="d\mathbf{x}_t = \mathbf{f}(\mathbf{x}_t, t) dt + \mathbf{G}(\mathbf{x}_t, t) d\mathbf{W}_t" />
+              {/* Large Contextual Figure */}
+              <div className="my-8 border border-mi-rule bg-mi-paper p-3">
+                <div className="w-full aspect-[21/9] overflow-hidden bg-mi-canvas">
+                  <MediaPicture
+                    id="MI-PH-008"
+                    className="w-full h-full"
+                    imgClassName="w-full h-full object-cover"
+                    alt="Aerial view of natural branching river delta channels"
+                  />
                 </div>
-                <div className="text-center py-2 border-t border-white/5 overflow-x-auto text-xs sm:text-sm text-[#2D5BFF]">
-                  <KaTeXBlock math="\mathbf{x}_{k+1} = \mathbf{x}_k + \mathbf{f}(\mathbf{x}_k, t_k) \Delta t + \mathbf{G}(\mathbf{x}_k, t_k) \sqrt{\Delta t} \mathbf{Z}_k \quad \mathbf{Z}_k \sim \mathcal{N}(\mathbf{0}, \mathbf{I})" />
-                </div>
-              </div>
-
-              {/* Spatial Syntax Hierarchy Indentation */}
-              <div className="space-y-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-[#5F6575] pt-2">
-                <p className="text-[#ECEFF5]">State vector x spans n continuous dimensions</p>
-                <p className="pl-[18px] text-[#ECEFF5]/80">Drift operator f defines deterministic deterministic momentum</p>
-                <p className="pl-[36px] text-[#2D5BFF]">Diffusion tensor G maps Gaussian increments into correlated space</p>
-              </div>
-            </section>
-
-            {/* Section 02 */}
-            <section id="section-02" className="scroll-mt-24 space-y-6 pt-10 border-t border-white/10">
-              <div className="flex items-center gap-3">
-                <span className="font-mono text-[9px] text-[#2D5BFF] uppercase tracking-[0.14em]">02</span>
-                <span className="font-mono text-[9px] text-[#5F6575] uppercase tracking-[0.14em]">PROBABILITY EVOLUTION</span>
-              </div>
-              <h2 className="font-['Space_Grotesk',sans-serif] text-2xl sm:text-3xl font-medium tracking-tight uppercase text-[#ECEFF5]">
-                Fokker Planck probability density transport
-              </h2>
-              <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-[#ECEFF5]/80 leading-relaxed">
-                Individual sample paths display brownian variance yet the ensemble distribution transports deterministically.
-                The time evolution of the probability density function obeys the partial differential transport equation.
-              </p>
-
-              <div className="p-6 bg-[#0E1015] border border-white/10 rounded-xl space-y-4 shadow-[inset_0_2px_4px_rgba(0,0,0,0.7),0_1px_0_rgba(255,255,255,0.04)]">
-                <div className="text-center py-2 overflow-x-auto text-sm sm:text-base text-[#ECEFF5]">
-                  <KaTeXBlock math="\frac{\partial p(\mathbf{x}, t)}{\partial t} = -\sum_{i=1}^n \frac{\partial}{\partial x_i} \left[ f_i(\mathbf{x}, t) p(\mathbf{x}, t) \right] + \frac{1}{2} \sum_{i=1}^n \sum_{j=1}^n \frac{\partial^2}{\partial x_i \partial x_j} \left[ D_{ij}(\mathbf{x}, t) p(\mathbf{x}, t) \right]" />
-                </div>
-                <div className="text-center py-2 border-t border-white/5 overflow-x-auto text-xs sm:text-sm text-[#2D5BFF]">
-                  <KaTeXBlock math="D_{ij} = \sum_k G_{ik} G_{jk} = \left( \mathbf{G}\mathbf{G}^T \right)_{ij}" />
-                </div>
-              </div>
-
-              {/* Inline SVG Vector Phase Portrait */}
-              <div className="mt-4 p-4 bg-[#07080B] border border-white/10 rounded-lg">
-                <span className="font-mono text-[8px] uppercase tracking-[0.14em] text-[#5F6575] block mb-2">
-                  DENSITY CONTOUR PHASE PROJECTION
+                <span className="font-mono text-xs text-mi-muted block mt-2 text-right">
+                  Figure: Natural branching dispersion patterns in physical systems
                 </span>
-                <svg viewBox="0 0 700 160" className="w-full h-auto" fill="none">
-                  <ellipse cx="350" cy="80" rx="280" ry="60" stroke="#ECEFF5" strokeWidth="0.75" strokeOpacity="0.2" />
-                  <ellipse cx="350" cy="80" rx="190" ry="40" stroke="#ECEFF5" strokeWidth="1" strokeOpacity="0.4" />
-                  <ellipse cx="350" cy="80" rx="90" ry="20" stroke="#2D5BFF" strokeWidth="1.5" />
-                  <circle cx="350" cy="80" r="3" fill="#2D5BFF" />
-                  <line x1="70" y1="80" x2="630" y2="80" stroke="white" strokeOpacity="0.1" strokeDasharray="3 3" />
-                  <line x1="350" y1="20" x2="350" y2="140" stroke="white" strokeOpacity="0.1" strokeDasharray="3 3" />
-                </svg>
               </div>
-            </section>
+            </article>
 
-            {/* Section 03 */}
-            <section id="section-03" className="scroll-mt-24 space-y-6 pt-10 border-t border-white/10">
-              <div className="flex items-center gap-3">
-                <span className="font-mono text-[9px] text-[#2D5BFF] uppercase tracking-[0.14em]">03</span>
-                <span className="font-mono text-[9px] text-[#5F6575] uppercase tracking-[0.14em]">EQUILIBRIUM RESOLUTION</span>
-              </div>
-              <h2 className="font-['Space_Grotesk',sans-serif] text-2xl sm:text-3xl font-medium tracking-tight uppercase text-[#ECEFF5]">
-                Strategic game equilibria and saddle convergence
+            {/* Chapter 03: Strategic Equilibrium */}
+            <article id="ch-03" className="scroll-mt-24 space-y-6 pb-12 border-b border-mi-rule">
+              <div className="font-mono text-xs text-mi-muted uppercase">Chapter 03</div>
+              <h2 className="font-sans font-medium text-3xl sm:text-4xl text-mi-ink tracking-tight">
+                Strategic Equilibrium in Normal-Form Games
               </h2>
-              <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-[#ECEFF5]/80 leading-relaxed">
-                Strategic confrontations resolve via deterministic equilibrium points where no rational participant benefits by unilateral deviation.
-                Zero sum zero deviation conditions converge to the saddle point value.
+              <p className="text-mi-ink-2 text-base leading-relaxed">
+                Game theoretic analysis evaluates finite normal-form games across two or more strategic actors. The backend engine exhaustively computes best-response correspondences to detect strictly dominant strategies and identify pure-strategy Nash equilibria.
+              </p>
+              <KaTeXBlock math="s_i^* \in \arg\max_{s_i \in S_i} u_i(s_i, s_{-i}^*)" />
+              <p className="text-mi-ink-2 text-base leading-relaxed">
+                In multi-stage scenarios, optional repeated-game learning and dynamic strategy evolution trace trajectory convergence across rounds. Reputation decay models how historical actions influence future strategic counter-moves without inventing unverified mixed-strategy probabilities.
+              </p>
+            </article>
+
+            {/* Chapter 04: Market Processes */}
+            <article id="ch-04" className="scroll-mt-24 space-y-6 pb-12 border-b border-mi-rule">
+              <div className="font-mono text-xs text-mi-muted uppercase">Chapter 04</div>
+              <h2 className="font-sans font-medium text-3xl sm:text-4xl text-mi-ink tracking-tight">
+                Market Processes, Shocks &amp; Regimes
+              </h2>
+              <p className="text-mi-ink-2 text-base leading-relaxed">
+                The market engine is grounded in Geometric Brownian Motion (GBM) with discrete Markov regime switching. Rather than assuming perpetual stationarity, the engine supports exogenous shock injections and optional GARCH-like volatility clustering:
+              </p>
+              <KaTeXBlock math="\sigma_t^2 = \omega + \alpha \epsilon_{t-1}^2 + \beta \sigma_{t-1}^2" />
+              <p className="text-mi-ink-2 text-base leading-relaxed">
+                Path ensembles simulate asset baskets, cross-asset correlations, and portfolio drawdowns across up to 10,000 paths, yielding Value-at-Risk (VaR95) and maximum drawdown metrics.
               </p>
 
-              <div className="p-6 bg-[#0E1015] border border-white/10 rounded-xl space-y-4 shadow-[inset_0_2px_4px_rgba(0,0,0,0.7),0_1px_0_rgba(255,255,255,0.04)]">
-                <div className="text-center py-2 overflow-x-auto text-sm sm:text-base text-[#ECEFF5]">
-                  <KaTeXBlock math="\max_{p \in \Delta_1} \min_{q \in \Delta_2} p^T \mathbf{A} q = \min_{q \in \Delta_2} \max_{p \in \Delta_1} p^T \mathbf{A} q = v^*" />
+              {/* Contextual Figure */}
+              <div className="my-8 border border-mi-rule bg-mi-paper p-3">
+                <div className="w-full aspect-[21/9] overflow-hidden bg-mi-canvas">
+                  <MediaPicture
+                    id="MI-PH-013"
+                    className="w-full h-full"
+                    imgClassName="w-full h-full object-cover"
+                    alt="Industrial shipping port and cargo flow infrastructure"
+                  />
                 </div>
-                <div className="text-center py-2 border-t border-white/5 overflow-x-auto text-xs sm:text-sm text-[#2D5BFF]">
-                  <KaTeXBlock math="u_i(s_i^*, s_{-i}^*) \ge u_i(s_i, s_{-i}^*) \quad \forall s_i \in S_i" />
-                </div>
+                <span className="font-mono text-xs text-mi-muted block mt-2 text-right">
+                  Figure: Constrained exchange and logistical flow topology
+                </span>
               </div>
+            </article>
 
-              <div className="space-y-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-[#5F6575] pt-2">
-                <p className="text-[#ECEFF5]">Simplex delta represents valid probability distribution sets</p>
-                <p className="pl-[18px] text-[#ECEFF5]/80">Payoff matrix A determines state utilities across players</p>
-                <p className="pl-[36px] text-[#2D5BFF]">Value v locks into unique deterministic saddle coordinate</p>
-              </div>
-            </section>
-
-            {/* Section 04 */}
-            <section id="section-04" className="scroll-mt-24 space-y-6 pt-10 border-t border-white/10">
-              <div className="flex items-center gap-3">
-                <span className="font-mono text-[9px] text-[#2D5BFF] uppercase tracking-[0.14em]">04</span>
-                <span className="font-mono text-[9px] text-[#5F6575] uppercase tracking-[0.14em]">QUANTILE ARCHITECTURE</span>
-              </div>
-              <h2 className="font-['Space_Grotesk',sans-serif] text-2xl sm:text-3xl font-medium tracking-tight uppercase text-[#ECEFF5]">
-                Empirical quantile structures and tail probabilities
+            {/* Chapter 05: Repeated Interaction */}
+            <article id="ch-05" className="scroll-mt-24 space-y-6 pb-12 border-b border-mi-rule">
+              <div className="font-mono text-xs text-mi-muted uppercase">Chapter 05</div>
+              <h2 className="font-sans font-medium text-3xl sm:text-4xl text-mi-ink tracking-tight">
+                Repeated Strategic Interaction &amp; Trust
               </h2>
-              <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-[#ECEFF5]/80 leading-relaxed">
-                Risk evaluation rejects singular summary estimates.
-                Math Intellect constructs the complete quantile profile from the computed sample realization ensemble.
+              <p className="text-mi-ink-2 text-base leading-relaxed">
+                The Conflict simulation engine is an iterative multi-agent strategic system. Agents with heterogenous strategies (Cooperative, Tit-for-Tat, Defector, Aggressive, Random) interact in pairwise rounds modeled after the Prisoner’s Dilemma.
               </p>
+              <p className="text-mi-ink-2 text-base leading-relaxed">
+                Each interaction updates resources and modifies pairwise trust scores. When defection occurs, betrayal sensitivity triggers coalition realignment and alliance cohesion degradation across up to 10,000 simulated rounds.
+              </p>
+            </article>
 
-              <div className="p-6 bg-[#0E1015] border border-white/10 rounded-xl space-y-4 shadow-[inset_0_2px_4px_rgba(0,0,0,0.7),0_1px_0_rgba(255,255,255,0.04)]">
-                <div className="text-center py-2 overflow-x-auto text-sm sm:text-base text-[#ECEFF5]">
-                  <KaTeXBlock math="q_\alpha = \inf \left\{ x \in \mathbb{R} : F_N(x) \ge \alpha \right\} \quad \alpha \in (0, 1)" />
-                </div>
-                <div className="text-center py-2 border-t border-white/5 overflow-x-auto text-xs sm:text-sm text-[#2D5BFF]">
-                  <KaTeXBlock math="\text{VaR}_\alpha = -\inf \left\{ x : P(X \le x) \ge 1 - \alpha \right\}" />
-                </div>
-              </div>
-
-              <div className="space-y-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-[#5F6575] pt-2">
-                <p className="text-[#ECEFF5]">Quantile alpha guarantees non parametric distribution tracking</p>
-                <p className="pl-[18px] text-[#ECEFF5]/80">Ensemble empirical CDF FN converges at root N rate</p>
-                <p className="pl-[36px] text-[#2D5BFF]">Extremal percentiles isolate asymptotic tail hazard</p>
-              </div>
-            </section>
-
-            {/* Section 05 */}
-            <section id="section-05" className="scroll-mt-24 space-y-6 pt-10 border-t border-white/10">
-              <div className="flex items-center gap-3">
-                <span className="font-mono text-[9px] text-[#2D5BFF] uppercase tracking-[0.14em]">05</span>
-                <span className="font-mono text-[9px] text-[#5F6575] uppercase tracking-[0.14em]">GOVERNANCE MANDATE</span>
-              </div>
-              <h2 className="font-['Space_Grotesk',sans-serif] text-2xl sm:text-3xl font-medium tracking-tight uppercase text-[#ECEFF5]">
-                Operational boundaries of artificial intelligence
+            {/* Chapter 06: AI Interpretation */}
+            <article id="ch-06" className="scroll-mt-24 space-y-6 pb-12 border-b border-mi-rule">
+              <div className="font-mono text-xs text-mi-muted uppercase">Chapter 06</div>
+              <h2 className="font-sans font-medium text-3xl sm:text-4xl text-mi-ink tracking-tight">
+                AI Interpretation &amp; Computational Boundaries
               </h2>
-              <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-[#ECEFF5]/80 leading-relaxed">
-                Artificial intelligence serves exclusively as a translation interface for human analysts.
-                Neural inference never performs simulation math or fabricates statistical proof.
+              <p className="text-mi-ink-2 text-base leading-relaxed">
+                A rigorous separation exists between computation and interpretation:
               </p>
-
-              <div className="p-6 bg-[#0E1015] border border-white/10 rounded-xl space-y-4 font-mono text-[11px] uppercase tracking-[0.08em]">
-                <div className="flex items-center gap-3 text-[#ECEFF5]">
-                  <span className="text-[#2D5BFF]">ACTIVE</span>
-                  <span>DETERMINISTIC VERIFICATION PROTOCOL</span>
-                </div>
-                <ul className="space-y-2.5 text-[#5F6575] pt-2">
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#ECEFF5]">RULE 01</span>
-                    <span className="text-[#ECEFF5]/80">Deterministic equations calculate every numerical trajectory</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#ECEFF5]">RULE 02</span>
-                    <span className="text-[#ECEFF5]/80">Language models explain parameter bounds without modifying values</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#ECEFF5]">RULE 03</span>
-                    <span className="text-[#ECEFF5]/80">Identical input seeds produce identical numerical history</span>
-                  </li>
-                </ul>
+              <div className="p-6 bg-mi-paper border border-mi-rule font-sans text-base text-mi-ink space-y-2">
+                <strong className="block font-medium">Core Principle:</strong>
+                <p>
+                  Simulation engines calculate numerical evidence. AI interprets, explains, compares, and can produce decision-oriented outputs around that evidence.
+                </p>
               </div>
-            </section>
+              <p className="text-mi-ink-2 text-base leading-relaxed">
+                The language model does not compute the Monte Carlo paths or solve Nash equilibria; mathematical kernels perform the arithmetic. The AI interprets parameter sensitivity, contextualizes tail risks, and summarizes comparative differentials between runs.
+              </p>
+            </article>
 
-          </div>
+            {/* Chapter 07: Adaptive Progression */}
+            <article id="ch-07" className="scroll-mt-24 space-y-6 pb-12 border-b border-mi-rule">
+              <div className="font-mono text-xs text-mi-muted uppercase">Chapter 07</div>
+              <h2 className="font-sans font-medium text-3xl sm:text-4xl text-mi-ink tracking-tight">
+                Adaptive Difficulty &amp; Progression
+              </h2>
+              <p className="text-mi-ink-2 text-base leading-relaxed">
+                Math Intellect supports Beginner, Adaptive, and Expert user tiers. The system dynamically scales parameter complexity, provides contextual hints during constraint setup, and logs progression metrics as analysts master multidimensional simulation spaces.
+              </p>
+            </article>
 
+            {/* Chapter 08: Limits and Boundaries */}
+            <article id="ch-08" className="scroll-mt-24 space-y-6 pb-12">
+              <div className="font-mono text-xs text-mi-muted uppercase">Chapter 08</div>
+              <h2 className="font-sans font-medium text-3xl sm:text-4xl text-mi-ink tracking-tight">
+                Limits, Epistemic Boundaries &amp; Constraints
+              </h2>
+              <p className="text-mi-ink-2 text-base leading-relaxed">
+                Honest systems declare their boundaries explicitly:
+              </p>
+              <ul className="space-y-3 font-mono text-xs text-mi-ink-2 list-disc list-inside bg-mi-paper p-6 border border-mi-rule">
+                <li>
+                  <strong className="text-mi-ink">Custom Engine Scope:</strong> Custom simulations currently run through the Monte Carlo execution pathway with user-defined variables and output expressions.
+                </li>
+                <li>
+                  <strong className="text-mi-ink">Public Demonstrations:</strong> Public interactive models use simplified seeded PRNGs for client-side responsiveness.
+                </li>
+                <li>
+                  <strong className="text-mi-ink">Assumption Sensitivity:</strong> All simulation outputs are functions of their initial assumptions. Reproducibility confirms that computation is deterministic, not that a model perfectly captures physical reality.
+                </li>
+                <li>
+                  <strong className="text-mi-ink">Strategic Solvers:</strong> The production Game Theory engine detects pure-strategy Nash equilibria; general mixed-strategy solvers are not exposed.
+                </li>
+              </ul>
+            </article>
+
+            {/* Restrained Contact Sheet (Contextual Photography) */}
+            <div className="pt-10 border-t border-mi-rule space-y-4">
+              <span className="font-mono text-xs text-mi-muted uppercase tracking-wider block">
+                Contextual System Figures
+              </span>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {['MI-PH-006', 'MI-PH-007', 'MI-PH-011', 'MI-PH-018'].map((id) => (
+                  <div key={id} className="border border-mi-rule bg-mi-paper p-1.5">
+                    <div className="aspect-[4/3] overflow-hidden bg-mi-canvas">
+                      <MediaPicture
+                        id={id}
+                        className="w-full h-full"
+                        imgClassName="w-full h-full object-cover"
+                        alt={`Contextual figure ${id}`}
+                      />
+                    </div>
+                    <span className="font-mono text-[9px] text-mi-muted block mt-1 truncate">
+                      Fig: {id}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </main>
         </div>
       </div>
-    </main>
-  )
-}
 
-export default MethodPage
+      {/* Method Route Call to Action */}
+      <section className="bg-mi-paper py-16 px-6 sm:px-8 border-t border-mi-rule text-center">
+        <div className="max-w-xl mx-auto space-y-4">
+          <h3 className="font-sans font-medium text-2xl text-mi-ink">
+            Put theory into computational practice.
+          </h3>
+          <p className="text-mi-ink-2 text-sm">
+            Launch the interactive workbench or sign in to configure production simulations.
+          </p>
+          <div className="pt-2 flex justify-center gap-4">
+            <Link
+              to="/workbench"
+              className="bg-mi-ink text-mi-paper font-sans text-sm font-medium px-6 py-3 hover:bg-mi-ink-2 transition-colors"
+            >
+              Explore the workbench
+            </Link>
+            <Link
+              to="/signup"
+              className="border border-mi-rule bg-mi-white text-mi-ink font-sans text-sm font-medium px-6 py-3 hover:border-mi-rule-strong transition-colors"
+            >
+              Create an account
+            </Link>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default MethodPage;

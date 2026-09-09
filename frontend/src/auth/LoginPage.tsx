@@ -1,103 +1,151 @@
-import { useState, type FormEvent } from "react"
-import { useNavigate } from "react-router-dom"
+import { useState, useRef, type FormEvent } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../shared/hooks/useAuth';
 
 export function LoginPage() {
-  const [identifier, setIdentifier] = useState("")
-  const [secret, setSecret] = useState("")
-  const [error, setError] = useState<string | null>(null)
-  const navigate = useNavigate()
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const emailInputRef = useRef<HTMLInputElement | null>(null);
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
-    if (!identifier || !secret) {
-      setError("IDENTITY AND SECRET REQUIRED")
-      return
+    e.preventDefault();
+    setError(null);
+
+    if (!email.trim() || !password) {
+      setError('Please enter both email and password.');
+      emailInputRef.current?.focus();
+      return;
     }
-    // Production authentication pipeline call
-    navigate("/app")
-  }
+
+    setIsSubmitting(true);
+    try {
+      await login({ email: email.trim(), password });
+      navigate('/app');
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error
+          ? err.message
+          : (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??
+            'Authentication failed. Please verify your credentials.';
+      setError(message);
+      emailInputRef.current?.focus();
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
-    <div className="min-h-[100svh] w-full bg-[#07080B] text-[#ECEFF5] flex flex-col lg:flex-row border-b border-[#1A1D26]">
-      
-      {/* 65% Viewport Mass: Colin + Meg Monolithic Stone Portal */}
-      <div className="hidden lg:block lg:w-[65%] h-[100svh] relative overflow-hidden bg-[#0E1015] border-r border-[#1A1D26]">
-        <img
-          src="/media/math/colin-meg-stone-portal.jpg"
-          alt="Monolithic stone portal with raking light"
-          className="w-full h-full object-cover grayscale contrast-125 brightness-75"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#07080B]" />
-        <div className="absolute top-8 left-8 font-mono text-[9px] uppercase tracking-[0.14em] text-[#5F6575]">
-          SESSION GATE 01 AIRLOCK VERIFIED
-        </div>
-        <div className="absolute bottom-8 left-8 font-mono text-[9px] uppercase tracking-[0.14em] text-[#2D5BFF]">
-          HARDWARE SHA256 ENCRYPTION ACTIVE
-        </div>
-      </div>
+    <div className="min-h-screen bg-mi-canvas flex flex-col justify-between selection:bg-mi-ink selection:text-mi-paper">
+      {/* Compact Brand Header */}
+      <header className="h-16 px-6 sm:px-8 border-b border-mi-rule flex items-center justify-between bg-mi-paper">
+        <Link
+          to="/"
+          className="font-sans font-medium text-base text-mi-ink tracking-tight hover:opacity-80 transition-opacity"
+        >
+          Math Intellect
+        </Link>
+        <Link
+          to="/signup"
+          className="font-sans text-sm text-mi-muted hover:text-mi-ink transition-colors"
+        >
+          Create an account
+        </Link>
+      </header>
 
-      {/* 35% Viewport Milled Form Terminal */}
-      <div className="w-full lg:w-[35%] min-h-[100svh] flex flex-col justify-center px-8 sm:px-14 py-12 relative z-10">
-        <div className="mb-8">
-          <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-[#5F6575] block mb-2">
-            PORTAL GATEWAY
-          </span>
-          <h1 className="font-['Space_Grotesk',sans-serif] text-3xl font-medium tracking-[-0.03em] uppercase text-[#ECEFF5]">
-            Enter Laboratory
-          </h1>
-        </div>
-
-        {error && (
-          <div className="mb-6 p-3 bg-red-950/40 border border-red-500/30 font-mono text-[10px] uppercase tracking-wider text-red-400">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block font-mono text-[10px] uppercase tracking-[0.12em] text-[#5F6575] mb-2">
-              System Identifier
-            </label>
-            <input
-              type="text"
-              required
-              value={identifier}
-              onChange={e => setIdentifier(e.target.value)}
-              placeholder="analyst@institution.internal"
-              className="milled-input w-full"
-            />
+      {/* Main Form Canvas */}
+      <main className="flex-1 flex items-center justify-center px-6 py-12">
+        <div className="w-full max-w-[460px] bg-mi-paper border border-mi-rule p-8 sm:p-10">
+          <div className="mb-8">
+            <h1 className="font-sans text-2xl sm:text-3xl font-medium tracking-tight text-mi-ink">
+              Sign in to Math Intellect
+            </h1>
+            <p className="text-mi-muted text-sm mt-2">
+              Continue to your workbench.
+            </p>
           </div>
 
-          <div>
-            <label className="block font-mono text-[10px] uppercase tracking-[0.12em] text-[#5F6575] mb-2">
-              Access Secret
-            </label>
-            <input
-              type="password"
-              required
-              value={secret}
-              onChange={e => setSecret(e.target.value)}
-              placeholder="••••••••••••"
-              className="milled-input w-full"
-            />
+          {/* Accessible Error Live Region */}
+          <div aria-live="assertive" aria-atomic="true">
+            {error && (
+              <div
+                role="alert"
+                className="mb-6 p-3 bg-mi-canvas border border-mi-data-red text-mi-data-red font-mono text-xs"
+              >
+                {error}
+              </div>
+            )}
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-[#ECEFF5] text-[#07080B] font-mono text-[11px] uppercase tracking-[0.14em] py-4 hover:bg-white transition-colors"
-          >
-            Verify Access
-          </button>
-        </form>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label
+                htmlFor="login-email"
+                className="block font-mono text-xs text-mi-ink-2 mb-1.5 uppercase tracking-wider"
+              >
+                Email
+              </label>
+              <input
+                id="login-email"
+                ref={emailInputRef}
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="name@institution.edu"
+                className="w-full h-11 px-3.5 bg-mi-white border border-mi-rule font-sans text-sm text-mi-ink placeholder:text-mi-muted/60 focus:outline-none focus:border-mi-ink"
+              />
+            </div>
 
-        <div className="mt-10 pt-6 border-t border-[#1A1D26] flex justify-between items-center font-mono text-[10px] uppercase tracking-wider text-[#5F6575]">
-          <span>New analyst</span>
-          <a href="/signup" className="text-[#ECEFF5] hover:text-[#2D5BFF] transition-colors">
-            Create Identity
-          </a>
+            <div>
+              <div className="flex justify-between items-center mb-1.5">
+                <label
+                  htmlFor="login-password"
+                  className="block font-mono text-xs text-mi-ink-2 uppercase tracking-wider"
+                >
+                  Password
+                </label>
+              </div>
+              <input
+                id="login-password"
+                type="password"
+                autoComplete="current-password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••••••"
+                className="w-full h-11 px-3.5 bg-mi-white border border-mi-rule font-sans text-sm text-mi-ink placeholder:text-mi-muted/60 focus:outline-none focus:border-mi-ink"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full h-11 bg-mi-ink text-mi-paper font-sans text-sm font-medium hover:bg-mi-ink-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+            >
+              {isSubmitting ? 'Signing in...' : 'Sign in'}
+            </button>
+          </form>
+
+          <div className="mt-8 pt-6 border-t border-mi-rule flex justify-between items-center text-xs font-mono text-mi-muted">
+            <span>Need an account?</span>
+            <Link to="/signup" className="text-mi-ink hover:underline">
+              Create an account
+            </Link>
+          </div>
         </div>
-      </div>
+      </main>
 
+      {/* Quiet Auth Footer */}
+      <footer className="py-6 text-center text-xs font-mono text-mi-muted border-t border-mi-rule">
+        <span>Math Intellect | Deterministic Simulation</span>
+      </footer>
     </div>
-  )
+  );
 }
+
+export default LoginPage;

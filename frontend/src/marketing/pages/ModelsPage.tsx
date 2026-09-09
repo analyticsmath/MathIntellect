@@ -1,322 +1,346 @@
-import { useState } from "react"
-import { KaTeXBlock } from "../../math/KaTeXBlock"
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { KaTeXBlock } from '../../math/KaTeXBlock';
+import { MediaPicture } from '../components/MediaPicture';
 
-interface EngineSpec {
-  id: string
-  code: string
-  name: string
-  category: string
-  equation: string
-  secondaryEquation?: string
-  parameters: string[]
-  outputs: string[]
-  summary: string
-  svgType: "diffusion" | "payoff" | "garch" | "topology"
+interface EngineAtlas {
+  id: string;
+  code: string;
+  name: string;
+  headline: string;
+  summary: string;
+  equation: string;
+  parameters: string[];
+  outputs: string[];
+  capabilities: string[];
 }
 
-const ENGINES: EngineSpec[] = [
+const ATLAS_ENGINES: EngineAtlas[] = [
   {
-    id: "monte-carlo",
-    code: "ENG 01",
-    name: "Monte Carlo Diffusion",
-    category: "STOCHASTIC SYSTEMS",
-    equation: "dx_t = \\mu x_t dt + \\sigma x_t dW_t",
-    secondaryEquation: "x_{k+1} = x_k (1 + \\mu \\Delta t + \\sigma \\sqrt{\\Delta t} Z_k)",
+    id: 'monte-carlo',
+    code: 'ENG 01',
+    name: 'Monte Carlo',
+    headline: 'Sample uncertainty.',
+    summary:
+      'Numerical integration over explicit stochastic distributions. Generates path ensembles, calibrates terminal variance, and models tail-risk branching without analytical hand-waving.',
+    equation: 'dx_t = \\mu x_t dt + \\sigma x_t dW_t',
     parameters: [
-      "Initial State x0",
-      "Drift Coefficient mu",
-      "Volatility Scale sigma",
-      "Sample Trajectories N",
-      "Discrete Step Delta t"
+      'Distribution types (normal, uniform, exponential, Bernoulli)',
+      'Deterministic seed integer',
+      'Iteration count (1 to 1,000,000)',
+      'Correlation matrix (Cholesky decomposition)',
+      'Explicit output expression',
     ],
     outputs: [
-      "Path Realization Ensemble",
-      "Terminal Quantile Distribution",
-      "Value at Risk Metric"
+      'Sample path ensemble array',
+      'Terminal distribution histogram',
+      'Expected value and variance',
+      '5th & 95th percentiles',
+      'Execution timing telemetry',
     ],
-    summary: "Computes path ensembles through stochastic numerical integration under geometric Brownian motion",
-    svgType: "diffusion"
+    capabilities: [
+      '1 to 1,000,000 iterations',
+      'Cholesky correlation',
+      'Tail-risk amplification',
+      'Scenario branching',
+    ],
   },
   {
-    id: "game-theory",
-    code: "ENG 02",
-    name: "Strategic Equilibria",
-    category: "STRATEGIC INTERACTIONS",
-    equation: "u_i(s_i^*, s_{-i}^*) \\ge u_i(s_i, s_{-i}^*) \\quad \\forall s_i \\in S_i",
-    secondaryEquation: "\\mathbf{A} = \\begin{bmatrix} (3, 3) & (0, 5) \\\\ (5, 0) & (1, 1) \\end{bmatrix}",
+    id: 'game-theory',
+    code: 'ENG 02',
+    name: 'Game Theory',
+    headline: 'Model strategic response.',
+    summary:
+      'Finite normal-form games and iterative strategic interaction. Detects strictly dominant strategies, identifies pure-strategy Nash equilibria, and computes expected payoffs across payoff tensors.',
+    equation: 'u_i(s_i^*, s_{-i}^*) \\ge u_i(s_i, s_{-i}^*) \\quad \\forall s_i \\in S_i',
     parameters: [
-      "Payoff Tensor Matrix A",
-      "Player Action Spaces",
-      "Discount Parameter delta",
-      "Information Precision"
+      'Player action spaces (≥ 2 players)',
+      'Normal-form payoff tensor',
+      'Optional dynamic evolution rounds',
+      'Repeated-game learning decay',
+      'Coalition formation toggle',
     ],
     outputs: [
-      "Pure Nash Equilibrium",
-      "Mixed Strategy Probability Vector",
-      "Pareto Optimal Frontier"
+      'Dominant strategy detection',
+      'Pure-strategy Nash equilibria',
+      'Expected payoffs per actor',
+      'Pareto-optimality classification',
+      'Reputation scores & coalition cohesion',
     ],
-    summary: "Calculates deterministic equilibrium states and minimax value bounds across payoff tensors",
-    svgType: "payoff"
+    capabilities: [
+      'Pure-strategy Nash detection',
+      'Dominant strategy isolation',
+      'Dynamic strategy evolution',
+      'Coalition formation tracking',
+    ],
   },
   {
-    id: "market",
-    code: "ENG 03",
-    name: "Market Dynamics GARCH",
-    category: "TIME SERIES DYNAMICS",
-    equation: "\\sigma_t^2 = \\omega + \\alpha \\epsilon_{t-1}^2 + \\beta \\sigma_{t-1}^2",
-    secondaryEquation: "x_t = \\rho x_{t-1} + \\sigma_t \\epsilon_t \\quad |\\rho| < 1",
+    id: 'market',
+    code: 'ENG 03',
+    name: 'Market',
+    headline: 'Model paths, shocks and regimes.',
+    summary:
+      'Geometric Brownian motion core paired with Markov regime switching and optional volatility clustering. Simulates multi-asset correlations, applied drawdown shocks, and sentiment proxies.',
+    equation: 'S_{t+\\Delta t} = S_t \\exp\\left( \\left(\\mu - \\frac{1}{2}\\sigma_t^2\\right)\\Delta t + \\sigma_t \\sqrt{\\Delta t} Z_t \\right)',
     parameters: [
-      "Autoregressive Factor rho",
-      "Base Variance omega",
-      "Shock Sensitivity alpha",
-      "Volatility Persistence beta"
+      'Asset basket & portfolio weights',
+      'Cross-asset correlation matrix',
+      'Markov regime transition matrix',
+      'Exogenous shock timing & magnitude',
+      'GARCH-like volatility clustering terms',
     ],
     outputs: [
-      "Conditional Variance Path",
-      "Stationary Regimes",
-      "Tail Kurtosis Quantification"
+      'Up to 10,000 calibrated price paths',
+      'Expected final price & drawdown',
+      '95% Value at Risk (VaR95)',
+      'Annualized return & volatility',
+      'Active regime transitions',
     ],
-    summary: "Evaluates volatility clustering and autoregressive persistence under conditional heteroskedasticity",
-    svgType: "garch"
+    capabilities: [
+      'GBM core engine',
+      'Regime switching',
+      'Volatility clustering',
+      'Explicit shock events',
+    ],
   },
   {
-    id: "conflict",
-    code: "ENG 04",
-    name: "Agent Interaction Topology",
-    category: "NETWORK DYNAMICS",
-    equation: "\\dot{\\mathbf{x}}_i = \\sum_{j \\in \\mathcal{N}_i} A_{ij}(\\mathbf{x}_j - \\mathbf{x}_i) + \\mathbf{F}_{ext}",
-    secondaryEquation: "\\Phi = \\frac{1}{N} \\left| \\sum_{j=1}^N \\frac{\\mathbf{v}_j}{\\|\\mathbf{v}_j\\|} \\right|",
+    id: 'conflict',
+    code: 'ENG 04',
+    name: 'Conflict',
+    headline: 'Model repeated interaction.',
+    summary:
+      'Iterative multi-agent strategic interaction model based on repeated Prisoner’s Dilemma mechanics. Tracks resource changes, pairwise trust scores, betrayal events, and coalition reorganization across up to 10,000 rounds.',
+    equation: '\\Pi_{CC} = (3,3), \\quad \\Pi_{DD} = (-1,-1), \\quad \\Pi_{DC} = (5,-2), \\quad \\Pi_{CD} = (-2,5)',
     parameters: [
-      "Population Size N",
-      "Interaction Radius r",
-      "Alignment Factor gamma",
-      "Boundary Conditions"
+      'Agent population (strategies: TFT, coop, defector, random, aggressive)',
+      'Initial resource endowments',
+      'Betrayal sensitivity threshold',
+      'Rounds (1 to 10,000)',
+      'Coalition rules & alliances',
     ],
     outputs: [
-      "Coordinate Phase Portrait",
-      "Global Order Parameter",
-      "Bifurcation Threshold"
+      'Pairwise trust matrix evolution',
+      'Cooperation rate timeline',
+      'Resource redistribution curve',
+      'Alliance cohesion index',
+      'Terminal winner & survivor roster',
     ],
-    summary: "Simulates continuous coordinate trajectories and collective order emergence in decentralized networks",
-    svgType: "topology"
-  }
-]
+    capabilities: [
+      'Up to 10,000 strategic rounds',
+      'Pairwise trust & memory tracking',
+      'Endogenous coalition formation',
+      'Resource transfer dynamics',
+    ],
+  },
+  {
+    id: 'custom',
+    code: 'ENG 05',
+    name: 'Custom',
+    headline: 'Define the variable and output.',
+    summary:
+      'Custom currently runs through the Monte Carlo execution pathway while allowing supplied parameters to change the default variable and output definition.',
+    equation: 'Y = g(X_1, X_2, \\dots, X_n), \\quad X_i \\sim \\mathcal{D}_i',
+    parameters: [
+      'Custom variable declarations (distribution + domain)',
+      'Output expression parser formula',
+      'Monte Carlo sample batching',
+      'Seed configuration',
+    ],
+    outputs: [
+      'Custom output distribution realization',
+      'Summary statistical moments',
+      'Quantile quantifications',
+      'Batch calculation progress',
+    ],
+    capabilities: [
+      'Arbitrary output expressions',
+      'Dynamic variable definitions',
+      'Monte Carlo execution pipeline',
+      'Deterministic verification',
+    ],
+  },
+];
 
-function PreviewDiagram({ type }: { type: EngineSpec["svgType"] }) {
-  if (type === "diffusion") {
-    return (
-      <svg viewBox="0 0 600 240" className="w-full h-full" fill="none">
-        <path d="M 40 120 C 140 120 220 90 320 60 C 420 30 500 40 560 30" stroke="#2D5BFF" strokeWidth="2" />
-        <path d="M 40 120 C 140 115 240 110 340 100 C 440 90 500 85 560 80" stroke="#ECEFF5" strokeWidth="1" strokeOpacity="0.7" />
-        <path d="M 40 120 C 140 125 240 130 340 145 C 440 160 500 170 560 180" stroke="#ECEFF5" strokeWidth="1" strokeOpacity="0.7" />
-        <path d="M 40 120 C 140 135 240 160 340 180 C 440 200 500 210 560 215" stroke="#ECEFF5" strokeWidth="1" strokeOpacity="0.4" strokeDasharray="4 4" />
-        <path d="M 40 120 C 140 105 240 70 340 50 C 440 30 500 20 560 15" stroke="#ECEFF5" strokeWidth="1" strokeOpacity="0.4" strokeDasharray="4 4" />
-        <line x1="40" y1="20" x2="40" y2="220" stroke="white" strokeOpacity="0.15" />
-        <line x1="40" y1="220" x2="560" y2="220" stroke="white" strokeOpacity="0.15" />
-      </svg>
-    )
-  }
-
-  if (type === "payoff") {
-    return (
-      <svg viewBox="0 0 600 240" className="w-full h-full" fill="none">
-        <polygon points="120,40 480,60 420,200 80,180" stroke="#ECEFF5" strokeWidth="1" strokeOpacity="0.4" fill="rgba(45,91,255,0.06)" />
-        <circle cx="300" cy="125" r="5" fill="#2D5BFF" />
-        <line x1="300" y1="40" x2="300" y2="200" stroke="#2D5BFF" strokeWidth="1" strokeDasharray="3 3" strokeOpacity="0.6" />
-        <line x1="80" y1="125" x2="480" y2="125" stroke="#2D5BFF" strokeWidth="1" strokeDasharray="3 3" strokeOpacity="0.6" />
-        <text x="315" y="120" fill="#2D5BFF" fontSize="10" fontFamily="monospace">NASH SADDLE POINT</text>
-      </svg>
-    )
-  }
-
-  if (type === "garch") {
-    return (
-      <svg viewBox="0 0 600 240" className="w-full h-full" fill="none">
-        <path d="M 40 120 Q 80 80 120 120 T 200 120 T 280 40 T 360 190 T 440 90 T 520 130 T 560 120" stroke="#ECEFF5" strokeWidth="1.5" />
-        <path d="M 40 70 Q 160 65 240 40 T 360 25 T 480 60 T 560 65" stroke="#2D5BFF" strokeWidth="1" strokeDasharray="4 4" strokeOpacity="0.8" />
-        <path d="M 40 170 Q 160 175 240 200 T 360 215 T 480 180 T 560 175" stroke="#2D5BFF" strokeWidth="1" strokeDasharray="4 4" strokeOpacity="0.8" />
-      </svg>
-    )
-  }
+export const ModelsPage: React.FC = () => {
+  const [activeEngineId, setActiveEngineId] = useState<string>('monte-carlo');
 
   return (
-    <svg viewBox="0 0 600 240" className="w-full h-full" fill="none">
-      <circle cx="160" cy="110" r="30" stroke="#ECEFF5" strokeWidth="1" strokeOpacity="0.3" />
-      <circle cx="300" cy="80" r="45" stroke="#2D5BFF" strokeWidth="1.5" />
-      <circle cx="440" cy="140" r="35" stroke="#ECEFF5" strokeWidth="1" strokeOpacity="0.3" />
-      <line x1="185" y1="100" x2="260" y2="85" stroke="#ECEFF5" strokeWidth="1" strokeDasharray="2 2" strokeOpacity="0.5" />
-      <line x1="340" y1="95" x2="410" y2="125" stroke="#2D5BFF" strokeWidth="1.5" />
-      <line x1="180" y1="130" x2="410" y2="150" stroke="#ECEFF5" strokeWidth="1" strokeOpacity="0.2" />
-    </svg>
-  )
-}
+    <div className="w-full bg-mi-canvas text-mi-ink">
+      {/* 1. Model Atlas Opening Overview */}
+      <section className="border-b border-mi-rule bg-mi-paper py-20 px-6 sm:px-8 lg:px-16">
+        <div className="max-w-[1600px] mx-auto">
+          <div className="max-w-3xl space-y-4">
+            <span className="font-mono text-xs text-mi-muted uppercase tracking-wider block">
+              Model Atlas / Five Analytical Engines
+            </span>
+            <h1 className="font-sans font-medium text-[clamp(2.8rem,5vw,5.5rem)] leading-[0.92] tracking-tight text-mi-ink">
+              Five ways to model a system.
+            </h1>
+            <p className="font-sans text-base sm:text-lg text-mi-ink-2 leading-relaxed">
+              Choose the structure that matches the question, then make assumptions explicit before you run. Every engine computes reproducible evidence without statistical sleight-of-hand.
+            </p>
+          </div>
 
-export function ModelsPage() {
-  const [selectedId, setSelectedId] = useState("monte-carlo")
-  const activeEngine = ENGINES.find(e => e.id === selectedId) || ENGINES[0]
-
-  return (
-    <main className="min-h-[100svh] bg-[#07080B] text-[#ECEFF5] selection:bg-[#2D5BFF] selection:text-white">
-      {/* Top Architectural Navigation */}
-      <header className="fixed top-0 inset-x-0 z-50 h-16 border-b border-white/10 bg-[#07080B]/80 backdrop-blur-md px-6 flex justify-between items-center">
-        <a href="/" className="font-mono text-[11px] uppercase tracking-[0.16em] text-[#ECEFF5] font-semibold">
-          MATHINTELLECT
-        </a>
-
-        <nav className="flex items-center gap-8 font-mono text-[10px] uppercase tracking-[0.12em] text-[#5F6575]">
-          <a href="/models" className="text-[#ECEFF5] transition-colors">Models</a>
-          <a href="/method" className="hover:text-[#ECEFF5] transition-colors">Method</a>
-          <a
-            href="/login"
-            className="text-[#ECEFF5] border border-white/20 px-3.5 py-1.5 hover:border-white transition-colors"
-          >
-            Access
-          </a>
-        </nav>
-      </header>
-
-      {/* Main Content Area */}
-      <div className="pt-28 pb-20 px-[5vw] max-w-7xl mx-auto">
-        {/* Header Block */}
-        <div className="mb-12 border-b border-white/10 pb-8">
-          <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-[#5F6575] block mb-2">
-            SIMULATION ENGINE DIRECTORY
-          </span>
-          <h1 className="font-['Space_Grotesk',sans-serif] text-[clamp(2.5rem,5vw,4.5rem)] font-medium leading-[0.9] tracking-[-0.035em] uppercase">
-            Model Atlas
-          </h1>
-          <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.08em] text-[#5F6575] max-w-2xl">
-            Mathematical specifications and parameter vectors for four simulation engines
-          </p>
-        </div>
-
-        {/* Two-Column Interactive Model Atlas */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
-          {/* Left Column: Vertical Engine Directory */}
-          <div className="lg:col-span-4 space-y-3">
-            {ENGINES.map(engine => {
-              const isSelected = engine.id === selectedId
+          {/* Central State Diagram / Atlas Selector */}
+          <div className="mt-14 pt-8 border-t border-mi-rule grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            {ATLAS_ENGINES.map((eng) => {
+              const isSelected = activeEngineId === eng.id;
               return (
                 <button
-                  key={engine.id}
-                  onClick={() => setSelectedId(engine.id)}
-                  className={`w-full text-left p-5 rounded-xl border transition-all duration-200 ${
+                  key={eng.id}
+                  type="button"
+                  onClick={() => setActiveEngineId(eng.id)}
+                  onFocus={() => setActiveEngineId(eng.id)}
+                  className={`p-5 text-left border transition-all ${
                     isSelected
-                      ? "bg-[#0E1015] border-white/40 shadow-[inset_0_2px_4px_rgba(0,0,0,0.7),0_1px_0_rgba(255,255,255,0.04)]"
-                      : "bg-[#07080B] border-white/10 hover:border-white/20 hover:bg-[#0E1015]/40"
+                      ? 'border-mi-ink bg-mi-canvas text-mi-ink shadow-sm'
+                      : 'border-mi-rule bg-mi-white text-mi-muted hover:border-mi-rule-strong hover:text-mi-ink'
                   }`}
                 >
-                  <div className="flex justify-between items-center mb-1.5">
-                    <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-[#5F6575]">
-                      {engine.code}
-                    </span>
-                    <span className={`font-mono text-[9px] uppercase tracking-[0.14em] ${isSelected ? "text-[#2D5BFF]" : "text-transparent"}`}>
-                      ACTIVE
-                    </span>
+                  <div className="font-mono text-[11px] text-mi-muted">{eng.code}</div>
+                  <div className="font-sans font-medium text-base text-mi-ink mt-1">
+                    {eng.name}
                   </div>
-                  <h2 className="font-['Space_Grotesk',sans-serif] text-lg font-medium tracking-tight text-[#ECEFF5]">
-                    {engine.name}
-                  </h2>
-                  <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-[#5F6575] block mt-1">
-                    {engine.category}
-                  </span>
+                  <div className="font-mono text-[10px] text-mi-muted mt-3 line-clamp-2">
+                    {eng.headline}
+                  </div>
                 </button>
-              )
+              );
             })}
           </div>
-
-          {/* Right Column: Persistent Live Manifold Preview Stage */}
-          <div className="lg:col-span-8 bg-[#0E1015] border border-white/10 rounded-xl p-8 shadow-[inset_0_2px_4px_rgba(0,0,0,0.7),0_1px_0_rgba(255,255,255,0.04)]">
-            
-            {/* Stage Header */}
-            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 pb-6 border-b border-white/10">
-              <div>
-                <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-[#2D5BFF] block">
-                  {activeEngine.category}
-                </span>
-                <h3 className="font-['Space_Grotesk',sans-serif] text-2xl font-medium tracking-tight text-[#ECEFF5] mt-1">
-                  {activeEngine.name}
-                </h3>
-              </div>
-
-              {/* Fork Action Button */}
-              <a
-                href={`/app/simulations/new?engine=${activeEngine.id}`}
-                className="group inline-flex items-center gap-3 bg-[#ECEFF5] text-[#07080B] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.12em] font-medium hover:bg-white transition-colors self-start sm:self-auto"
-              >
-                <span>FORK ENGINE CONFIGURATION</span>
-                <span className="group-hover:translate-x-0.5 transition-transform duration-150">➔</span>
-              </a>
-            </div>
-
-            {/* Summary */}
-            <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.08em] text-[#ECEFF5]/90">
-              {activeEngine.summary}
-            </p>
-
-            {/* Live KaTeX Equation Plate */}
-            <div className="mt-6 p-5 bg-[#07080B] border border-white/10 rounded-lg">
-              <span className="font-mono text-[8px] uppercase tracking-[0.14em] text-[#5F6575] block mb-3">
-                GOVERNING EQUATION
-              </span>
-              <div className="text-[#ECEFF5] overflow-x-auto text-sm sm:text-base py-1">
-                <KaTeXBlock math={activeEngine.equation} />
-              </div>
-              {activeEngine.secondaryEquation && (
-                <div className="text-[#ECEFF5]/80 overflow-x-auto text-xs sm:text-sm pt-3 mt-3 border-t border-white/5">
-                  <KaTeXBlock math={activeEngine.secondaryEquation} />
-                </div>
-              )}
-            </div>
-
-            {/* Simulation Phase Field Preview */}
-            <div className="mt-6">
-              <span className="font-mono text-[8px] uppercase tracking-[0.14em] text-[#5F6575] block mb-2">
-                TRAJECTORY SIMULATION FIELD
-              </span>
-              <div className="w-full h-44 bg-[#07080B] border border-white/10 rounded-lg flex items-center justify-center p-4">
-                <PreviewDiagram type={activeEngine.svgType} />
-              </div>
-            </div>
-
-            {/* Parameters & Outputs Grid */}
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6 pt-6 border-t border-white/10">
-              <div>
-                <span className="font-mono text-[8px] uppercase tracking-[0.14em] text-[#5F6575] block mb-3">
-                  INPUT PARAMETER VECTOR
-                </span>
-                <ul className="space-y-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-[#ECEFF5]/80">
-                  {activeEngine.parameters.map((param, i) => (
-                    <li key={i} className="flex items-center gap-2">
-                      <span className="w-1 h-1 rounded-full bg-[#2D5BFF]" />
-                      <span>{param}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <span className="font-mono text-[8px] uppercase tracking-[0.14em] text-[#5F6575] block mb-3">
-                  COMPUTATIONAL OUTPUTS
-                </span>
-                <ul className="space-y-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-[#ECEFF5]/80">
-                  {activeEngine.outputs.map((out, i) => (
-                    <li key={i} className="flex items-center gap-2">
-                      <span className="w-1 h-1 rounded-full bg-white/40" />
-                      <span>{out}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-          </div>
-
         </div>
-      </div>
-    </main>
-  )
-}
+      </section>
 
-export default ModelsPage
+      {/* 2. Five Distinct Engine Chapters */}
+      <div className="space-y-0">
+        {ATLAS_ENGINES.map((eng, idx) => (
+          <section
+            key={eng.id}
+            id={eng.id}
+            className={`border-b border-mi-rule py-20 px-6 sm:px-8 lg:px-16 ${
+              idx % 2 === 0 ? 'bg-mi-canvas' : 'bg-mi-paper'
+            }`}
+          >
+            <div className="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+              {/* Left 5 Cols: Thesis, Math & Capabilities */}
+              <div className="lg:col-span-5 space-y-6">
+                <div className="flex items-center gap-3 font-mono text-xs text-mi-muted">
+                  <span className="text-mi-ink font-medium">{eng.code}</span>
+                  <span>/</span>
+                  <span className="uppercase">{eng.name} Engine</span>
+                </div>
+
+                <h2 className="font-sans font-medium text-[clamp(2.2rem,3.4vw,3.8rem)] leading-[0.96] tracking-tight text-mi-ink">
+                  {eng.headline}
+                </h2>
+
+                <p className="text-mi-ink-2 text-base leading-relaxed">{eng.summary}</p>
+
+                <div className="pt-2">
+                  <KaTeXBlock math={eng.equation} />
+                </div>
+
+                {/* Capabilities Capsule */}
+                <div className="p-5 border border-mi-rule bg-mi-white space-y-3 font-mono text-xs">
+                  <span className="text-mi-muted uppercase tracking-wider block text-[10px]">
+                    Verified Engine Capabilities
+                  </span>
+                  <ul className="space-y-1.5 text-mi-ink">
+                    {eng.capabilities.map((cap, cIdx) => (
+                      <li key={cIdx} className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 bg-mi-ink rounded-none inline-block"></span>
+                        <span>{cap}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* Right 7 Cols: Parameters & Outputs Spec Sheet */}
+              <div className="lg:col-span-7 bg-mi-white border border-mi-rule p-8 sm:p-10 space-y-8">
+                {/* Contextual interruption for Market */}
+                {eng.id === 'market' && (
+                  <div className="mb-6 p-2 border border-mi-rule bg-mi-canvas">
+                    <div className="w-full aspect-[21/9] overflow-hidden bg-mi-paper">
+                      <MediaPicture
+                        id="MI-PH-015"
+                        className="w-full h-full"
+                        imgClassName="w-full h-full object-cover"
+                        alt="Top-down orthographic container flow representing logistics market structure"
+                      />
+                    </div>
+                    <span className="block mt-2 font-mono text-[10px] text-mi-muted text-right">
+                      Figure: Contextual logistics exchange geometry
+                    </span>
+                  </div>
+                )}
+
+                {/* Parameters Section */}
+                <div>
+                  <div className="flex justify-between items-baseline mb-4 pb-2 border-b border-mi-rule">
+                    <span className="font-mono text-xs text-mi-ink font-medium uppercase tracking-wider">
+                      Explicit Input Parameters
+                    </span>
+                    <span className="font-mono text-[11px] text-mi-muted">Pre-flight verified</span>
+                  </div>
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 font-mono text-xs text-mi-ink-2">
+                    {eng.parameters.map((param, pIdx) => (
+                      <li key={pIdx} className="p-2.5 bg-mi-canvas border border-mi-rule">
+                        {param}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Outputs Section */}
+                <div>
+                  <div className="flex justify-between items-baseline mb-4 pb-2 border-b border-mi-rule">
+                    <span className="font-mono text-xs text-mi-ink font-medium uppercase tracking-wider">
+                      Computed Output Evidence
+                    </span>
+                    <span className="font-mono text-[11px] text-mi-muted">Reproducible result</span>
+                  </div>
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 font-mono text-xs text-mi-ink-2">
+                    {eng.outputs.map((out, oIdx) => (
+                      <li key={oIdx} className="p-2.5 bg-mi-canvas border border-mi-rule">
+                        {out}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+        ))}
+      </div>
+
+      {/* 3. Atlas Route Ending Call to Action */}
+      <section className="bg-mi-paper py-16 px-6 sm:px-8 lg:px-16 text-center border-b border-mi-rule">
+        <div className="max-w-2xl mx-auto space-y-6">
+          <h3 className="font-sans font-medium text-3xl text-mi-ink">
+            Test the models with live assumptions.
+          </h3>
+          <p className="text-mi-ink-2 text-base">
+            Step into the interactive public demonstration or read the complete methodological dossier.
+          </p>
+          <div className="flex flex-wrap justify-center items-center gap-4 pt-2">
+            <Link
+              to="/workbench"
+              className="bg-mi-ink text-mi-paper font-sans text-sm font-medium px-6 py-3 hover:bg-mi-ink-2 transition-colors min-h-[44px] flex items-center"
+            >
+              Open the workbench
+            </Link>
+            <Link
+              to="/method"
+              className="text-mi-ink font-sans text-sm font-medium hover:underline underline-offset-4 min-h-[44px] flex items-center"
+            >
+              Read how the evidence is produced
+            </Link>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default ModelsPage;

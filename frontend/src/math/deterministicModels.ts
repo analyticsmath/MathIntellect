@@ -29,7 +29,7 @@ export interface MonteCarloResult {
   mean: number;
   variance: number;
   probAboveZero: number;
-  probTailRisk: number; // P(X < -1.5)
+  probTailRisk: number; // P(X < -0.5)
 }
 
 /**

@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import '@fontsource-variable/instrument-sans/wght.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
 @import 'katex/dist/katex.min.css';
 
 @tailwind base;
@@ -7,157 +9,71 @@
 
 @layer base {
   :root {
-    --color-void: #07080B;
-    --color-blackboard: #0E1015;
-    --color-axis: #1A1D26;
-    --color-ink-muted: #5F6575;
-    --color-ink-primary: #ECEFF5;
-    --color-signal-cobalt: #2D5BFF;
+    --mi-canvas: #F1F3F2;
+    --mi-paper: #F8F9F8;
+    --mi-white: #FFFFFF;
+    --mi-ink: #101311;
+    --mi-ink-2: #2B302D;
+    --mi-muted: #626864;
+    --mi-rule: #CFD4D0;
+    --mi-rule-strong: #AEB5B0;
+    --mi-dark: #151916;
+    --mi-dark-2: #202521;
+    --mi-on-dark: #F2F4F3;
 
-    /* High-luminance neutral foundation (protected app fallback) */
-    --mi-canvas: #F4F6F5;
-    --mi-paper: #FFFFFF;
-    --mi-ink: #111412;
-    --mi-ink-2: #2D3330;
-    --mi-text: #505753;
-    --mi-muted: #839087;
-    --mi-rule: #D8DDDA;
-    --mi-rule-strong: #BAC1BD;
-    --mi-surface-soft: #ECEFEE;
-    --mi-focus: #2457E6;
-    --mi-danger: #B64049;
-    --mi-radius-sm: 8px;
-    --mi-radius-xs: 4px;
-    --mi-shadow-modal: 0 12px 36px rgba(17, 20, 18, 0.14), 0 2px 8px rgba(17, 20, 18, 0.06);
+    --mi-data-blue: #315F7A;
+    --mi-data-green: #3E6B50;
+    --mi-data-red: #983E36;
+    --mi-data-amber: #8A651F;
+    --mi-data-plum: #6B526F;
+
+    --mi-display-xl: clamp(4.75rem, 7.7vw, 8.8rem);
+    --mi-display-lg: clamp(3.5rem, 5.4vw, 6.4rem);
+    --mi-display-md: clamp(2.5rem, 3.8vw, 4.5rem);
+    --mi-title: clamp(1.75rem, 2.2vw, 2.8rem);
+    --mi-body-lg: clamp(1.125rem, 1.35vw, 1.375rem);
+    --mi-body: 1rem;
+    --mi-small: 0.875rem;
+    --mi-micro: 0.6875rem;
   }
 
   body {
-    background-color: var(--color-void);
-    color: var(--color-ink-primary);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--mi-canvas);
+    color: var(--mi-ink);
+    font-family: 'Instrument Sans Variable', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-weight: 400;
+    line-height: 1.55;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  /* Accessible focus indicators */
+  :focus-visible {
+    outline: 2px solid var(--mi-ink);
+    outline-offset: 2px;
+  }
 }
 
-/* Institutional Milled Input Token System */
-.milled-input {
-  background-color: #0E1015;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.7), 0 1px 0 rgba(255, 255, 255, 0.04);
-  color: #ECEFF5;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 13px;
-  letter-spacing: 0.04em;
-  padding: 16px 20px;
-  transition: border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+/* Base link and button resets */
+a, button {
+  border-radius: 0;
 }
 
-.milled-input:focus {
-  outline: none;
-  border-color: rgba(255, 255, 255, 0.45);
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.25);
+/* Reduced motion overrides */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
-/* 3% Monochromatic Noise Filter Overlay */
-.bg-noise-overlay {
-  position: relative;
-}
-
-.bg-noise-overlay::after {
-  content: "";
-  position: absolute;
-  inset: 0;
+/* Functional probe crosshair */
+.mi-probe-crosshair {
+  stroke: var(--mi-ink-2);
+  stroke-width: 1px;
+  stroke-dasharray: 2 2;
   pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
-  z-index: 15;
-}
-
-/* Touch Fallback: Hide virtual desktop controls */
-@media (min-width: 1024px) and (pointer: fine) {
-  .touch-fallback-only { display: none !important; }
-}
-
-@media (max-width: 1023px), (pointer: coarse) {
-  .desktop-pinned-only { display: none !important; }
-}
-
-/* Workbench Component Baselines */
-.mi-input {
-  width: 100%;
-  height: 48px;
-  padding: 0 14px;
-  background: var(--mi-paper);
-  border: 1px solid var(--mi-rule);
-  border-radius: var(--mi-radius-sm);
-  color: var(--mi-ink);
-  font-size: 15px;
-  transition: border-color 0.15s ease;
-}
-
-.mi-input:hover {
-  border-color: var(--mi-rule-strong);
-}
-
-.mi-input:focus {
-  outline: none;
-  border-color: var(--mi-focus);
-}
-
-.mi-btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 44px;
-  padding: 0 20px;
-  background: var(--mi-ink);
-  color: var(--mi-paper);
-  border-radius: var(--mi-radius-sm);
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  transition: background-color 0.15s ease, opacity 0.15s ease;
-}
-
-.mi-btn-primary:hover:not(:disabled) {
-  background: var(--mi-ink-2);
-}
-
-.mi-btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 44px;
-  padding: 0 18px;
-  background: var(--mi-paper);
-  color: var(--mi-ink);
-  border: 1px solid var(--mi-rule);
-  border-radius: var(--mi-radius-sm);
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
-}
-
-.mi-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-}
-
-.mi-table th {
-  text-align: left;
-  padding: 10px 14px;
-  color: var(--mi-muted);
-  font-weight: 500;
-  border-bottom: 1px solid var(--mi-rule);
-  font-size: 13px;
-}
-
-.mi-table td {
-  padding: 12px 14px;
-  border-bottom: 1px solid var(--mi-rule);
-  color: var(--mi-ink-2);
 }

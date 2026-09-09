@@ -13,18 +13,14 @@ import { ProtectedRoute } from './shared/ui/ProtectedRoute';
 import { useAuth } from './shared/hooks/useAuth';
 import { AppErrorBoundary } from './components/ui/AppErrorBoundary';
 
-const MarketingLayout = lazy(() =>
-  import('./marketing/MarketingLayout').then(m => ({ default: m.MarketingLayout }))
-);
+const MarketingShell = lazy(() => import('./marketing/MarketingShell'));
+const HomePage = lazy(() => import('./marketing/pages/HomePage'));
 const ModelsPage = lazy(() => import('./marketing/pages/ModelsPage'));
 const WorkbenchPage = lazy(() => import('./marketing/pages/WorkbenchPage'));
 const MethodPage = lazy(() => import('./marketing/pages/MethodPage'));
-const LoginPage = lazy(() =>
-  import('./auth/LoginPage').then(m => ({ default: m.LoginPage }))
-);
-const SignupPage = lazy(() =>
-  import('./auth/SignupPage').then(m => ({ default: m.SignupPage }))
-);
+const LoginPage = lazy(() => import('./auth/LoginPage'));
+const SignupPage = lazy(() => import('./auth/SignupPage'));
+
 const AppDashboardPage = lazy(() => import('./app/pages/AppDashboardPage'));
 const AppSimulationPage = lazy(() => import('./app/pages/AppSimulationPage'));
 const AppAnalyticsPage = lazy(() => import('./app/pages/AppAnalyticsPage'));
@@ -35,7 +31,7 @@ function PageLoader() {
   return (
     <div className="min-h-screen grid place-items-center bg-mi-canvas">
       <div className="text-xs font-mono text-mi-muted">
-        Loading workspace...
+        Loading...
       </div>
     </div>
   );
@@ -91,6 +87,21 @@ function RouteExperienceManager() {
       lastPath.current.startsWith('/app/analytics/');
     window.scrollTo({ top: preserveAppScroll ? window.scrollY : 0, behavior: 'auto' });
     lastPath.current = location.pathname;
+
+    // Update document title per route specification
+    if (location.pathname === '/') {
+      document.title = 'Math Intellect | Reproducible Mathematical Simulation';
+    } else if (location.pathname === '/models') {
+      document.title = 'Models | Math Intellect';
+    } else if (location.pathname === '/workbench') {
+      document.title = 'Workbench | Math Intellect';
+    } else if (location.pathname === '/method') {
+      document.title = 'Method | Math Intellect';
+    } else if (location.pathname === '/login') {
+      document.title = 'Sign in | Math Intellect';
+    } else if (location.pathname === '/signup') {
+      document.title = 'Create account | Math Intellect';
+    }
   }, [location, navigationType]);
 
   return null;
@@ -117,10 +128,10 @@ function ApiErrorToast() {
   return (
     <div
       role="alert"
-      className="fixed right-6 top-6 z-[120] border border-mi-danger/40 bg-mi-paper text-mi-danger px-4 py-3 text-xs font-mono shadow-modal"
+      className="fixed right-6 top-6 z-[120] border border-mi-data-red bg-mi-paper text-mi-data-red px-4 py-3 text-xs font-mono shadow-modal"
     >
       <div className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-mi-danger"></span>
+        <span className="w-2 h-2 rounded-full bg-mi-data-red"></span>
         <span>{message}</span>
       </div>
     </div>
@@ -133,11 +144,13 @@ function AppRoutes() {
     <>
       <RouteExperienceManager />
       <Routes location={location}>
-        {/* Public Routes */}
-        <Route path="/" element={<MarketingLayout />} />
-        <Route path="/models" element={<ModelsPage />} />
-        <Route path="/workbench" element={<WorkbenchPage />} />
-        <Route path="/method" element={<MethodPage />} />
+        {/* Public Marketing Experience */}
+        <Route element={<MarketingShell />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/models" element={<ModelsPage />} />
+          <Route path="/workbench" element={<WorkbenchPage />} />
+          <Route path="/method" element={<MethodPage />} />
+        </Route>
 
         {/* Legacy Public Redirects */}
         <Route path="/features" element={<Navigate to="/models" replace />} />
@@ -150,7 +163,7 @@ function AppRoutes() {
           <Route path="/signup" element={<SignupPage />} />
         </Route>
 
-        {/* Protected Application Routes */}
+        {/* Protected Application Routes (Untouched) */}
         <Route
           path="/app"
           element={
