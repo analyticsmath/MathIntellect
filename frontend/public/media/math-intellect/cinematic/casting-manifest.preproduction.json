@@ -13,10 +13,11 @@
       "These images are Math Intellect simulation outputs",
       "These people are Math Intellect users",
       "The liquid photos are frames from the same event",
-      "The NYSE image shows today's live market"
+      "The NYSE image shows today's live market",
+      "Two fencing participants literally represent the 32-agent Conflict field"
     ],
-    "implementationGate": "Final five-model photographic art direction and 1440x900/390x844 composed-frame review must pass before Home UI coding.",
-    "currentFiles": "11 source JPEGs including hero 3840 source and Highsmith archival recast; 36 optimized AVIF/WebP files including 4 mobile portraits."
+    "implementationGate": "Film 05 rendered stills are preproduction review evidence; complete photo casting quality and static-frame signoff before marketing UI implementation.",
+    "currentFiles": "11 cinematic source JPEGs and 36 cinematic optimized AVIF/WebP files, plus newly reused existing MI-PH-005 (murmuration) source and legacy 4-size AVIF/WebP derivatives."
   },
   "actors": [
     {
@@ -154,9 +155,9 @@
     {
       "id": "CIN-06",
       "role": [
-        "models.conflict"
+        "models.conflict.rejected-alternative"
       ],
-      "castingStatus": "conditional-candidate",
+      "castingStatus": "rejected-as-principal-photo-after-model-truth-review",
       "credit": "Omar Abozeid",
       "canonicalSourceUrl": "https://unsplash.com/photos/two-fencers-in-white-gear-competing-on-a-strip-8ZKU0g-H5xg",
       "localSource": "/media/math-intellect/cinematic/source/mi-film-conflict-fencing.jpg",
@@ -174,7 +175,8 @@
       "mobileCameraRule": "DO NOT crop to portrait; keep both fencers and foils in whole-frame wide composition.",
       "limitations": [
         "Automatic 3:4 crop REJECTED, loses other fencer.",
-        "Arena signage and event light create stylistic clash."
+        "Arena signage and event light create stylistic clash.",
+        "The current Conflict public helper evaluates a 32-agent alignment/interaction field; a two-person fencing match suggests a different model."
       ]
     },
     {
@@ -263,6 +265,39 @@
         "Available original digital file is 1632×2048, suited to tall editorial composition.",
         "Library of Congress states no known restrictions on publication; third-party/jurisdiction rights caveats remain.",
         "Wikimedia Commons mirror: https://commons.wikimedia.org/wiki/File:No_Known_Restrictions_Trading_Floor,_New_York_Stock_Exchange_(Highsmith_LOC)_(6718386525).jpg"
+      ]
+    },
+    {
+      "id": "CIN-11",
+      "role": [
+        "models.conflict.preferred",
+        "models.conflict.mobile-editorial"
+      ],
+      "castingStatus": "preferred-existing-licensed-photo-not-final-locked",
+      "credit": "James Wainscoat",
+      "canonicalSourceUrl": "https://unsplash.com/photos/b7MZ6iGIoSI",
+      "sourceManifestRef": "MI-PH-005",
+      "localSource": "/media/math-intellect/source/mi-murmuration-01.jpg",
+      "responsive": {
+        "avif": [
+          "/media/math-intellect/optimized/avif/mi-murmuration-01-768.avif",
+          "/media/math-intellect/optimized/avif/mi-murmuration-01-1280.avif",
+          "/media/math-intellect/optimized/avif/mi-murmuration-01-1920.avif",
+          "/media/math-intellect/optimized/avif/mi-murmuration-01-2560.avif"
+        ],
+        "webp": [
+          "/media/math-intellect/optimized/webp/mi-murmuration-01-768.webp",
+          "/media/math-intellect/optimized/webp/mi-murmuration-01-1280.webp",
+          "/media/math-intellect/optimized/webp/mi-murmuration-01-1920.webp",
+          "/media/math-intellect/optimized/webp/mi-murmuration-01-2560.webp"
+        ]
+      },
+      "mobile": null,
+      "mobileCameraRule": "Do not fake a portrait by clipping the collective formation. Use the existing wide natural aspect in a vertically edited layout, as audited in Film 05.",
+      "limitations": [
+        "This is authentic bird murmuration, an editorial analogy for collective interaction, NOT the mathematical 32-agent output.",
+        "The old photo was already in the repository; it is reused rather than redundantly downloaded.",
+        "Await final composition/photographic cohesion approval."
       ]
     }
   ]
