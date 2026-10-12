@@ -1,0 +1,269 @@
+{
+  "title": "Math Intellect — Cinematic Media Cast (Preproduction)",
+  "lastReviewed": "2026-10-13",
+  "status": "SOURCE_ASSETS_STAGED__VISUAL_LOCK_PENDING",
+  "futureUse": "Editorial pre-production metadata. Not consumed by live marketing UI until visual and license acceptance.",
+  "policy": {
+    "sourceClassification": "Downloaded JPEG deliveries, not camera RAW originals",
+    "license": {
+      "unsplash": "Standard free Unsplash License as shown on each canonical page, with photographer credit retained.",
+      "libraryOfCongress": "No known publication restrictions for Carol M. Highsmith archive; do not claim blanket clearance for all jurisdictions or objects in the photo."
+    },
+    "falseClaimsToAvoid": [
+      "These images are Math Intellect simulation outputs",
+      "These people are Math Intellect users",
+      "The liquid photos are frames from the same event",
+      "The NYSE image shows today's live market"
+    ],
+    "implementationGate": "Final five-model photographic art direction and 1440x900/390x844 composed-frame review must pass before Home UI coding.",
+    "currentFiles": "11 source JPEGs including hero 3840 source and Highsmith archival recast; 36 optimized AVIF/WebP files including 4 mobile portraits."
+  },
+  "actors": [
+    {
+      "id": "CIN-01",
+      "role": [
+        "home.hero",
+        "home.extraction",
+        "models.monte-carlo",
+        "home.replay",
+        "home.finale"
+      ],
+      "castingStatus": "strong-candidate-not-locked",
+      "credit": "Pete Godfrey",
+      "canonicalSourceUrl": "https://unsplash.com/photos/milk-splash-frozen-in-time-against-black-background-6ieRRBACAqM",
+      "localSource": "/media/math-intellect/cinematic/source/mi-film-impact-origin.jpg",
+      "responsive": {
+        "avif": [
+          "/media/math-intellect/cinematic/optimized/avif/mi-film-impact-origin-960.avif",
+          "/media/math-intellect/cinematic/optimized/avif/mi-film-impact-origin-1920.avif"
+        ],
+        "webp": [
+          "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-origin-960.webp",
+          "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-origin-1920.webp"
+        ]
+      },
+      "mobile": {
+        "avif": "/media/math-intellect/cinematic/optimized/mobile/mi-film-impact-origin-portrait-960x1280.avif",
+        "webp": "/media/math-intellect/cinematic/optimized/mobile/mi-film-impact-origin-portrait-960x1280.webp",
+        "cropReview": "provisional-accept"
+      },
+      "mobileCameraRule": "Keep full white droplet column and top crown; typography in uninterrupted dark region",
+      "limitations": [
+        "Physical liquid-impact photography is editorial metaphor; not simulation output.",
+        "Photographs from this series are not verified frames of one continuous event."
+      ]
+    },
+    {
+      "id": "CIN-02",
+      "role": [
+        "home.intervention",
+        "home.comparison"
+      ],
+      "castingStatus": "strong-candidate-not-locked",
+      "credit": "Pete Godfrey",
+      "canonicalSourceUrl": "https://unsplash.com/photos/milk-splash-with-droplets-against-black-background-UAjcZ1qBzE0",
+      "localSource": "/media/math-intellect/cinematic/source/mi-film-impact-aftermath.jpg",
+      "responsive": {
+        "avif": [
+          "/media/math-intellect/cinematic/optimized/avif/mi-film-impact-aftermath-960.avif",
+          "/media/math-intellect/cinematic/optimized/avif/mi-film-impact-aftermath-1920.avif"
+        ],
+        "webp": [
+          "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-aftermath-960.webp",
+          "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-aftermath-1920.webp"
+        ]
+      },
+      "mobile": null,
+      "mobileCameraRule": "Whole photographic source, matched to CIN-01; never pretend mathematical output",
+      "limitations": []
+    },
+    {
+      "id": "CIN-03",
+      "role": [
+        "home.branching",
+        "home.replay"
+      ],
+      "castingStatus": "strong-candidate-not-locked",
+      "credit": "Pete Godfrey",
+      "canonicalSourceUrl": "https://unsplash.com/photos/water-droplet-collision-creating-a-crown-splash-6nk-Shl0fsw",
+      "localSource": "/media/math-intellect/cinematic/source/mi-film-impact-variation-mono.jpg",
+      "responsive": {
+        "avif": [
+          "/media/math-intellect/cinematic/optimized/avif/mi-film-impact-variation-mono-960.avif",
+          "/media/math-intellect/cinematic/optimized/avif/mi-film-impact-variation-mono-1920.avif"
+        ],
+        "webp": [
+          "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-variation-mono-960.webp",
+          "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-variation-mono-1920.webp"
+        ]
+      },
+      "mobile": null,
+      "mobileCameraRule": "Use safe crop, keep isolated crown as physical memory",
+      "limitations": []
+    },
+    {
+      "id": "CIN-04",
+      "role": [
+        "models.game-theory"
+      ],
+      "castingStatus": "strong-candidate-not-locked",
+      "credit": "Adam Rutkowski",
+      "canonicalSourceUrl": "https://unsplash.com/photos/two-men-sitting-at-a-table-with-a-laptop-r_WVQzfgClw",
+      "localSource": "/media/math-intellect/cinematic/source/mi-film-game-theory.jpg",
+      "responsive": {
+        "avif": [
+          "/media/math-intellect/cinematic/optimized/avif/mi-film-game-theory-960.avif",
+          "/media/math-intellect/cinematic/optimized/avif/mi-film-game-theory-1920.avif"
+        ],
+        "webp": [
+          "/media/math-intellect/cinematic/optimized/webp/mi-film-game-theory-960.webp",
+          "/media/math-intellect/cinematic/optimized/webp/mi-film-game-theory-1920.webp"
+        ]
+      },
+      "mobile": null,
+      "mobileCameraRule": "DO NOT crop to portrait. Must show BOTH participants in wide landscape composition.",
+      "limitations": [
+        "Automatic 3:4 crop was REJECTED: it removes one participant."
+      ]
+    },
+    {
+      "id": "CIN-05",
+      "role": [
+        "models.market.fallback"
+      ],
+      "castingStatus": "rejected-as-principal-photography",
+      "credit": "Jakub Żerdzicki",
+      "canonicalSourceUrl": "https://unsplash.com/photos/trader-analyzing-stock-market-charts-on-multiple-screens-j_hho1mE47s",
+      "localSource": "/media/math-intellect/cinematic/source/mi-film-market-observation.jpg",
+      "responsive": {
+        "avif": [
+          "/media/math-intellect/cinematic/optimized/avif/mi-film-market-observation-960.avif",
+          "/media/math-intellect/cinematic/optimized/avif/mi-film-market-observation-1920.avif"
+        ],
+        "webp": [
+          "/media/math-intellect/cinematic/optimized/webp/mi-film-market-observation-960.webp",
+          "/media/math-intellect/cinematic/optimized/webp/mi-film-market-observation-1920.webp"
+        ]
+      },
+      "mobile": null,
+      "mobileCameraRule": "DO NOT use as principal hero unless creative recast fails",
+      "limitations": [
+        "Generic chart/screen close-up conflicts with user feedback."
+      ]
+    },
+    {
+      "id": "CIN-06",
+      "role": [
+        "models.conflict"
+      ],
+      "castingStatus": "conditional-candidate",
+      "credit": "Omar Abozeid",
+      "canonicalSourceUrl": "https://unsplash.com/photos/two-fencers-in-white-gear-competing-on-a-strip-8ZKU0g-H5xg",
+      "localSource": "/media/math-intellect/cinematic/source/mi-film-conflict-fencing.jpg",
+      "responsive": {
+        "avif": [
+          "/media/math-intellect/cinematic/optimized/avif/mi-film-conflict-fencing-960.avif",
+          "/media/math-intellect/cinematic/optimized/avif/mi-film-conflict-fencing-1920.avif"
+        ],
+        "webp": [
+          "/media/math-intellect/cinematic/optimized/webp/mi-film-conflict-fencing-960.webp",
+          "/media/math-intellect/cinematic/optimized/webp/mi-film-conflict-fencing-1920.webp"
+        ]
+      },
+      "mobile": null,
+      "mobileCameraRule": "DO NOT crop to portrait; keep both fencers and foils in whole-frame wide composition.",
+      "limitations": [
+        "Automatic 3:4 crop REJECTED, loses other fencer.",
+        "Arena signage and event light create stylistic clash."
+      ]
+    },
+    {
+      "id": "CIN-07",
+      "role": [
+        "models.custom"
+      ],
+      "castingStatus": "conditional-candidate",
+      "credit": "Fulvio Ciccolo",
+      "canonicalSourceUrl": "https://unsplash.com/photos/a-person-spooning-sugar-into-a-glass-of-water-uFNo0CRqgU4",
+      "localSource": "/media/math-intellect/cinematic/source/mi-film-custom-experiment.jpg",
+      "responsive": {
+        "avif": [
+          "/media/math-intellect/cinematic/optimized/avif/mi-film-custom-experiment-960.avif",
+          "/media/math-intellect/cinematic/optimized/avif/mi-film-custom-experiment-1920.avif"
+        ],
+        "webp": [
+          "/media/math-intellect/cinematic/optimized/webp/mi-film-custom-experiment-960.webp",
+          "/media/math-intellect/cinematic/optimized/webp/mi-film-custom-experiment-1920.webp"
+        ]
+      },
+      "mobile": null,
+      "mobileCameraRule": "DO NOT crop to portrait; keep real hand, spoon and vessel in whole-frame wide composition.",
+      "limitations": [
+        "Automatic 3:4 crop REJECTED: hands removed.",
+        "Original photo is perfumery; don't describe as mathematical research or Math Intellect user."
+      ]
+    },
+    {
+      "id": "CIN-08",
+      "role": [
+        "method.editorial"
+      ],
+      "castingStatus": "strong-candidate-not-locked",
+      "credit": "Eric Prouzet",
+      "canonicalSourceUrl": "https://unsplash.com/photos/a-close-up-of-an-old-fashioned-radio-US1ndpdptUI",
+      "localSource": "/media/math-intellect/cinematic/source/mi-film-method-measurement.jpg",
+      "responsive": {
+        "avif": [
+          "/media/math-intellect/cinematic/optimized/avif/mi-film-method-measurement-960.avif",
+          "/media/math-intellect/cinematic/optimized/avif/mi-film-method-measurement-1920.avif"
+        ],
+        "webp": [
+          "/media/math-intellect/cinematic/optimized/webp/mi-film-method-measurement-960.webp",
+          "/media/math-intellect/cinematic/optimized/webp/mi-film-method-measurement-1920.webp"
+        ]
+      },
+      "mobile": {
+        "avif": "/media/math-intellect/cinematic/optimized/mobile/mi-film-method-measurement-portrait-960x1280.avif",
+        "webp": "/media/math-intellect/cinematic/optimized/mobile/mi-film-method-measurement-portrait-960x1280.webp",
+        "cropReview": "provisional-accept"
+      },
+      "mobileCameraRule": "A close-up of input dial acceptable; do not imply Math Intellect produces analog readouts",
+      "limitations": []
+    },
+    {
+      "id": "CIN-09",
+      "role": [
+        "models.reserve"
+      ],
+      "castingStatus": "reserve-not-for-production",
+      "credit": "Green Liu",
+      "canonicalSourceUrl": "https://unsplash.com/photos/a-group-of-people-standing-next-to-each-other-OwgaIM4e9TY",
+      "localSource": "/media/math-intellect/cinematic/source/mi-film-human-interaction.jpg",
+      "responsive": null,
+      "mobile": null,
+      "mobileCameraRule": "No mobile crop approved",
+      "limitations": [
+        "Sunset color world detached from photographic direction."
+      ]
+    },
+    {
+      "id": "CIN-10",
+      "role": [
+        "models.market.preferred"
+      ],
+      "castingStatus": "preferred-archival-candidate-not-locked",
+      "credit": "Carol M. Highsmith / Library of Congress",
+      "canonicalSourceUrl": "https://www.loc.gov/item/2011630168/",
+      "localSource": "/media/math-intellect/cinematic/source/mi-film-market-floor-highsmith-loc.jpg",
+      "responsive": null,
+      "mobile": null,
+      "mobileCameraRule": "Keep portrait 4:5 aspect; dense human trading floor must remain visible, no upscale for ultra-wide hero.",
+      "limitations": [
+        "Source is an archival photograph of the NYSE trading floor from sometime between 1980 and 2006, not current.",
+        "Available original digital file is 1632×2048, suited to tall editorial composition.",
+        "Library of Congress states no known restrictions on publication; third-party/jurisdiction rights caveats remain.",
+        "Wikimedia Commons mirror: https://commons.wikimedia.org/wiki/File:No_Known_Restrictions_Trading_Floor,_New_York_Stock_Exchange_(Highsmith_LOC)_(6718386525).jpg"
+      ]
+    }
+  ]
+}
