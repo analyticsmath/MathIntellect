@@ -72,7 +72,7 @@ describe("the public scenario", () => {
       "all sampled paths and metrics match",
     );
     fireEvent.click(
-      screen.getByRole("button", { name: /Reset the experiment/ }),
+      screen.getByRole("button", { name: /Restore the opening conditions/ }),
     );
     expect(
       (screen.getByRole("slider", { name: /Drift/ }) as HTMLInputElement).value,
