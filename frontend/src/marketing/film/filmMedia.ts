@@ -23,12 +23,17 @@ export const FILM_PHOTOS: Record<
   }
 > = {
   "monte-carlo": {
-    src: `${root}/optimized/webp/mi-film-impact-origin-2560.webp`,
-    srcSet: versions("mi-film-impact-origin", [960, 1280, 1920, 2560]),
-    alt: "A suspended liquid crown and rising column, photographed against a dark background",
-    credit: "Pete Godfrey",
-    url: "https://unsplash.com/photos/6ieRRBACAqM",
-    position: "50% 50%",
+    src: "/media/math-intellect/optimized/webp/mi-river-branching-01-1920.webp",
+    srcSet: [
+      "/media/math-intellect/optimized/webp/mi-river-branching-01-768.webp 768w",
+      "/media/math-intellect/optimized/webp/mi-river-branching-01-1280.webp 1280w",
+      "/media/math-intellect/optimized/webp/mi-river-branching-01-1920.webp 1920w",
+      "/media/math-intellect/optimized/webp/mi-river-branching-01-2560.webp 2560w",
+    ].join(", "),
+    alt: "River channels dividing across a green floodplain, an editorial illustration of branching possibilities",
+    credit: "Dan Roizer",
+    url: "https://unsplash.com/photos/GygPFmXGD1o",
+    position: "50% 56%",
   },
   aftermath: {
     src: `${root}/optimized/webp/mi-film-impact-aftermath-1800.webp`,

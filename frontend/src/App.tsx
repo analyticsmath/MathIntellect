@@ -29,9 +29,19 @@ const AppProfilePage = lazy(() => import('./app/pages/AppProfilePage'));
 
 function PageLoader() {
   return (
-    <div className="min-h-screen grid place-items-center bg-mi-canvas">
-      <div className="text-xs font-mono text-mi-muted">
-        Loading...
+    <div
+      role="status"
+      aria-live="polite"
+      className="min-h-screen grid place-items-center bg-[#101712] text-[#efeee8]"
+    >
+      <div className="text-center">
+        <span className="block font-medium tracking-tight text-lg">
+          math intellect<span className="text-[#d15e43]">·</span>
+        </span>
+        <span className="mt-4 block font-mono text-[9px] tracking-[0.16em] text-[#aab5aa]">
+          OPENING THE MODEL ROOM
+        </span>
+        <span aria-hidden="true" className="mx-auto mt-5 block h-px w-16 bg-[#d15e43]" />
       </div>
     </div>
   );
@@ -62,7 +72,7 @@ function RouteExperienceManager() {
   useEffect(() => {
     positions.current[lastKey.current] = window.scrollY;
     lastKey.current = location.key;
-    const titles:Record<string,string>={'/':'Math Intellect | Reproducible Mathematical Simulation','/models':'Models | Math Intellect','/workbench':'Workbench | Math Intellect','/method':'Method | Math Intellect','/login':'Sign in | Math Intellect','/signup':'Create account | Math Intellect'};
+    const titles:Record<string,string>={'/':'Math Intellect | One start, many possible futures','/models':'Models | Math Intellect','/workbench':'Workbench | Math Intellect','/method':'Method | Math Intellect','/login':'Sign in | Math Intellect','/signup':'Create account | Math Intellect'};
     if (titles[location.pathname]) document.title=titles[location.pathname];
     const isHashNav = location.hash.length > 1;
 

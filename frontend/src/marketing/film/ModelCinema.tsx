@@ -4,127 +4,118 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Photo } from "./Photo";
 import { MODEL_STORIES } from "./filmMedia";
 import { TransitionLink } from "./TransitionLink";
+
 gsap.registerPlugin(ScrollTrigger);
+
 export function ModelCinema() {
-  const sectionRef = useRef<HTMLElement>(null),
-    trackRef = useRef<HTMLDivElement>(null),
-    triggerRef = useRef<ScrollTrigger | null>(null),
-    timelineRef = useRef<gsap.core.Timeline | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+
   useLayoutEffect(() => {
     const media = gsap.matchMedia();
     media.add(
       "(min-width: 1024px) and (pointer: fine) and (prefers-reduced-motion: no-preference)",
       () => {
-        const section = sectionRef.current,
-          track = trackRef.current;
-        if (!section || !track) return;
-        const distance = () =>
-          Math.max(0, track.scrollWidth - window.innerWidth);
-        section.classList.add("mi-cinema-enhanced");
-        const animation = gsap.timeline({
-          scrollTrigger: {
-            trigger: section,
-            start: "top top",
-            end: () => `+=${distance() + window.innerHeight * 0.8}`,
-            pin: true,
-            scrub: 0.3,
-            invalidateOnRefresh: true,
-          },
-        });
-        const panels = Array.from(
-          track.querySelectorAll<HTMLElement>(".mi-model-panel"),
-        );
-        panels.forEach((panel, index) => {
-          if (index > 0) {
-            animation.to(track, {
-              x: () =>
-                -Math.min(
-                  Math.max(0, panel.offsetLeft - window.innerWidth * 0.05),
-                  distance(),
-                ),
-              duration: 0.8,
-              ease: "power1.inOut",
-            });
-            animation.fromTo(
-              panel.querySelector(".mi-photo-crop"),
-              { xPercent: 2 },
-              { xPercent: -2, duration: 0.8, ease: "none" },
-              "<",
-            );
-          }
-          animation
-            .addLabel(MODEL_STORIES[index].id)
-            .to({}, { duration: 0.14 });
-        });
-        timelineRef.current = animation;
-        triggerRef.current = animation.scrollTrigger ?? null;
-        const resize = new ResizeObserver(() => ScrollTrigger.refresh());
-        resize.observe(track);
-        return () => {
-          resize.disconnect();
-          animation.scrollTrigger?.kill();
-          animation.kill();
-          triggerRef.current = null;
-          timelineRef.current = null;
-          section.classList.remove("mi-cinema-enhanced");
-          gsap.set(track, { clearProps: "transform" });
-        };
+        const section = sectionRef.current;
+        if (!section) return;
+
+        const context = gsap.context(() => {
+          gsap.utils.toArray<HTMLElement>(".mi-model-scene").forEach((scene) => {
+            const crop = scene.querySelector<HTMLElement>(".mi-photo-crop");
+            const copy = scene.querySelector<HTMLElement>(".mi-model-scene-copy");
+            if (crop) {
+              gsap.fromTo(
+                crop,
+                { yPercent: -7 },
+                {
+                  yPercent: 7,
+                  ease: "none",
+                  scrollTrigger: {
+                    trigger: scene,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true,
+                    invalidateOnRefresh: true,
+                  },
+                },
+              );
+            }
+            if (copy) {
+              gsap.fromTo(
+                copy,
+                { y: 30, opacity: 0.45 },
+                {
+                  y: 0,
+                  opacity: 1,
+                  ease: "none",
+                  scrollTrigger: {
+                    trigger: scene,
+                    start: "top 82%",
+                    end: "top 38%",
+                    scrub: true,
+                  },
+                },
+              );
+            }
+          });
+        }, section);
+
+        return () => context.revert();
       },
     );
     return () => media.revert();
   }, []);
+
   return (
     <section
       ref={sectionRef}
-      className="mi-model-cinema"
-      aria-label="Explore the mathematical models"
+      className="mi-model-cinema mi-model-chapters"
+      aria-labelledby="mi-model-cinema-title"
     >
-      <div className="mi-cinema-heading">
-        <h2>
-          Different questions.
-          <br />
-          Different mathematics.
-        </h2>
-        <span className="mi-cinema-hint">Scroll to explore ↘</span>
-      </div>
-      <div className="mi-cinema-window">
-        <div ref={trackRef} className="mi-cinema-track">
-          {MODEL_STORIES.map((model) => (
-            <TransitionLink
-              actor={model.id}
-              key={model.id}
-              to={`/models#${model.id}`}
-              className={`mi-model-panel mi-model-panel--${model.id}`}
-              onFocus={(event) => {
-                if (!event.currentTarget.matches(":focus-visible")) return;
-                const trigger = triggerRef.current;
-                if (!trigger) return;
-                const timeline = timelineRef.current;
-                if (!timeline) return;
-                const progress =
-                  timeline.labels[model.id] / timeline.duration();
-                window.scrollTo({
-                  top: trigger.start + (trigger.end - trigger.start) * progress,
-                  behavior: "auto",
-                });
-                timeline.progress(progress);
-              }}
-            >
-              <Photo id={model.id} />
-              <div className="mi-panel-caption">
-                <span>{model.name}</span>
-                <span aria-hidden="true">↗</span>
-              </div>
-              <p>{model.question}</p>
-              {model.id === "market" && (
-                <span className="mi-photo-note">
-                  Historical NYSE photograph · 1980–2006
-                </span>
-              )}
-            </TransitionLink>
-          ))}
+      <header className="mi-model-preface">
+        <div>
+          <span className="mi-story-eyebrow">03 <i /> THE RIGHT LENS</span>
+          <h2 id="mi-model-cinema-title">
+            Different questions.
+            <br />
+            <span>Different mathematics.</span>
+          </h2>
         </div>
+        <p>
+          Uncertainty, strategy and interaction are different problems. Each
+          deserves a model that describes what is actually changing.
+        </p>
+      </header>
+
+      <div className="mi-model-story-list">
+        {MODEL_STORIES.map((model, index) => (
+          <TransitionLink
+            actor={model.id}
+            key={model.id}
+            to={"/models#" + model.id}
+            className={"mi-model-scene mi-model-scene--" + (index % 2 === 0 ? "image-first" : "copy-first")}
+          >
+            <div className="mi-model-scene-visual">
+              <Photo id={model.id} />
+              <span className="mi-model-scene-index">
+                {String(index + 1).padStart(2, "0")} <i /> 05
+              </span>
+            </div>
+            <div className="mi-model-scene-copy">
+              <span className="mi-model-scene-name">{model.name}</span>
+              <h3>{model.title}</h3>
+              <p className="mi-model-scene-question">{model.question}</p>
+              <p>{model.description}</p>
+              <span className="mi-model-scene-link">
+                Inspect this model <i aria-hidden="true">↗</i>
+              </span>
+            </div>
+          </TransitionLink>
+        ))}
       </div>
+      <p className="mi-model-context-note">
+        Context photographs are editorial illustrations. The model assumptions
+        and outputs are defined separately for each simulation.
+      </p>
     </section>
   );
 }

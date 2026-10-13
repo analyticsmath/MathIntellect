@@ -43,7 +43,7 @@ describe("the public scenario", () => {
     });
     expect(screen.getByText("+0.1563")).toBeTruthy();
     fireEvent.click(
-      screen.getByRole("link", { name: /Take this state into the workbench/ }),
+      screen.getByRole("link", { name: /Take the question further/ }),
     );
     expect(
       (screen.getByRole("slider", { name: /Volatility/ }) as HTMLInputElement)
@@ -63,7 +63,7 @@ describe("the public scenario", () => {
       screen.getByRole("button", { name: /Replay the same inputs/ }),
     );
     expect(screen.getByRole("status").textContent).toContain(
-      "all sampled paths and metrics match",
+      "every path and displayed statistic matches",
     );
     fireEvent.change(screen.getByRole("slider", { name: /Drift/ }), {
       target: { value: "0.07" },
