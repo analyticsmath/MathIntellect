@@ -1,67 +1,57 @@
-import { useEffect, useRef, type PropsWithChildren } from 'react';
-import Lenis from 'lenis';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useLocation } from 'react-router-dom';
-
+import { useEffect, useRef, type PropsWithChildren } from "react";
+import { useLocation } from "react-router-dom";
+import Lenis from "lenis";
+import "lenis/dist/lenis.css";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
-
 export function DesktopLenisBridge({ children }: PropsWithChildren) {
   const lenisRef = useRef<Lenis | null>(null);
-  const location = useLocation();
-
+  const { pathname, hash } = useLocation();
   useEffect(() => {
-    // Only activate on desktop (>=1024px) with a fine pointer (mouse/trackpad)
-    const isDesktop = window.innerWidth >= 1024;
-    const isFinePointer = window.matchMedia('(pointer: fine)').matches;
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (!isDesktop || !isFinePointer || prefersReducedMotion) {
-      return;
-    }
-
-    const lenis = new Lenis({
-      duration: 1.1,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      syncTouch: false,
-      anchors: true,
-      autoRaf: false,
+    const media = gsap.matchMedia();
+    let disposed = false;
+    media.add(
+      "(min-width: 1024px) and (pointer: fine) and (prefers-reduced-motion: no-preference)",
+      () => {
+        const lenis = new Lenis({
+          autoRaf: false,
+          smoothWheel: true,
+          syncTouch: false,
+          lerp: 0.085,
+          anchors: true,
+        });
+        lenisRef.current = lenis;
+        lenis.on("scroll", ScrollTrigger.update);
+        const tick = (time: number) => lenis.raf(time * 1000);
+        gsap.ticker.add(tick);
+        gsap.ticker.lagSmoothing(0);
+        return () => {
+          gsap.ticker.remove(tick);
+          lenis.off("scroll", ScrollTrigger.update);
+          lenis.destroy();
+          lenisRef.current = null;
+          gsap.ticker.lagSmoothing(500, 33);
+        };
+      },
+    );
+    void document.fonts.ready.then(() => {
+      if (!disposed) ScrollTrigger.refresh();
     });
-
-    lenisRef.current = lenis;
-
-    const onScroll = () => {
-      ScrollTrigger.update();
-    };
-
-    lenis.on('scroll', onScroll);
-
-    const ticker = (time: number) => {
-      lenis.raf(time * 1000);
-    };
-
-    gsap.ticker.add(ticker);
-    gsap.ticker.lagSmoothing(0);
-
     return () => {
-      lenis.off('scroll', onScroll);
-      gsap.ticker.remove(ticker);
-      lenis.destroy();
-      lenisRef.current = null;
+      disposed = true;
+      media.revert();
     };
   }, []);
-
-  // Stop inertia on route change
   useEffect(() => {
-    if (lenisRef.current) {
-      lenisRef.current.stop();
-      lenisRef.current.start();
+    const frame = requestAnimationFrame(() => {
+      lenisRef.current?.scrollTo(window.scrollY, {
+        immediate: true,
+        force: true,
+      });
       ScrollTrigger.refresh();
-    }
-  }, [location.pathname]);
-
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [pathname, hash]);
   return <>{children}</>;
 }

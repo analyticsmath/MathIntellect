@@ -62,13 +62,15 @@ function RouteExperienceManager() {
   useEffect(() => {
     positions.current[lastKey.current] = window.scrollY;
     lastKey.current = location.key;
+    const titles:Record<string,string>={'/':'Math Intellect | Reproducible Mathematical Simulation','/models':'Models | Math Intellect','/workbench':'Workbench | Math Intellect','/method':'Method | Math Intellect','/login':'Sign in | Math Intellect','/signup':'Create account | Math Intellect'};
+    if (titles[location.pathname]) document.title=titles[location.pathname];
     const isHashNav = location.hash.length > 1;
 
     if (isHashNav) {
       requestAnimationFrame(() => {
         const target = document.getElementById(location.hash.slice(1));
         if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          target.scrollIntoView({ behavior: 'auto', block: 'start' });
         }
       });
       lastPath.current = location.pathname;
@@ -88,20 +90,6 @@ function RouteExperienceManager() {
     window.scrollTo({ top: preserveAppScroll ? window.scrollY : 0, behavior: 'auto' });
     lastPath.current = location.pathname;
 
-    // Update document title per route specification
-    if (location.pathname === '/') {
-      document.title = 'Math Intellect | Reproducible Mathematical Simulation';
-    } else if (location.pathname === '/models') {
-      document.title = 'Models | Math Intellect';
-    } else if (location.pathname === '/workbench') {
-      document.title = 'Workbench | Math Intellect';
-    } else if (location.pathname === '/method') {
-      document.title = 'Method | Math Intellect';
-    } else if (location.pathname === '/login') {
-      document.title = 'Sign in | Math Intellect';
-    } else if (location.pathname === '/signup') {
-      document.title = 'Create account | Math Intellect';
-    }
   }, [location, navigationType]);
 
   return null;

@@ -1,8 +1,8 @@
 {
-  "title": "Math Intellect — Cinematic Media Cast (Preproduction)",
+  "title": "Math Intellect \u2014 Cinematic Media Cast (Preproduction)",
   "lastReviewed": "2026-10-13",
-  "status": "SOURCE_ASSETS_STAGED__VISUAL_LOCK_PENDING",
-  "futureUse": "Editorial pre-production metadata. Not consumed by live marketing UI until visual and license acceptance.",
+  "status": "IMPLEMENTED_STANDARD_LICENSE_CAST__PREMIUM_RECAST_AND_VISUAL_ACCEPTANCE_PENDING",
+  "futureUse": "Source provenance retained for the implemented public film. The active runtime registry is frontend/src/marketing/film/filmMedia.ts.",
   "policy": {
     "sourceClassification": "Downloaded JPEG deliveries, not camera RAW originals",
     "license": {
@@ -16,9 +16,10 @@
       "The NYSE image shows today's live market",
       "Two fencing participants literally represent the 32-agent Conflict field"
     ],
-    "implementationGate": "Film 06 provisional casting and still direction require route-by-route browser visual QA and continuity signoff before frontend rebuild; no Home implementation in this photo-stage change.",
-    "currentFiles": "12 cinematic source JPEGs and 40 cinematic optimized AVIF/WebP files; separately reuse prior MI-PH-005 collective photo and original 4-size responsive derivatives. Old Custom and fencer photographs remain in archive, not approved production casting.",
-    "typographicCandidate": "Film 06 preproduction selects Syne variable for cinematic display, Hanken Grotesk for body/UI, IBM Plex Mono for real technical values; no font binaries installed into live site yet. All reviewed Syne/Hanken families available under SIL OFL 1.1."
+    "implementationGate": "User authorized full main-branch implementation on 13 October. Available verified source photography is installed; premium replacements and full live motion acceptance remain outstanding.",
+    "currentFiles": "12 cinematic source JPEGs and 48 cinematic optimized AVIF/WebP files, plus reused MI-PH-005 derivatives. Source cast remains provisional pending premium comparison and complete static acceptance.",
+    "typographicCandidate": "Film 06 preproduction selects Syne variable for cinematic display, Hanken Grotesk for body/UI, IBM Plex Mono for real technical values; no font binaries installed into live site yet. All reviewed Syne/Hanken families available under SIL OFL 1.1.",
+    "mediaReviewFilm07": "All 52 previous cinematic media files fully decoded. Four upscaled 1920 aftermath/variation variants retained as legacy files but removed from active casting references. Native-resolution alternatives generated from retained sources; hero variants generated from true 3840 master. No new Unsplash+ asset downloaded; authenticated entitlement unresolved."
   },
   "actors": [
     {
@@ -33,15 +34,19 @@
       "castingStatus": "strong-candidate-not-locked",
       "credit": "Pete Godfrey",
       "canonicalSourceUrl": "https://unsplash.com/photos/milk-splash-frozen-in-time-against-black-background-6ieRRBACAqM",
-      "localSource": "/media/math-intellect/cinematic/source/mi-film-impact-origin.jpg",
+      "localSource": "/media/math-intellect/cinematic/source/mi-film-impact-origin-master-3840.jpg",
       "responsive": {
         "avif": [
           "/media/math-intellect/cinematic/optimized/avif/mi-film-impact-origin-960.avif",
-          "/media/math-intellect/cinematic/optimized/avif/mi-film-impact-origin-1920.avif"
+          "/media/math-intellect/cinematic/optimized/avif/mi-film-impact-origin-1280.avif",
+          "/media/math-intellect/cinematic/optimized/avif/mi-film-impact-origin-1920.avif",
+          "/media/math-intellect/cinematic/optimized/avif/mi-film-impact-origin-2560.avif"
         ],
         "webp": [
           "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-origin-960.webp",
-          "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-origin-1920.webp"
+          "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-origin-1280.webp",
+          "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-origin-1920.webp",
+          "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-origin-2560.webp"
         ]
       },
       "mobile": {
@@ -68,11 +73,11 @@
       "responsive": {
         "avif": [
           "/media/math-intellect/cinematic/optimized/avif/mi-film-impact-aftermath-960.avif",
-          "/media/math-intellect/cinematic/optimized/avif/mi-film-impact-aftermath-1920.avif"
+          "/media/math-intellect/cinematic/optimized/avif/mi-film-impact-aftermath-1800.avif"
         ],
         "webp": [
           "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-aftermath-960.webp",
-          "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-aftermath-1920.webp"
+          "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-aftermath-1800.webp"
         ]
       },
       "mobile": null,
@@ -92,11 +97,11 @@
       "responsive": {
         "avif": [
           "/media/math-intellect/cinematic/optimized/avif/mi-film-impact-variation-mono-960.avif",
-          "/media/math-intellect/cinematic/optimized/avif/mi-film-impact-variation-mono-1920.avif"
+          "/media/math-intellect/cinematic/optimized/avif/mi-film-impact-variation-mono-1700.avif"
         ],
         "webp": [
           "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-variation-mono-960.webp",
-          "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-variation-mono-1920.webp"
+          "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-variation-mono-1700.webp"
         ]
       },
       "mobile": null,
@@ -134,7 +139,7 @@
         "models.market.fallback"
       ],
       "castingStatus": "rejected-as-principal-photography",
-      "credit": "Jakub Żerdzicki",
+      "credit": "Jakub \u017berdzicki",
       "canonicalSourceUrl": "https://unsplash.com/photos/trader-analyzing-stock-market-charts-on-multiple-screens-j_hho1mE47s",
       "localSource": "/media/math-intellect/cinematic/source/mi-film-market-observation.jpg",
       "responsive": {
@@ -264,7 +269,7 @@
       "mobileCameraRule": "Keep portrait 4:5 aspect; dense human trading floor must remain visible, no upscale for ultra-wide hero.",
       "limitations": [
         "Source is an archival photograph of the NYSE trading floor from sometime between 1980 and 2006, not current.",
-        "Available original digital file is 1632×2048, suited to tall editorial composition.",
+        "Available original digital file is 1632\u00d72048, suited to tall editorial composition.",
         "Library of Congress states no known restrictions on publication; third-party/jurisdiction rights caveats remain.",
         "Wikimedia Commons mirror: https://commons.wikimedia.org/wiki/File:No_Known_Restrictions_Trading_Floor,_New_York_Stock_Exchange_(Highsmith_LOC)_(6718386525).jpg"
       ]

@@ -1,0 +1,561 @@
+{
+  "date": "2026-10-13",
+  "scope": "preproduction media, not live visual acceptance",
+  "filesDecoded": 60,
+  "missingManifestPaths": [],
+  "premiumDownloadsThisPass": 0,
+  "files": [
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-conflict-fencing-1920.avif",
+      "width": 1920,
+      "height": 1282,
+      "bytes": 152044,
+      "sha256": "9a2c3b87bba6cbe2cc8fa704d9f5a1fd09f2967b6b3d3cac2644d0af2e9a665d",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-conflict-fencing-960.avif",
+      "width": 960,
+      "height": 641,
+      "bytes": 47584,
+      "sha256": "bf2b828bfc83bd084f936055ecccd45c524974b97fc30e3c5c3f862f961aa043",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-custom-experiment-1920.avif",
+      "width": 1920,
+      "height": 1280,
+      "bytes": 145705,
+      "sha256": "6d53bc6faeaee6049a9a47d7189afcc19f22f21fa0e31edede64b68fdebd547f",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-custom-experiment-960.avif",
+      "width": 960,
+      "height": 640,
+      "bytes": 22731,
+      "sha256": "346767053d0d6b0176ea385aeb6238690824eb10c3274c01f6b870fc911be2ad",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-custom-precision-nci-1920.avif",
+      "width": 1920,
+      "height": 1251,
+      "bytes": 44582,
+      "sha256": "67641cb8f8368bf7a0c78de8ab8d3fed895386fe95f4259d2c1a8ba4120f6033",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-custom-precision-nci-960.avif",
+      "width": 960,
+      "height": 626,
+      "bytes": 20059,
+      "sha256": "413a0ea46a7ac6e27f92ace58b2f348bb1c1d1ae4d6264edd37e5e868dc4cad3",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-game-theory-1920.avif",
+      "width": 1920,
+      "height": 1280,
+      "bytes": 106255,
+      "sha256": "7eba34c830ccde97fcba9765aa9c0124e1644589e934536e17a77b719d018929",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-game-theory-960.avif",
+      "width": 960,
+      "height": 640,
+      "bytes": 28018,
+      "sha256": "f479576ecfa374c8a8a269fbdf46d82dd3134e24307247a052ef056a871f8e36",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-impact-aftermath-1800.avif",
+      "width": 1800,
+      "height": 1200,
+      "bytes": 62049,
+      "sha256": "bc59da2691cc8cfc8dfede69a80262fec70ad360eb92c6cf3ee4265e6f049afa",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-impact-aftermath-1920.avif",
+      "width": 1920,
+      "height": 1280,
+      "bytes": 47891,
+      "sha256": "f613c0bca749c951bb309aea35f6b65a24a86078c4115870fe02f4bb6e4bdce5",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-impact-aftermath-960.avif",
+      "width": 960,
+      "height": 640,
+      "bytes": 10217,
+      "sha256": "300fca4d48302a18c949c80a3c1a9941e7f9271fe5c48695393ce20c97f572b5",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-impact-origin-1280.avif",
+      "width": 1280,
+      "height": 853,
+      "bytes": 19405,
+      "sha256": "129a7acd3890dba363cc25966a03c8ffc28dfbc4baebc3337fd8983dc951effe",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-impact-origin-1920.avif",
+      "width": 1920,
+      "height": 1280,
+      "bytes": 45116,
+      "sha256": "2f804e1cde9ba09eeda9394704b574c3428d8ce9b7bd86e16a41faca6fffbcca",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-impact-origin-2560.avif",
+      "width": 2560,
+      "height": 1707,
+      "bytes": 113378,
+      "sha256": "df5068560cc9cb4339c1769205af69eb8a959982764f5ac98fbad06a03e934d9",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-impact-origin-960.avif",
+      "width": 960,
+      "height": 640,
+      "bytes": 9085,
+      "sha256": "d4988d3dd6c786823b73844c79d591f87c3e679fcaef04e33e911a2b43e28341",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-impact-variation-mono-1700.avif",
+      "width": 1700,
+      "height": 1133,
+      "bytes": 42092,
+      "sha256": "eb672dd53092d31d5042267f8f3763c00f58d284b8b3c4a7ba2b4253625faf6d",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-impact-variation-mono-1920.avif",
+      "width": 1920,
+      "height": 1280,
+      "bytes": 24038,
+      "sha256": "afb95bfce51bb27e42280f9e404f1acc0c5b2343eceb7db8b93b0a3fe9568092",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-impact-variation-mono-960.avif",
+      "width": 960,
+      "height": 640,
+      "bytes": 10356,
+      "sha256": "5537c495cbbd5f535df8fb7f0d4ef6c6487beb8f3196493985a5b2c1c74a7aac",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-market-observation-1920.avif",
+      "width": 1920,
+      "height": 3192,
+      "bytes": 114171,
+      "sha256": "6a68361625f4e87457bad532b57a95222ad39099990a8a489ac04c046e5710ae",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-market-observation-960.avif",
+      "width": 960,
+      "height": 1596,
+      "bytes": 39830,
+      "sha256": "f1b91c53b5fb9bae194e1ddc4eec2f464021b435dd3420982035dcbcbc53ceaa",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-method-measurement-1920.avif",
+      "width": 1920,
+      "height": 1280,
+      "bytes": 366030,
+      "sha256": "2679d636977e193fdcbd941d9839ebddae4b9b4a0dae2ca8d3d1f51f1ab3dbf7",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-method-measurement-960.avif",
+      "width": 960,
+      "height": 640,
+      "bytes": 51368,
+      "sha256": "c58758d54ee160016acc930fc8c5533105908379f08ec621dc0830a0f6c6f33a",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/mobile/mi-film-impact-origin-portrait-960x1280.avif",
+      "width": 960,
+      "height": 1280,
+      "bytes": 15801,
+      "sha256": "7c049a26a658180b6cc6968fff1d002496864a7f23680ef7a0c45f9119b15626",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/mobile/mi-film-impact-origin-portrait-960x1280.webp",
+      "width": 960,
+      "height": 1280,
+      "bytes": 28588,
+      "sha256": "da3cd89737f38487b5f0e4c14d0fdf186f35ef38714d7602a3c53740cdde2eac",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/mobile/mi-film-method-measurement-portrait-960x1280.avif",
+      "width": 960,
+      "height": 1280,
+      "bytes": 173116,
+      "sha256": "458be8ec8a6ecab201f1fbf13ae9973233e487e5a5c25d5ae30c2702f18a3ff6",
+      "format": "AVIF"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/mobile/mi-film-method-measurement-portrait-960x1280.webp",
+      "width": 960,
+      "height": 1280,
+      "bytes": 266850,
+      "sha256": "b4afa748cbb49982e97324577d8c6dc361a8222b5b6cd28737387ef3a9fdf34f",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-conflict-fencing-1920.webp",
+      "width": 1920,
+      "height": 1282,
+      "bytes": 255164,
+      "sha256": "ffd2a69113305436c33fb38daddb013dc29e5757329ead7a77c4ad463dbbace7",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-conflict-fencing-960.webp",
+      "width": 960,
+      "height": 641,
+      "bytes": 79482,
+      "sha256": "433eb68846dc1b4b5f7d1f83096ac40fba6552bed1ce0907942e0f67234718d1",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-custom-experiment-1920.webp",
+      "width": 1920,
+      "height": 1280,
+      "bytes": 285008,
+      "sha256": "9718a3573856f7783b82d1b6d72c5cb6341ae7d535a83bb8d9ce619372e0a203",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-custom-experiment-960.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 45294,
+      "sha256": "bf91d87432fc331279cbfcd61c8c1d725b928a97b14c9cfc847bc6991a62b0cf",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-custom-precision-nci-1920.webp",
+      "width": 1920,
+      "height": 1251,
+      "bytes": 85946,
+      "sha256": "6bf977a315e1f4a69e70fd982f684f550ba7b3f172aeda899ae219a3879bbf57",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-custom-precision-nci-960.webp",
+      "width": 960,
+      "height": 626,
+      "bytes": 31342,
+      "sha256": "b967912782ae4f5db3402a64b5d6fc081a17eac0e2df6ad441d657c424463440",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-game-theory-1920.webp",
+      "width": 1920,
+      "height": 1280,
+      "bytes": 182376,
+      "sha256": "2d470d741281a97f5799cf3a42647475decd3118152202b6f37554b2016ae945",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-game-theory-960.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 41616,
+      "sha256": "6c43f958c3213b9bc4815c390641adba34b6fdaefe0a313edfd14b1c1ac42350",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-impact-aftermath-1800.webp",
+      "width": 1800,
+      "height": 1200,
+      "bytes": 45398,
+      "sha256": "5a136bd5df5640f5eea8b9486940e7e5975dd62a03ee1201ff5d1ef9d74bb674",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-impact-aftermath-1920.webp",
+      "width": 1920,
+      "height": 1280,
+      "bytes": 110986,
+      "sha256": "430e64b1b79957ff5b9da03d95ef7c2da8c6d4066846d63015c866c247fd6ef4",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-impact-aftermath-960.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 17414,
+      "sha256": "0383f27b3c7c6e52f3c2b78eee768d8b39df9dd9fcdf04e0e48010c8ab61b91b",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-impact-origin-1280.webp",
+      "width": 1280,
+      "height": 853,
+      "bytes": 14272,
+      "sha256": "8a627d9277dcabe05bf721a1b6c60d6729a8654d931c7de54de7afcf2329002b",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-impact-origin-1920.webp",
+      "width": 1920,
+      "height": 1280,
+      "bytes": 28398,
+      "sha256": "4c63dbf0d5ebf0f1ae8a7eb7f85796d564fb9c446044afc0ee57e9261ecd0dbd",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-impact-origin-2560.webp",
+      "width": 2560,
+      "height": 1707,
+      "bytes": 54444,
+      "sha256": "99191f29e68b164875dc6d0f0d5ab75d52e2c9eddcfc1c2a372d902c4f4d0455",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-impact-origin-960.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 14336,
+      "sha256": "2e6eb2149f454399fbd90bb303fea4c1f2513acaaad9ba0f872a5abf92a883c9",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-impact-variation-mono-1700.webp",
+      "width": 1700,
+      "height": 1133,
+      "bytes": 27430,
+      "sha256": "4c52fa84bc9785c22bebc4d7b7485d6c4d9eee16eae831e85c21bff621f0571a",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-impact-variation-mono-1920.webp",
+      "width": 1920,
+      "height": 1280,
+      "bytes": 77116,
+      "sha256": "d0b8b76dfef604a47cc15fa433f139c7060978b3b97507de75a56b5965e284a4",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-impact-variation-mono-960.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 15032,
+      "sha256": "4494d86778623f4474288dd70eaee34aa141eacfe95cf735015d1b40d06b871c",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-market-observation-1920.webp",
+      "width": 1920,
+      "height": 3192,
+      "bytes": 296088,
+      "sha256": "9d53c279a34c671495c7174dad8beef78976ed280bfdbc92fe1e9c6e13e9cbc5",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-market-observation-960.webp",
+      "width": 960,
+      "height": 1596,
+      "bytes": 71156,
+      "sha256": "eb1f8d5423a027325394baae71dec94577242338155724a70d61734db2dbf24b",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-method-measurement-1920.webp",
+      "width": 1920,
+      "height": 1280,
+      "bytes": 529586,
+      "sha256": "e692e4652a18fb71d989567e4e705098164617ea46e6d1d04f837688591837f2",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-method-measurement-960.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 91500,
+      "sha256": "30ecb53d79e95185745725ee60523469f75ec20aa51bb8ac6dc197dd47575600",
+      "format": "WEBP"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/source/mi-film-conflict-fencing.jpg",
+      "width": 2200,
+      "height": 1468,
+      "bytes": 427764,
+      "sha256": "5dc1af168dbba6877e25c40d9105cf6fb485689b1076fda4a3406c12858f4c27",
+      "format": "JPEG"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/source/mi-film-custom-experiment.jpg",
+      "width": 2200,
+      "height": 1467,
+      "bytes": 428478,
+      "sha256": "7a36cf65f074810b8e111e766461071ead4b569902bdc1883044bc1b48dd1727",
+      "format": "JPEG"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/source/mi-film-custom-precision-nci.jpg",
+      "width": 2800,
+      "height": 1824,
+      "bytes": 497726,
+      "sha256": "1521a9619f43a63254a92482b9a170ed4a66a8b5eddac14c8da0b88261f9be71",
+      "format": "JPEG"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/source/mi-film-game-theory.jpg",
+      "width": 2000,
+      "height": 1333,
+      "bytes": 253765,
+      "sha256": "bc1ccc529b91996ffdf71663c005cb6d6f4a72cc5b9fff9fffb56ef2f6054077",
+      "format": "JPEG"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/source/mi-film-human-interaction.jpg",
+      "width": 1500,
+      "height": 2250,
+      "bytes": 115086,
+      "sha256": "03fef881a4e21da15b1eeace177f6243cee0a1f3b1cb98d10a755a0f353b06ba",
+      "format": "JPEG"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/source/mi-film-impact-aftermath.jpg",
+      "width": 1800,
+      "height": 1200,
+      "bytes": 98799,
+      "sha256": "6b7d72272e50a838fdaba447fd51a1d5d5f686397faa08dbfad8a9627cc4825e",
+      "format": "JPEG"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/source/mi-film-impact-origin-master-3840.jpg",
+      "width": 3840,
+      "height": 2560,
+      "bytes": 808944,
+      "sha256": "5ee94ef6056018dffb2526adc9a9c208b87e1208900b44b3c6afcc6d1ac3447c",
+      "format": "JPEG"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/source/mi-film-impact-origin.jpg",
+      "width": 2400,
+      "height": 1600,
+      "bytes": 174451,
+      "sha256": "7c32bcd1b23303cad0f97ce56c8ce0495d987c75f29504e1deb7c1470f5faf9c",
+      "format": "JPEG"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/source/mi-film-impact-variation-mono.jpg",
+      "width": 1700,
+      "height": 1133,
+      "bytes": 96175,
+      "sha256": "1d0bc1227f30b1669f00d63c62e6fc8ca8ee7131d7f6a20bb9e2f938f0a2839d",
+      "format": "JPEG"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/source/mi-film-market-floor-highsmith-loc.jpg",
+      "width": 1632,
+      "height": 2048,
+      "bytes": 633777,
+      "sha256": "5b3f18bdc5a62a61802eab85c11e44f18bf40add93f08289796cb64691f58183",
+      "format": "JPEG"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/source/mi-film-market-observation.jpg",
+      "width": 2300,
+      "height": 3823,
+      "bytes": 836947,
+      "sha256": "8afe41d339944d0c19d7b5b653051f679b8aa5e9c186bb54897f86cb75d35284",
+      "format": "JPEG"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/source/mi-film-method-measurement.jpg",
+      "width": 2200,
+      "height": 1467,
+      "bytes": 660266,
+      "sha256": "97e403510fd243b1b4f278d2887f28e43965ae8337d6cd4bd56f3ffeef830311",
+      "format": "JPEG"
+    }
+  ],
+  "generatedThisPass": [
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-impact-origin-1280.webp",
+      "width": 1280,
+      "height": 853,
+      "bytes": 14272,
+      "source": "mi-film-impact-origin-master-3840.jpg"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-impact-origin-1280.avif",
+      "width": 1280,
+      "height": 853,
+      "bytes": 19405,
+      "source": "mi-film-impact-origin-master-3840.jpg"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-impact-origin-1920.webp",
+      "width": 1920,
+      "height": 1280,
+      "bytes": 28398,
+      "source": "mi-film-impact-origin-master-3840.jpg"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-impact-origin-1920.avif",
+      "width": 1920,
+      "height": 1280,
+      "bytes": 45116,
+      "source": "mi-film-impact-origin-master-3840.jpg"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-impact-origin-2560.webp",
+      "width": 2560,
+      "height": 1707,
+      "bytes": 54444,
+      "source": "mi-film-impact-origin-master-3840.jpg"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-impact-origin-2560.avif",
+      "width": 2560,
+      "height": 1707,
+      "bytes": 113378,
+      "source": "mi-film-impact-origin-master-3840.jpg"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-impact-aftermath-1800.webp",
+      "width": 1800,
+      "height": 1200,
+      "bytes": 45398,
+      "source": "mi-film-impact-aftermath.jpg"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-impact-aftermath-1800.avif",
+      "width": 1800,
+      "height": 1200,
+      "bytes": 62049,
+      "source": "mi-film-impact-aftermath.jpg"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/webp/mi-film-impact-variation-mono-1700.webp",
+      "width": 1700,
+      "height": 1133,
+      "bytes": 27430,
+      "source": "mi-film-impact-variation-mono.jpg"
+    },
+    {
+      "path": "frontend/public/media/math-intellect/cinematic/optimized/avif/mi-film-impact-variation-mono-1700.avif",
+      "width": 1700,
+      "height": 1133,
+      "bytes": 42092,
+      "source": "mi-film-impact-variation-mono.jpg"
+    }
+  ]
+}

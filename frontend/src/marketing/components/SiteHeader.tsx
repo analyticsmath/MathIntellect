@@ -1,167 +1,110 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-
-export const SiteHeader: React.FC = () => {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+import { useEffect, useRef, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+export function SiteHeader() {
   const location = useLocation();
-  const triggerRef = useRef<HTMLButtonElement | null>(null);
-  const menuRef = useRef<HTMLDivElement | null>(null);
-
+  const [openFor, setOpenFor] = useState("");
+  const open = openFor === location.key;
+  const trigger = useRef<HTMLButtonElement>(null),
+    menu = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 120);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const handleLinkClick = () => {
-    setMobileMenuOpen(false);
-  };
-
-  // Handle body scroll locking and Escape key for mobile menu
-  useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') {
-          setMobileMenuOpen(false);
-          triggerRef.current?.focus();
+    if (!open) return;
+    const overflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const elements = () =>
+      Array.from(menu.current?.querySelectorAll<HTMLElement>("a,button") ?? []);
+    elements()[0]?.focus();
+    const key = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpenFor("");
+        trigger.current?.focus();
+      }
+      if (event.key === "Tab") {
+        const items = elements();
+        if (event.shiftKey && document.activeElement === items[0]) {
+          event.preventDefault();
+          items.at(-1)?.focus();
+        } else if (!event.shiftKey && document.activeElement === items.at(-1)) {
+          event.preventDefault();
+          items[0]?.focus();
         }
-      };
-      window.addEventListener('keydown', handleKeyDown);
-
-      // Focus first link in mobile menu
-      const firstFocusable = menuRef.current?.querySelector<HTMLAnchorElement>('a');
-      firstFocusable?.focus();
-
-      return () => {
-        document.body.style.overflow = '';
-        window.removeEventListener('keydown', handleKeyDown);
-      };
-    } else {
-      document.body.style.overflow = '';
-    }
-  }, [mobileMenuOpen]);
-
-  const navLinks = [
-    { label: 'Models', href: '/models' },
-    { label: 'Workbench', href: '/workbench' },
-    { label: 'Method', href: '/method' },
+      }
+    };
+    window.addEventListener("keydown", key);
+    return () => {
+      document.body.style.overflow = overflow;
+      window.removeEventListener("keydown", key);
+    };
+  }, [open]);
+  const links = [
+    ["Models", "/models"],
+    ["Workbench", "/workbench"],
+    ["Method", "/method"],
   ];
-
   return (
     <>
-      <header
-        className={`fixed top-0 inset-x-0 z-50 bg-mi-paper border-b border-mi-rule transition-all duration-300 ${
-          scrolled ? 'h-[54px]' : 'h-16'
-        } flex items-center justify-between px-6 sm:px-8 lg:px-12`}
-      >
-        {/* Left: Brand Wordmark */}
-        <Link
-          to="/"
-          className="font-sans font-medium text-base text-mi-ink tracking-tight hover:opacity-80 transition-opacity"
-        >
-          Math Intellect
+      <header className={`mi-site-header ${open ? "mi-header-open" : ""}`}>
+        <Link to="/" className="mi-brand" aria-label="Math Intellect home">
+          math intellect<span aria-hidden="true">·</span>
         </Link>
-
-        {/* Desktop Primary Navigation */}
-        <nav className="hidden md:flex items-center gap-8" aria-label="Main Navigation">
-          {navLinks.map((link) => {
-            const isActive = location.pathname === link.href;
-            return (
-              <Link
-                key={link.href}
-                to={link.href}
-                className={`font-sans text-sm tracking-tight relative py-1 transition-colors ${
-                  isActive ? 'text-mi-ink font-medium' : 'text-mi-muted hover:text-mi-ink'
-                }`}
-              >
-                {link.label}
-                {isActive && (
-                  <span className="absolute bottom-0 inset-x-0 h-[2px] bg-mi-ink" />
-                )}
-              </Link>
-            );
-          })}
+        <nav aria-label="Main navigation">
+          {links.map(([label, to]) => (
+            <Link
+              key={to}
+              to={to}
+              aria-current={location.pathname === to ? "page" : undefined}
+            >
+              {label}
+            </Link>
+          ))}
         </nav>
-
-        {/* Right Actions */}
-        <div className="hidden md:flex items-center gap-6">
-          <Link
-            to="/login"
-            className="font-sans text-sm text-mi-muted hover:text-mi-ink transition-colors"
+        <div className="mi-header-actions">
+          <Link to="/login">Sign in ↗</Link>
+          <button
+            ref={trigger}
+            aria-expanded={open}
+            aria-controls="mi-navigation"
+            onClick={() => setOpenFor(open ? "" : location.key)}
           >
-            Sign in
-          </Link>
-          <Link
-            to="/signup"
-            className="font-sans text-sm font-medium bg-mi-ink text-mi-paper px-4 py-2 hover:bg-mi-ink-2 transition-colors"
-          >
-            Start modeling
-          </Link>
+            {open ? "Close" : "Menu"}{" "}
+            <span aria-hidden="true">{open ? "−" : "+"}</span>
+          </button>
         </div>
-
-        {/* Mobile Menu Trigger */}
-        <button
-          ref={triggerRef}
-          type="button"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-expanded={mobileMenuOpen}
-          aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-          className="md:hidden font-mono text-xs uppercase tracking-wider text-mi-ink p-2 -mr-2"
-        >
-          {mobileMenuOpen ? 'Close' : 'Menu'}
-        </button>
       </header>
-
-      {/* Mobile Plain Navigation Field */}
-      {mobileMenuOpen && (
+      {open && (
         <div
-          ref={menuRef}
+          ref={menu}
+          id="mi-navigation"
           role="dialog"
           aria-modal="true"
-          aria-label="Mobile Navigation"
-          className="fixed inset-0 z-40 bg-mi-paper pt-20 px-8 pb-12 flex flex-col justify-between md:hidden"
+          aria-label="Navigation"
+          className="mi-navigation"
+          data-lenis-prevent
         >
-          <nav className="flex flex-col gap-2 mt-4" aria-label="Mobile Main Navigation">
-            {navLinks.map((link) => {
-              const isActive = location.pathname === link.href;
-              return (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  onClick={handleLinkClick}
-                  className={`min-h-[48px] flex items-center font-sans text-2xl tracking-tight border-b border-mi-rule ${
-                    isActive ? 'text-mi-ink font-medium' : 'text-mi-muted hover:text-mi-ink'
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
+          <button
+            className="mi-menu-close"
+            onClick={() => {
+              setOpenFor("");
+              trigger.current?.focus();
+            }}
+          >
+            Close −
+          </button>
+          <nav>
+            {[
+              ["Home", "/"],
+              ...links,
+              ["Sign in", "/login"],
+              ["Start modeling", "/signup"],
+            ].map(([label, to]) => (
+              <Link key={to} to={to} onClick={() => setOpenFor("")}>
+                {label}
+                <span aria-hidden="true">↗</span>
+              </Link>
+            ))}
           </nav>
-
-          <div className="flex flex-col gap-3 pt-6 border-t border-mi-rule">
-            <Link
-              to="/login"
-              onClick={handleLinkClick}
-              className="min-h-[48px] flex items-center justify-center font-sans text-base text-mi-ink border border-mi-rule"
-            >
-              Sign in
-            </Link>
-            <Link
-              to="/signup"
-              onClick={handleLinkClick}
-              className="min-h-[48px] flex items-center justify-center font-sans text-base font-medium bg-mi-ink text-mi-paper"
-            >
-              Start modeling
-            </Link>
-          </div>
+          <p>A question worth following.</p>
         </div>
       )}
     </>
   );
-};
+}
