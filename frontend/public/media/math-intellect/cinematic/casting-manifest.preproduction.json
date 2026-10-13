@@ -16,8 +16,9 @@
       "The NYSE image shows today's live market",
       "Two fencing participants literally represent the 32-agent Conflict field"
     ],
-    "implementationGate": "Film 05 rendered stills are preproduction review evidence; complete photo casting quality and static-frame signoff before marketing UI implementation.",
-    "currentFiles": "11 cinematic source JPEGs and 36 cinematic optimized AVIF/WebP files, plus newly reused existing MI-PH-005 (murmuration) source and legacy 4-size AVIF/WebP derivatives."
+    "implementationGate": "Film 06 provisional casting and still direction require route-by-route browser visual QA and continuity signoff before frontend rebuild; no Home implementation in this photo-stage change.",
+    "currentFiles": "12 cinematic source JPEGs and 40 cinematic optimized AVIF/WebP files; separately reuse prior MI-PH-005 collective photo and original 4-size responsive derivatives. Old Custom and fencer photographs remain in archive, not approved production casting.",
+    "typographicCandidate": "Film 06 preproduction selects Syne variable for cinematic display, Hanken Grotesk for body/UI, IBM Plex Mono for real technical values; no font binaries installed into live site yet. All reviewed Syne/Hanken families available under SIL OFL 1.1."
   },
   "actors": [
     {
@@ -182,9 +183,9 @@
     {
       "id": "CIN-07",
       "role": [
-        "models.custom"
+        "models.custom.rejected-alt"
       ],
-      "castingStatus": "conditional-candidate",
+      "castingStatus": "retired-after-compositional-review",
       "credit": "Fulvio Ciccolo",
       "canonicalSourceUrl": "https://unsplash.com/photos/a-person-spooning-sugar-into-a-glass-of-water-uFNo0CRqgU4",
       "localSource": "/media/math-intellect/cinematic/source/mi-film-custom-experiment.jpg",
@@ -202,7 +203,8 @@
       "mobileCameraRule": "DO NOT crop to portrait; keep real hand, spoon and vessel in whole-frame wide composition.",
       "limitations": [
         "Automatic 3:4 crop REJECTED: hands removed.",
-        "Original photo is perfumery; don't describe as mathematical research or Math Intellect user."
+        "Original photo is perfumery; don't describe as mathematical research or Math Intellect user.",
+        "Film 06 full-frame comparison finds warm perfumery spoon/glass imagery disconnected from editorial scientific/mathematical visual world."
       ]
     },
     {
@@ -298,6 +300,34 @@
         "This is authentic bird murmuration, an editorial analogy for collective interaction, NOT the mathematical 32-agent output.",
         "The old photo was already in the repository; it is reused rather than redundantly downloaded.",
         "Await final composition/photographic cohesion approval."
+      ]
+    },
+    {
+      "id": "CIN-12",
+      "role": [
+        "models.custom.preferred",
+        "models.custom.mobile-editorial"
+      ],
+      "castingStatus": "preferred-photo-preproduction-not-production-locked",
+      "credit": "National Cancer Institute",
+      "canonicalSourceUrl": "https://unsplash.com/photos/hands-using-tweezers-with-petri-dish-OYlhHhzksuk",
+      "localSource": "/media/math-intellect/cinematic/source/mi-film-custom-precision-nci.jpg",
+      "responsive": {
+        "avif": [
+          "/media/math-intellect/cinematic/optimized/avif/mi-film-custom-precision-nci-960.avif",
+          "/media/math-intellect/cinematic/optimized/avif/mi-film-custom-precision-nci-1920.avif"
+        ],
+        "webp": [
+          "/media/math-intellect/cinematic/optimized/webp/mi-film-custom-precision-nci-960.webp",
+          "/media/math-intellect/cinematic/optimized/webp/mi-film-custom-precision-nci-1920.webp"
+        ]
+      },
+      "mobile": null,
+      "mobileCameraRule": "Use wide natural photographic field so BOTH hands and tweezers remain visible; never portrait-crop the source into an abstract unidentified specimen.",
+      "limitations": [
+        "Photo depicts laboratory precision sample manipulation, not Math Intellect user, model output, or an application for the Custom model.",
+        "The engine's Custom mode must not be advertised as a general scientific fluid/microscopy simulator.",
+        "Staged free Unsplash-licensed derived JPEG and locally stored responsive AVIF/WebP; final visual QA pending."
       ]
     }
   ]
