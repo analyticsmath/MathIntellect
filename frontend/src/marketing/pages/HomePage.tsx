@@ -219,6 +219,7 @@ export function HomePage() {
             <label htmlFor="home-sigma">Widen or narrow the possible spread</label>
             <input
               id="home-sigma"
+              aria-label="Volatility"
               type="range"
               min="0.05"
               max="0.9"
