@@ -33,7 +33,7 @@ export function ModelsPage() {
       </header>
 
       <div className="mi-model-details">
-        {MODEL_STORIES.map((model, index) => (
+        {MODEL_STORIES.map((model) => (
           <section
             id={model.id}
             key={model.id}

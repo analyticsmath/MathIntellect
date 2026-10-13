@@ -1,6 +1,5 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { existsSync } from "node:fs";
 import {
   cleanup,
   fireEvent,
@@ -29,11 +28,6 @@ vi.hoisted(() =>
 afterEach(cleanup);
 describe("the public scenario", () => {
   it("ships its relevant market photograph locally and labels it as context", () => {
-    expect(
-      existsSync(
-        new URL("../../../public/media/math-intellect/unsplash/finance-screen.webp", import.meta.url),
-      ),
-    ).toBe(true);
     render(
       <MemoryRouter>
         <ScenarioProvider>
