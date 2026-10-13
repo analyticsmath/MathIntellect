@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { existsSync } from "node:fs";
 import {
   cleanup,
   fireEvent,
@@ -27,6 +28,28 @@ vi.hoisted(() =>
 );
 afterEach(cleanup);
 describe("the public scenario", () => {
+  it("ships its relevant market photograph locally and labels it as context", () => {
+    expect(
+      existsSync(
+        new URL("../../../public/media/math-intellect/unsplash/finance-screen.webp", import.meta.url),
+      ),
+    ).toBe(true);
+    render(
+      <MemoryRouter>
+        <ScenarioProvider>
+          <HomePage />
+        </ScenarioProvider>
+      </MemoryRouter>,
+    );
+    const image = screen.getByRole("img", {
+      name: /financial market information screen/,
+    });
+    expect(image.getAttribute("src")).toBe(
+      "/media/math-intellect/unsplash/finance-screen.webp",
+    );
+    expect(screen.getByText(/photograph is context, not a model result/i)).toBeTruthy();
+  });
+
   it("carries a changed input and its actual evidence from Home into Workbench", () => {
     render(
       <MemoryRouter>
@@ -43,7 +66,7 @@ describe("the public scenario", () => {
     });
     expect(screen.getByText("+0.1563")).toBeTruthy();
     fireEvent.click(
-      screen.getByRole("link", { name: /Take the question further/ }),
+      screen.getByRole("link", { name: /Open the workbench/ }),
     );
     expect(
       (screen.getByRole("slider", { name: /Volatility/ }) as HTMLInputElement)
@@ -62,8 +85,8 @@ describe("the public scenario", () => {
     fireEvent.click(
       screen.getByRole("button", { name: /Replay the same inputs/ }),
     );
-    expect(screen.getByRole("status").textContent).toContain(
-      "every path and displayed statistic matches",
+    expect(screen.getByRole("status").textContent).toMatch(
+      /every path and displayed statistic matches/i,
     );
     fireEvent.change(screen.getByRole("slider", { name: /Drift/ }), {
       target: { value: "0.07" },
@@ -116,3 +139,4 @@ describe("the public scenario", () => {
     expect(runDeterministicMonteCarlo(0.35, 0.05, 50, 24, 43)).not.toEqual(a);
   });
 });
+

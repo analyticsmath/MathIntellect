@@ -4,141 +4,119 @@ import { KaTeXBlock } from "../../math/KaTeXBlock";
 export function MethodPage() {
   return (
     <div className="mi-method-page">
-      <header className="mi-method-intro">
-        <span className="mi-story-eyebrow">METHOD NOTES <i /> PUBLIC DEMONSTRATION</span>
+      <header className="mi-page-intro mi-method-intro">
         <h1 tabIndex={-1}>
           Show the inputs.
           <br />
-          <span>Show the calculation.</span>
+          Show the calculation.
         </h1>
         <p>
-          A result is easier to question when its conditions, sampling and
-          limits remain in view.
+          Here is the exact model behind the public workbench, how the paths
+          are sampled, and what the result can tell you.
         </p>
-        <nav aria-label="Method contents">
-          <a href="#state">01 / State</a>
-          <a href="#chance">02 / Sampling</a>
-          <a href="#comparison">03 / Comparison</a>
-          <a href="#replay">04 / Replay</a>
+        <nav aria-label="Method sections" className="mi-method-nav">
+          <a href="#starting-state">Starting state</a>
+          <a href="#sampling">Sampling</a>
+          <a href="#comparison">Comparison</a>
+          <a href="#replay">Replay</a>
+          <a href="#limits">Limits</a>
         </nav>
-        <div className="mi-method-at-glance">
-          <span>ONE MODEL</span>
-          <strong>Additive diffusion</strong>
-          <span>24 PATHS <i /> 50 STEPS <i /> SEEDED</span>
-        </div>
       </header>
 
       <div className="mi-method-body">
-        <article id="state">
-          <span>01 <i /> THE STATE</span>
+        <article id="starting-state" className="mi-method-section" data-reveal>
+          <div><h2>Start from a stated condition.</h2></div>
           <div>
-            <h2>Know what went in.</h2>
             <p>
-              A simulation is a question with its conditions made explicit. In
-              the public workbench, those conditions are drift, volatility, the
-              random seed, 24 sample paths and 50 steps over a unit time
-              horizon.
-            </p>
-            <p>
-              We keep an input snapshot beside the result. Change a value and
-              you have a different question. Keep the values and you can repeat
-              the same computation.
+              The public example is additive diffusion. Each path begins at
+              zero. Drift and volatility are applied over fifty equal steps.
+              Twenty four paths use the same seeded random sequence.
             </p>
             <dl className="mi-method-ledger">
-              <div><dt>Input</dt><dd>Drift and volatility</dd></div>
-              <div><dt>Sampling</dt><dd>Seed, 24 paths, 50 steps</dd></div>
-              <div><dt>Evidence</dt><dd>Paths and endpoint statistics</dd></div>
+              <div><dt>Starting value</dt><dd>0</dd></div>
+              <div><dt>Drift</dt><dd>0.05</dd></div>
+              <div><dt>Volatility</dt><dd>0.35</dd></div>
+              <div><dt>Seed</dt><dd>42</dd></div>
+              <div><dt>Paths</dt><dd>24</dd></div>
+              <div><dt>Steps</dt><dd>50</dd></div>
             </dl>
           </div>
         </article>
 
-        <article id="chance">
-          <span>02 <i /> THE SAMPLING</span>
+        <article id="sampling" className="mi-method-section" data-reveal>
+          <div><h2>Build each path one step at a time.</h2></div>
           <div>
-            <h2>Make room for possibility.</h2>
             <p>
-              The public demonstration uses additive stochastic diffusion. Each
-              path starts at zero. At every step, a drift term and a sampled
-              Gaussian term are added to the previous value.
+              At each step, the model adds a drift increment and a Gaussian
+              increment to the previous value. The time step is one fiftieth
+              of the full horizon.
             </p>
             <div className="mi-method-equation">
-              <KaTeXBlock math="x_{t+\Delta t}=x_t+\mu\Delta t+\sigma\sqrt{\Delta t}\,Z_t" />
-              <KaTeXBlock math="Z_t\sim\mathcal{N}(0,1),\qquad\Delta t=1/50" />
+              <KaTeXBlock math="x_{t+1}=x_t+\mu\Delta t+\sigma\sqrt{\Delta t}\,Z_t" />
+              <KaTeXBlock math="Z_t\sim\mathcal{N}(0,1),\qquad\Delta t=\frac{1}{50}" />
             </div>
             <p>
-              A seeded Mulberry32 generator supplies uniform samples; a
-              Box–Muller transform produces Gaussian pairs. A path is a
-              computed sample, not a prediction.
-            </p>
-            <p>
-              The full application has separate engines for Monte Carlo, game
-              theory, market dynamics, conflict and custom expressions. Their
-              assumptions and outputs differ. This additive-diffusion example
-              should not be read as a demonstration of every engine.
+              A Mulberry32 generator produces repeatable uniform values. The
+              Box Muller transform uses those values to create Gaussian pairs.
+              Each path therefore contains fifty calculated steps after its
+              starting value.
             </p>
           </div>
         </article>
 
-        <article id="comparison">
-          <span>03 <i /> THE COMPARISON</span>
+        <article id="comparison" className="mi-method-section" data-reveal>
+          <div><h2>Compare like with like.</h2></div>
           <div>
-            <h2>Change one condition.<br />Keep the rest in view.</h2>
             <p>
-              When volatility changes, the comparison uses the same drift,
-              seed, sample count and steps. Baseline and changed paths share
-              one coordinate system, including a scale that contains both sets.
+              The baseline uses volatility 0.35. When you change volatility,
+              the drift, seed, number of paths and time horizon remain the same.
+              Both sets of paths share one vertical scale.
             </p>
             <p>
-              Sample mean and variance are calculated from the path endpoints.
-              Variance in this demonstration uses the population denominator
-              of 24 for the displayed sample set. It is not an unbiased
-              estimate of a population variance.
+              The displayed mean and variance use the twenty four endpoints.
+              The variance divides by twenty four, the population variance of
+              this displayed set. It is not an unbiased estimate of a larger
+              population.
             </p>
             <div className="mi-method-equation">
-              <KaTeXBlock math="\bar{x}=\frac{1}{N}\sum_{i=1}^{N}x_i,\qquad v=\frac{1}{N}\sum_{i=1}^{N}(x_i-\bar{x})^2" />
+              <KaTeXBlock math="\bar{x}=\frac{1}{N}\sum_{i=1}^{N}x_i" />
+              <KaTeXBlock math="v=\frac{1}{N}\sum_{i=1}^{N}(x_i-\bar{x})^2" />
             </div>
             <p>
-              Holding other inputs fixed isolates the parameter change inside
-              this model. It does not establish a causal effect in the outside
-              world. A different model, distribution, sample count or seed can
-              produce different evidence.
+              This isolates the setting inside this calculation. It does not
+              establish a cause or a probability in the outside world.
             </p>
           </div>
         </article>
 
-        <article id="replay">
-          <span>04 <i /> THE REPLAY</span>
+        <article id="replay" className="mi-method-section" data-reveal>
+          <div><h2>Repeat the same calculation.</h2></div>
           <div>
-            <h2>Repeat the calculation.<br />Inspect the agreement.</h2>
             <p>
-              Replay recomputes the public demonstration from its current
-              input snapshot. It compares the resulting paths and metrics with
-              the displayed result. Confirmation appears only when those
-              values match.
+              Replay uses the current input snapshot and the same algorithm.
+              The interface confirms a match only after the computed paths and
+              statistics agree with the displayed run.
             </p>
             <p>
-              This is reproducibility within the same algorithm and browser
-              implementation. It does not prove the assumptions are correct
-              or guarantee identical floating-point behavior across every
-              platform and future algorithm version.
+              This demonstrates repeatability for this browser implementation.
+              It does not prove that the assumptions are correct or that
+              different software versions will use identical arithmetic.
             </p>
-            <Link to="/workbench" className="mi-story-link mi-story-link--dark">
-              Run the demonstration <span aria-hidden="true">↗</span>
+            <Link to="/workbench" viewTransition className="mi-button mi-button--ink">
+              Run the experiment
             </Link>
           </div>
         </article>
 
-        <aside className="mi-method-limits">
-          <span className="mi-story-eyebrow">A CLEAR BOUNDARY</span>
-          <h2>A useful model<br /><em>has clear limits.</em></h2>
+        <aside id="limits" className="mi-method-limits" data-reveal>
+          <h2>A model has a boundary.</h2>
           <p>
-            Small samples illustrate possibility. Real decisions require
-            suitable assumptions, adequate sampling and domain judgment.
-            Model output is evidence about a specified computation. It is not
-            a guarantee about an uncertain world.
+            These small samples illustrate one mathematical process. They do
+            not forecast events, estimate real market risk or replace domain
+            judgment. A result is evidence about the inputs and rules shown here.
           </p>
-          <Link to="/models" className="mi-story-link mi-story-link--light">
-            Find the right model <span aria-hidden="true">↗</span>
+          <Link to="/models" viewTransition className="mi-text-link mi-text-link--light">
+            Explore the model families
           </Link>
         </aside>
       </div>
@@ -147,3 +125,4 @@ export function MethodPage() {
 }
 
 export default MethodPage;
+

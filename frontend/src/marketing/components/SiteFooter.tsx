@@ -1,75 +1,45 @@
 import { Link } from "react-router-dom";
-import { FILM_PHOTOS } from "../film/filmMedia";
+
+const photoUrl =
+  "https://unsplash.com/photos/financial-stock-market-data-displayed-on-a-screen-EuIqk6LpUU0";
 
 export function SiteFooter() {
-  const credits = [
-    FILM_PHOTOS["monte-carlo"],
-    FILM_PHOTOS["game-theory"],
-    FILM_PHOTOS.market,
-    FILM_PHOTOS.conflict,
-    FILM_PHOTOS.custom,
-    FILM_PHOTOS.method,
-  ];
-
   return (
     <footer id="site-footer" className="mi-finale">
-      <section className="mi-finale-statement" aria-labelledby="mi-finale-title">
-        <div className="mi-finale-thread" aria-hidden="true">
-          <svg viewBox="0 0 760 132" focusable="false">
-            <path d="M2 66H151C211 66 208 17 267 17S324 115 388 115s67-49 128-49h241" />
-            <path d="M2 66H151C211 66 208 41 267 41S324 91 388 91s67-25 128-25h241" />
-            <path d="M2 66H151C211 66 208 66 267 66S324 66 388 66s67 0 128 0h241" />
-            <path d="M2 66H151C211 66 208 91 267 91S324 41 388 41s67 25 128 25h241" />
-            <path d="M2 66H151C211 66 208 115 267 115S324 17 388 17s67 49 128 49h241" />
-            <circle cx="151" cy="66" r="5" />
-          </svg>
-        </div>
-        <span className="mi-story-eyebrow">THE QUESTION STAYS WITH YOU</span>
-        <h2 id="mi-finale-title">
-          Make uncertainty
-          <br />
-          <em>something you can work with.</em>
-        </h2>
-        <Link to="/workbench" className="mi-story-link mi-story-link--light">
-          Enter the workbench <span aria-hidden="true">↗</span>
+      <div className="mi-finale-statement">
+        <h2>Keep the question clear.</h2>
+        <p>Keep every condition beside the result.</p>
+        <Link to="/workbench" viewTransition className="mi-button mi-button--light">
+          Open the workbench
         </Link>
-      </section>
-
-      <div className="mi-finale-identity" aria-label="Math Intellect">
-        <span>MATH</span><span>INTELLECT</span>
       </div>
 
-      <div className="mi-footer-utility">
+      <div className="mi-footer-main">
+        <Link to="/" viewTransition className="mi-footer-brand">
+          Math Intellect
+        </Link>
         <nav aria-label="Footer navigation">
-          <Link to="/models">Models</Link>
-          <Link to="/workbench">Workbench</Link>
-          <Link to="/method">Method</Link>
-          <Link to="/signup">Start modeling <span aria-hidden="true">↗</span></Link>
+          <Link to="/models" viewTransition>Models</Link>
+          <Link to="/workbench" viewTransition>Workbench</Link>
+          <Link to="/method" viewTransition>Method</Link>
+          <Link to="/signup" viewTransition>Start modeling</Link>
         </nav>
         <span>© {new Date().getFullYear()} Math Intellect</span>
       </div>
 
       <details className="mi-footer-credits">
-        <summary>Photography &amp; visual context</summary>
+        <summary>Photo credit</summary>
         <p>
-          The opening work scene is illustrative artwork, not a customer
-          portrait. The plotted paths are computed from the displayed inputs.
-          Context photographs are editorial illustrations; the NYSE image is
-          archival.
+          Market context photograph by{" "}
+          <a href={photoUrl} target="_blank" rel="noreferrer">
+            Daniel Brzdęk on Unsplash
+          </a>
+          . It illustrates a market data setting and is not a model result.
         </p>
-        <ul>
-          {credits.map((photo) => (
-            <li key={photo.url}>
-              <a href={photo.url} target="_blank" rel="noreferrer">
-                {photo.credit} ↗
-                <span className="sr-only"> (opens in a new tab)</span>
-              </a>
-            </li>
-          ))}
-        </ul>
       </details>
     </footer>
   );
 }
 
 export default SiteFooter;
+

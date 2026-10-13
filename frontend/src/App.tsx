@@ -32,16 +32,13 @@ function PageLoader() {
     <div
       role="status"
       aria-live="polite"
-      className="min-h-screen grid place-items-center bg-[#101712] text-[#efeee8]"
+      className="min-h-screen grid place-items-center bg-[#101b2b] text-[#f7f9fc]"
     >
       <div className="text-center">
         <span className="block font-medium tracking-tight text-lg">
-          math intellect<span className="text-[#d15e43]">·</span>
+          math intellect
         </span>
-        <span className="mt-4 block font-mono text-[9px] tracking-[0.16em] text-[#aab5aa]">
-          OPENING THE MODEL ROOM
-        </span>
-        <span aria-hidden="true" className="mx-auto mt-5 block h-px w-16 bg-[#d15e43]" />
+        <span aria-hidden="true" className="mx-auto mt-5 block h-px w-16 bg-[#52d4e5]" />
       </div>
     </div>
   );
@@ -202,3 +199,4 @@ function App() {
 }
 
 export default App;
+

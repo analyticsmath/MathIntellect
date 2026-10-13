@@ -1,120 +1,142 @@
-import { useLayoutEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Photo } from "./Photo";
-import { MODEL_STORIES } from "./filmMedia";
-import { TransitionLink } from "./TransitionLink";
+import { Link } from "react-router-dom";
+import { MODEL_STORIES, type ModelId } from "./filmMedia";
+import { useScenario } from "./scenario";
+import { TrajectoryPlot } from "./TrajectoryPlot";
 
-gsap.registerPlugin(ScrollTrigger);
+const marketPhoto = "/media/math-intellect/unsplash/finance-screen.webp";
+const marketPhotoPage =
+  "https://unsplash.com/photos/financial-stock-market-data-displayed-on-a-screen-EuIqk6LpUU0";
 
-export function ModelCinema() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useLayoutEffect(() => {
-    const media = gsap.matchMedia();
-    media.add(
-      "(min-width: 1024px) and (pointer: fine) and (prefers-reduced-motion: no-preference)",
-      () => {
-        const section = sectionRef.current;
-        if (!section) return;
-
-        const context = gsap.context(() => {
-          gsap.utils.toArray<HTMLElement>(".mi-model-scene").forEach((scene) => {
-            const crop = scene.querySelector<HTMLElement>(".mi-photo-crop");
-            const copy = scene.querySelector<HTMLElement>(".mi-model-scene-copy");
-            if (crop) {
-              gsap.fromTo(
-                crop,
-                { yPercent: -7 },
-                {
-                  yPercent: 7,
-                  ease: "none",
-                  scrollTrigger: {
-                    trigger: scene,
-                    start: "top bottom",
-                    end: "bottom top",
-                    scrub: true,
-                    invalidateOnRefresh: true,
-                  },
-                },
-              );
-            }
-            if (copy) {
-              gsap.fromTo(
-                copy,
-                { y: 30, opacity: 0.45 },
-                {
-                  y: 0,
-                  opacity: 1,
-                  ease: "none",
-                  scrollTrigger: {
-                    trigger: scene,
-                    start: "top 82%",
-                    end: "top 38%",
-                    scrub: true,
-                  },
-                },
-              );
-            }
-          });
-        }, section);
-
-        return () => context.revert();
-      },
+function ModelVisual({
+  id,
+  paths,
+  compact = false,
+}: {
+  id: ModelId;
+  paths: ReturnType<typeof useScenario>["current"];
+  compact?: boolean;
+}) {
+  if (id === "monte-carlo") {
+    return (
+      <div className="mi-model-visual mi-model-visual--paths">
+        <TrajectoryPlot current={paths} />
+        <span className="mi-visual-caption">The public workbench calculates these paths</span>
+      </div>
     );
-    return () => media.revert();
-  }, []);
+  }
+
+  if (id === "game-theory") {
+    return (
+      <div
+        className="mi-model-visual mi-model-visual--matrix"
+        role="img"
+        aria-label="Example opening payoffs. The first number belongs to Player 1 and the second to Player 2. The rows and columns each show Strategy 1 and Strategy 2."
+      >
+        <div className="mi-matrix-title">
+          <span>Player 2</span>
+          <span>Example opening payoffs</span>
+        </div>
+        <div className="mi-payoff-grid">
+          <span aria-hidden="true" />
+          <span>Strategy 1</span>
+          <span>Strategy 2</span>
+          <span className="mi-strategy-label">Player 1<br />Strategy 1</span>
+          <strong>4, 1</strong>
+          <strong>1, 5</strong>
+          <span className="mi-strategy-label">Player 1<br />Strategy 2</span>
+          <strong>2, 3</strong>
+          <strong>5, 2</strong>
+        </div>
+        <span className="mi-visual-caption">Player 1 payoff, then Player 2 payoff</span>
+      </div>
+    );
+  }
+
+  if (id === "market") {
+    return (
+      <figure className={"mi-model-visual mi-model-visual--market" + (compact ? " is-compact" : "")}>
+        <img
+          src={marketPhoto}
+          width="1470"
+          height="980"
+          alt="A financial market information screen with asset prices and market data"
+          loading={compact ? "lazy" : "eager"}
+          decoding="async"
+        />
+        <figcaption>
+          <a href={marketPhotoPage} target="_blank" rel="noreferrer">
+            Market context photograph by Daniel Brzdęk on Unsplash
+          </a>
+          <span>The photograph is context, not a model result.</span>
+        </figcaption>
+      </figure>
+    );
+  }
 
   return (
-    <section
-      ref={sectionRef}
-      className="mi-model-cinema mi-model-chapters"
-      aria-labelledby="mi-model-cinema-title"
+    <div
+      className="mi-model-visual mi-model-visual--agents"
+      role="img"
+      aria-label="Example agent setup with four named agents and their strategies, matching the model builder defaults"
     >
-      <header className="mi-model-preface">
-        <div>
-          <span className="mi-story-eyebrow">03 <i /> THE RIGHT LENS</span>
-          <h2 id="mi-model-cinema-title">
-            Different questions.
-            <br />
-            <span>Different mathematics.</span>
-          </h2>
-        </div>
+      <div className="mi-agent-setup-heading">
+        <span>Example setup</span>
+        <strong>100 rounds</strong>
+      </div>
+      <div className="mi-agent-grid">
+        <div><span>Alpha</span><strong>Aggressive</strong></div>
+        <div><span>Beta</span><strong>Cooperative</strong></div>
+        <div><span>Gamma</span><strong>Tit for Tat</strong></div>
+        <div><span>Delta</span><strong>Stochastic</strong></div>
+      </div>
+      <span className="mi-visual-caption">Four strategies from the model builder</span>
+    </div>
+  );
+}
+
+export { ModelVisual };
+
+export function ModelCinema() {
+  const demo = useScenario();
+
+  return (
+    <section className="mi-model-cinema" aria-labelledby="mi-model-cinema-title">
+      <header className="mi-model-preface" data-reveal>
+        <h2 id="mi-model-cinema-title">A different question needs a different model.</h2>
         <p>
-          Uncertainty, strategy and interaction are different problems. Each
-          deserves a model that describes what is actually changing.
+          These are the four engines in the model builder. Each begins with a
+          different set of assumptions and leaves a different result to inspect.
         </p>
       </header>
 
-      <div className="mi-model-story-list">
+      <div className="mi-home-model-grid">
         {MODEL_STORIES.map((model, index) => (
-          <TransitionLink
-            actor={model.id}
+          <article
             key={model.id}
-            to={"/models#" + model.id}
-            className={"mi-model-scene mi-model-scene--" + (index % 2 === 0 ? "image-first" : "copy-first")}
+            className={"mi-home-model-card mi-home-model-card--" + model.id}
+            data-reveal
+            style={{ transitionDelay: Math.min(index * 45, 135) + "ms" }}
           >
-            <div className="mi-model-scene-visual">
-              <Photo id={model.id} />
-              <span className="mi-model-scene-index">
-                {String(index + 1).padStart(2, "0")} <i /> 05
-              </span>
-            </div>
-            <div className="mi-model-scene-copy">
-              <span className="mi-model-scene-name">{model.name}</span>
-              <h3>{model.title}</h3>
-              <p className="mi-model-scene-question">{model.question}</p>
+            <ModelVisual
+              id={model.id}
+              paths={demo.current}
+              compact={model.id === "market"}
+            />
+            <div className="mi-home-model-copy">
+              <h3>{model.name}</h3>
+              <h4>{model.question}</h4>
               <p>{model.description}</p>
-              <span className="mi-model-scene-link">
-                Inspect this model <i aria-hidden="true">↗</i>
-              </span>
+              <Link to={"/models#" + model.id} viewTransition>
+                Explore {model.name}
+              </Link>
             </div>
-          </TransitionLink>
+          </article>
         ))}
       </div>
+
       <p className="mi-model-context-note">
-        Context photographs are editorial illustrations. The model assumptions
-        and outputs are defined separately for each simulation.
+        The market photograph sets a scene. Every figure in the public experiment
+        is calculated from the inputs shown beside it.
       </p>
     </section>
   );

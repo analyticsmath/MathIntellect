@@ -8,3 +8,4 @@ export function ScenarioProvider({ children }: PropsWithChildren) {
     </ScenarioContext.Provider>
   );
 }
+

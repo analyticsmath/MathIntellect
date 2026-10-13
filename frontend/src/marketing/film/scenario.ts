@@ -49,3 +49,4 @@ export function useScenario() {
     throw new Error("Scenario controls require the marketing provider.");
   return value;
 }
+

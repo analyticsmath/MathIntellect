@@ -1,64 +1,66 @@
-# Math Intellect: Story and reference study
+# Math Intellect story and reference study
 
 **Prepared:** 13 October 2026  
-**Scope:** Public marketing experience, homepage, model index, workbench and method page  
-**Research method:** Direct review of the product source and existing public route behavior, the Design Ideas folder, the Personality Assessor creative audit, and live desktop browsing of six core reference sites plus three additional studios/sites. This is a design study; the references inform principles and interaction choices. Their images, copy, marks and code are not reused.
+**Scope:** Public homepage, model index, workbench and method page
 
-## Product truth
+## What the product does
 
-Math Intellect is a modeling workspace, not a prediction service. The public demonstration already contains something more specific than a generic SaaS story: a deterministic additive-diffusion calculation with explicit drift, volatility, seed, 24 paths and 50 steps. The browser computes actual paths and endpoint statistics. A changed volatility can be compared with a baseline while the drift, seed, sample count and step count remain fixed. The same seed can be replayed and the resulting paths and statistics checked.
+Math Intellect is a workspace for configuring and examining mathematical simulations. The public workbench is a small, self-contained example: a seeded additive diffusion calculation starts 24 paths at zero, applies drift and volatility over 50 steps, and reports the endpoint mean and population variance. A visitor can change volatility while drift, seed, path count and horizon remain fixed. The result can be replayed and saved as a local JSON file.
 
-The marketing site should make that process visible. Its central character is the **scenario**: it begins with one set of conditions, branches into computed outcomes, is changed deliberately, then can be replayed. The human in the opening artwork supplies a human point of view, but is explicitly identified as illustrative. The math and displayed inputs remain the evidence.
-
-This follows the useful principle in the Personality Assessor audit that the product's own Evidence Record should act as protagonist. I transferred the verbs—**branch, retain, compare, inspect and recompose**—to scenario modeling. I did not transfer its identity, visual skin or personality-specific imagery.
-
-## Six core references
-
-| Reference | Observed idea | Applied to Math Intellect | Deliberately left behind |
-| --- | --- | --- | --- |
-| [Lando Norris](https://landonorris.com/) | One person remains the through-line as the experience moves between biography, current racing data, off-track work and helmet archive. | Keep one scenario and its current inputs visible as the user moves from concept to workbench. Put evidence and context in the same journey. | The racing spectacle, typography and personal brand are specific to Lando and do not belong to a mathematical tool. |
-| [White Desert](https://white-desert.com/) | A remote-world premise becomes concrete through place, coordinates, camps, itineraries and the practical steps of a trip. | Move from the abstract “many possible futures” idea into a concrete run: origin, parameter values, path count, steps, comparison and replay. | Antarctic imagery and luxury-travel conventions would make the product feel unrelated. |
-| [LIKOVA](https://likova.space/) ([project case study](https://videinfra.com/work/likova)) | The building is the visual protagonist; its form, interactive site plan and useful architectural facts all reinforce one subject. | Treat the actual model output as the moving subject. Let annotations describe real controls and computed evidence rather than adding ornamental motion. | A 3D scene or long loader is not required to make a mathematical experience feel dimensional. |
-| [Oryzo AI](https://oryzo.ai/) ([Lusion project notes](https://lusion.co/projects/oryzo_ai/)) | A deliberately ordinary coaster is given one coherent, dryly humorous campaign premise. The visual production follows that premise. | Give the homepage a single memorable idea—one start, many possible futures—and make every section advance it. | The AI parody, WebGL treatment and intentionally fake product claims do not fit this product. The Math Intellect copy states its limits plainly. |
-| [Siena Film Foundation](https://www.siena.film/) | The film archive gives each work a clear title, format, year and runtime; the catalog is itself the story of the studio's output. | Treat each model family as a distinct lens with a name, question, parameters and evidence. Keep the model index useful as well as atmospheric. | A black canvas dependent on one rendered composition would weaken ordinary reading, navigation and fallback behavior. |
-| [Moto Card](https://www.moto-card.com/) | Product photography is held with restraint; motion and page-level contrast are reserved for purposeful emphasis. | Give the opening artwork a composed still frame, then reserve scroll movement for the transition from human question to computed paths. Let one changed path carry the accent color. | The near-black luxury-finance template and repeated premium-card language do not fit Math Intellect. |
-
-### Additional references
-
-- [Lenis](https://lenis.dev/) is a useful motion constraint: smoothness should preserve native scrolling and remain usable across input types. The site uses browser scroll with scroll-linked reveals only on desktop, fine pointers and no-preference motion settings.
-- [Studio Ardē's work page](https://www.studio-arde.com/work/) uses varied project compositions rather than repeating an identical tile. The model chapters use alternating image/copy arrangements, while maintaining one shared editorial system.
-- [Fabian Ferdinand Fallend](https://www.fabianfallend.com/) makes authorship, photographic work and portfolio categories legible alongside a strong typographic voice. That reinforces the need to credit context photography instead of presenting it as product evidence.
+The model builder exposes four engines: Monte Carlo, Game Theory, Market Dynamics and Agent Interaction. The marketing site now names only those four. The old fifth “Custom” card was removed because the current model selector does not expose a custom engine.
 
 ## Story direction
 
-1. **The question:** One researcher marks the starting point. The headline introduces the question rather than promising a forecast.
-2. **The first evidence:** The browser computes 24 sample paths from the displayed starting conditions. The input ledger and endpoint variance identify what the image alone cannot prove.
-3. **The changed condition:** The visitor adjusts volatility. Baseline and changed paths share axes; drift, seed, path count and steps remain fixed. A note explains the accent line and states that the demonstration is not a real-world probability claim.
-4. **The wider field:** Five model families are framed as different questions, not as decorative feature cards. Each gets relevant context photography, assumptions and outputs.
-5. **The return:** Replay recomputes from the same input snapshot. The workbench can export its current inputs and results; the method page explains sampling, comparison and limits.
+The scenario is the protagonist. It starts from a stated condition, branches into calculated paths, changes when one input moves, sits beside its baseline, then returns on replay. That is the story a visitor can see and test.
 
-The sequence gives the visitor a reason to scroll: curiosity, evidence, intervention, scope, then trust. The workbench preserves the same simulation state instead of restarting the story at a disconnected form.
+1. **Start:** Twenty-four paths begin at zero. The hero chart is the actual seeded calculation, not a photograph or generated illustration.
+2. **Intervene:** The visitor moves volatility. The chart recalculates from the same drift, seed and horizon.
+3. **Compare:** Baseline and changed paths share one scale. Endpoint variance makes the change legible, with a note about what the calculation cannot establish.
+4. **Choose another question:** Four model cards show a computed path plot, the product's opening payoff matrix, one relevant market photograph, and the model builder's actual default agent setup.
+5. **Return and inspect:** Replay verifies the same result. The workbench keeps the current inputs visible and can save them. The method page explains the calculation and its limits.
 
-## Motion and image direction
+This carries forward a principle from the Personality Assessor work: let the product's own evidence lead the story, and keep the same state coherent as the user moves between scenes. It uses the scenario and its changing evidence rather than personality imagery or a copied brand treatment.
 
-- The desktop opening pins one viewport while the opening image yields to the computed path field. The path strokes draw as the evidence arrives. The following model chapters use a small vertical image drift to give the long sequence depth.
-- These effects are enabled only above 1024px, with a fine pointer and no reduced-motion preference. Mobile and reduced-motion visitors get the same content as a normal reading sequence, without a pinned section or hidden reveal.
-- Native scrolling remains in control. There is no canvas-only page, WebGL loader, forced wheel behavior or full-screen transition that blocks the evidence.
-- The generated opening artwork shows a modeler marking a point on plotting paper. Its caption says it is illustrative; it is not a customer portrait, and the plotted paths are computed separately. Context photos for model families are credited in the page footer.
-- A previous liquid-crown splash image had no clear relationship to this simulation. Monte Carlo imagery now uses a branching river already in the approved asset library; the other photographs map to the model subjects they illustrate.
+## Six reference sites
 
-## Review criteria
+The references were reviewed to understand how premise, visual focus and interaction work together. Their copy, imagery, marks and code are not reused.
 
-The finished public experience should answer, in order: **What is being modeled? Which conditions are fixed? What did the browser calculate? What changed? Can the result be replayed? What can this model not claim?** Every transition, image, heading and control serves one of those questions. A visual effect should be removed if it hides a value, slows access to the simulation or turns an illustrative photo into apparent evidence.
+| Reference | What was observed | What informs this site |
+| --- | --- | --- |
+| [Lando Norris](https://landonorris.com/) | A dark opening resolves to a large personal mark. Scrolling connects biography, career figures, current context and an archive of helmets. | One scenario stays in view from the first path to comparison and replay. Data belongs to the same subject as the opening. |
+| [White Desert](https://white-desert.com/) | Itineraries identify concrete places, dates and stops. Photography sets a world, while cards explain how a trip unfolds. | Replace abstract claims with the actual run: inputs, path count, steps, comparison and replay. |
+| [LIKOVA](https://likova.space/) and the [Vide Infra case study](https://videinfra.com/work/likova) | The building remains the visual subject. Its form and site-plan interaction give the project details a reason to appear. | The calculated path field is the main visual. Every annotation names a real value or action. |
+| [Oryzo](https://oryzo.ai/) and [Lusion's project notes](https://lusion.co/projects/oryzo_ai/) | The project notes describe one deliberately ordinary object carrying a dry campaign premise. The cloud browser remained on a black preloader, so its visual transitions were not evaluated. | Keep one clear premise from headline through interaction. Do not claim a motion pattern that was not observed. |
+| [Siena Film Foundation](https://www.siena.film/) | The browser exposed the archive labels for title, format, year and runtime, but its visual canvas did not render in this session. | Give each model a useful name, question, inputs and outputs. Do not make access to a canvas necessary to understand the page. |
+| [Moto Card](https://www.moto-card.com/) | A real physical card leads the first composition. Scrolling moves into a concise product statement and concrete product details. | Put the actual product artifact first. Here that artifact is the computed path field. |
 
-### Source links
+### Additional references and source limits
 
-- [Lando Norris official site](https://landonorris.com/)
-- [White Desert official site](https://white-desert.com/)
-- [LIKOVA](https://likova.space/) and [Vide Infra case study](https://videinfra.com/work/likova)
-- [Oryzo AI](https://oryzo.ai/) and [Lusion's project page](https://lusion.co/projects/oryzo_ai/)
-- [Siena Film Foundation](https://www.siena.film/)
-- [Moto Card](https://www.moto-card.com/)
-- [Lenis](https://lenis.dev/)
-- [Studio Ardē work](https://www.studio-arde.com/work/)
-- [Fabian Ferdinand Fallend](https://www.fabianfallend.com/)
+- [Lenis](https://lenis.dev/) documents a smooth-scroll library, but the marketing pages use native browser scrolling. No scroll hijack is needed for this story.
+- [Studio Ardē](https://www.studio-arde.com/work/) informed the use of varied model compositions within one shared system.
+- [Fabian Ferdinand Fallend](https://www.fabianfallend.com/) makes authorship and portfolio categories legible alongside strong typography; the market photograph is credited at its use and in the footer.
+- The connected Drive “Design Ideas” folder contained dashboard, fintech and product-landing references. The browser preview for the available images was access-gated, so those files were not used as visual evidence.
+
+## Visual and motion direction
+
+- **Hero:** A dark navy field, large editorial headline and a chart generated from the active scenario. No generated hero image and no generic finance portrait.
+- **Palette:** Deep navy and cool porcelain establish the instrument surface. Cobalt identifies the current run. Cyan marks the active path and interaction. IBM Plex Mono is reserved for parameters and measured values. The existing Syne and Hanken Grotesk families remain in use.
+- **Photography:** One local Unsplash photograph appears in the Market Dynamics section as setting only. It is credited to Daniel Brzdęk and explicitly identified as context, not a calculation. The hero, payoff matrix, agent setup and trajectory figures are product visuals.
+- **Motion:** The hero paths draw once. Moving a control recalculates the paths and statistics immediately. Scroll reveals use a short opacity and crop transition; route changes use a restrained View Transition. The mobile menu is an accessible overlay. Native scrolling remains in control. There is no pinned hero, decorative image parallax or vertical text gimmick.
+- **Access:** Reduced-motion settings remove reveal and transition movement. All important values remain text. Charts have accessible labels, controls have names and focus states remain visible.
+
+## Review questions
+
+The finished experience should answer these questions in order:
+
+1. What is the model calculating?
+2. Which conditions are held fixed?
+3. What changed when the visitor moved the control?
+4. Can the result be reproduced?
+5. What can this result not claim?
+
+Remove any image, phrase or animation that obscures one of those answers or makes an illustrative asset look like evidence.
+
+## Image source
+
+- Daniel Brzdęk, [financial stock market data displayed on a screen](https://unsplash.com/photos/financial-stock-market-data-displayed-on-a-screen-EuIqk6LpUU0), stored at `frontend/public/media/math-intellect/unsplash/finance-screen.webp`.

@@ -1,75 +1,89 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+
+const links = [
+  ["Models", "/models"],
+  ["Workbench", "/workbench"],
+  ["Method", "/method"],
+];
+
 export function SiteHeader() {
   const location = useLocation();
   const [openFor, setOpenFor] = useState("");
   const open = openFor === location.key;
-  const trigger = useRef<HTMLButtonElement>(null),
-    menu = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const menu = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (!open) return;
-    const overflow = document.body.style.overflow;
+
+    const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    const elements = () =>
+    const items = () =>
       Array.from(menu.current?.querySelectorAll<HTMLElement>("a,button") ?? []);
-    elements()[0]?.focus();
-    const key = (event: KeyboardEvent) => {
+    items()[0]?.focus();
+
+    const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setOpenFor("");
         trigger.current?.focus();
       }
       if (event.key === "Tab") {
-        const items = elements();
-        if (event.shiftKey && document.activeElement === items[0]) {
+        const focusable = items();
+        if (event.shiftKey && document.activeElement === focusable[0]) {
           event.preventDefault();
-          items.at(-1)?.focus();
-        } else if (!event.shiftKey && document.activeElement === items.at(-1)) {
+          focusable.at(-1)?.focus();
+        } else if (!event.shiftKey && document.activeElement === focusable.at(-1)) {
           event.preventDefault();
-          items[0]?.focus();
+          focusable[0]?.focus();
         }
       }
     };
-    window.addEventListener("keydown", key);
+
+    window.addEventListener("keydown", onKeyDown);
     return () => {
-      document.body.style.overflow = overflow;
-      window.removeEventListener("keydown", key);
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
     };
   }, [open]);
-  const links = [
-    ["Models", "/models"],
-    ["Workbench", "/workbench"],
-    ["Method", "/method"],
-  ];
+
+  const closeMenu = () => setOpenFor("");
+
   return (
     <>
-      <header className={`mi-site-header ${open ? "mi-header-open" : ""}`}>
-        <Link to="/" className="mi-brand" aria-label="Math Intellect home">
-          math intellect<span aria-hidden="true">·</span>
+      <header className="mi-site-header">
+        <Link to="/" viewTransition className="mi-brand" aria-label="Math Intellect home">
+          math intellect
         </Link>
-        <nav aria-label="Main navigation">
+
+        <nav aria-label="Main navigation" className="mi-header-navigation">
           {links.map(([label, to]) => (
             <Link
               key={to}
               to={to}
+              viewTransition
               aria-current={location.pathname === to ? "page" : undefined}
             >
               {label}
             </Link>
           ))}
         </nav>
+
         <div className="mi-header-actions">
-          <Link to="/login">Sign in ↗</Link>
+          <Link to="/login" viewTransition>Sign in</Link>
           <button
             ref={trigger}
+            type="button"
             aria-expanded={open}
             aria-controls="mi-navigation"
+            aria-label={open ? "Close menu" : "Menu"}
             onClick={() => setOpenFor(open ? "" : location.key)}
           >
-            {open ? "Close" : "Menu"}{" "}
-            <span aria-hidden="true">{open ? "−" : "+"}</span>
+            {open ? "Close menu" : "Menu"}
           </button>
         </div>
       </header>
+
       {open && (
         <div
           ref={menu}
@@ -78,33 +92,35 @@ export function SiteHeader() {
           aria-modal="true"
           aria-label="Navigation"
           className="mi-navigation"
-          data-lenis-prevent
         >
           <button
             className="mi-menu-close"
+            type="button"
             onClick={() => {
-              setOpenFor("");
+              closeMenu();
               trigger.current?.focus();
             }}
           >
-            Close −
+            Close
           </button>
-          <nav>
+
+          <nav aria-label="Site">
             {[
               ["Home", "/"],
               ...links,
               ["Sign in", "/login"],
               ["Start modeling", "/signup"],
             ].map(([label, to]) => (
-              <Link key={to} to={to} onClick={() => setOpenFor("")}>
+              <Link key={to} to={to} viewTransition onClick={closeMenu}>
                 {label}
-                <span aria-hidden="true">↗</span>
               </Link>
             ))}
           </nav>
-          <p>A question worth following.</p>
+
+          <p>Start with a question. Keep the conditions in view.</p>
         </div>
       )}
     </>
   );
 }
+
