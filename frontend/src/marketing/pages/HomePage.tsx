@@ -80,23 +80,21 @@ export function HomePage() {
               { y: -50, duration: 1, ease: "none" },
               0,
             );
-          gsap.utils
-            .toArray<HTMLElement>(".mi-reveal")
-            .forEach((element) =>
-              gsap.fromTo(
-                element,
-                { y: 34 },
-                {
-                  y: 0,
-                  scrollTrigger: {
-                    trigger: element,
-                    start: "top 90%",
-                    end: "top 55%",
-                    scrub: true,
-                  },
+          gsap.utils.toArray<HTMLElement>(".mi-reveal").forEach((element) =>
+            gsap.fromTo(
+              element,
+              { y: 34 },
+              {
+                y: 0,
+                scrollTrigger: {
+                  trigger: element,
+                  start: "top 90%",
+                  end: "top 55%",
+                  scrub: true,
                 },
-              ),
-            );
+              },
+            ),
+          );
         }, root);
         return () => {
           context.revert();
@@ -115,10 +113,17 @@ export function HomePage() {
           <div className="mi-opening-title">
             <h1 tabIndex={-1}>
               What if
-              <br />
-              one thing
-              <br />
-              <span>changed?</span>
+              <span className="mi-mobile-space"> </span>
+              <br className="mi-desktop-break" />
+              one
+              <span className="mi-mobile-break">
+                <br />
+              </span>
+              <span className="mi-desktop-space"> </span>
+              thing
+              <span className="mi-mobile-space"> </span>
+              <br className="mi-desktop-break" />
+              <span className="mi-title-last">changed?</span>
             </h1>
             <p>A different assumption can change the whole picture.</p>
             <Link className="mi-text-link" to="/workbench">

@@ -1306,9 +1306,6 @@
     line-height: 1.02;
     max-width: 100%;
   }
-  .mi-opening-title h1 br:first-of-type {
-    display: none;
-  }
   .mi-opening-title p {
     font-size: 14px;
     margin-top: 20px;
@@ -1719,5 +1716,23 @@
   .mi-model-panel .mi-photo-crop {
     width: 100%;
     margin-left: 0;
+  }
+}
+.mi-opening-title h1 .mi-mobile-space,
+.mi-opening-title h1 .mi-mobile-break {
+  display: none;
+}
+.mi-opening-title h1 .mi-desktop-space {
+  color: inherit;
+}
+@media (max-width: 767px) {
+  .mi-opening-title h1 .mi-mobile-space,
+  .mi-opening-title h1 .mi-mobile-break {
+    display: inline;
+    color: inherit;
+  }
+  .mi-opening-title h1 .mi-desktop-space,
+  .mi-opening-title h1 .mi-desktop-break {
+    display: none;
   }
 }

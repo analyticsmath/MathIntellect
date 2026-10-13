@@ -31,3 +31,9 @@ Unsplash account sign-in succeeded in this pass. Premium candidates were inspect
 Implementation and engineering checks are complete for this pass. Independent live render captures and dynamic desktop/mobile, reverse-scroll, rapid navigation, reduced-motion and actual touch acceptance remain separate from source/build checks. No official award, 9/10 visual score or 100% end-to-end product certification is claimed by this report.
 
 Work is published only to the existing main branch; no preview/lab route, branch, fabricated model screen or synthetic photography was added.
+
+## Live deployment and independent static review
+
+Vercel production deployment `dpl_4XVG7UHxEDsndiFuMVDZRkRhUpSg` reported READY for main commit `3a425dbf77ee028c79235026de625bdda1999745`, with `math-intellect.vercel.app` assigned. All four public routes returned HTTP 200. Fresh Firecrawl captures reproduced the new live Home hero at 1440×900 and 390×844, the selected Game Theory model, Method publication, and Workbench on desktop and mobile. Those actual images were visually inspected. The mobile hero exposed joined words at a suppressed line break; this follow-up separates the responsive break markers and restores the intended complete phrase.
+
+Static captures establish the visible layouts and mounted content. They do not establish touch interaction, reverse-scroll feel, high-speed navigation or full motion acceptance. The authenticated browser download remained blocked by credential protection. Context.dev had no capture credits; the public visual review used Firecrawl instead. No account credential was written to source, documentation or deployment files.
