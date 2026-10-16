@@ -388,9 +388,11 @@
 }
 
 .mi-hero-art {
+  width: 100%;
+  max-width: 100%;
   height: min(65svh, 690px);
   min-height: 440px;
-  aspect-ratio: 1.02;
+  aspect-ratio: auto;
 }
 
 .mi-hero-art picture,
@@ -1328,6 +1330,8 @@
 }
 
 .mi-method-hero-art {
+  width: 100%;
+  max-width: 100%;
   height: min(56svh, 580px);
   min-height: 360px;
 }
