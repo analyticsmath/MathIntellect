@@ -1,18 +1,17 @@
 # Design tokens
 
-The public marketing experience is scoped to `.mi-cinema` in `frontend/src/marketing/film/film.css`. These colors do not replace the authenticated application theme.
+The public marketing experience is scoped to .mi-cinema in frontend/src/marketing/film/film.css. The authenticated application keeps its separate theme.
 
 | Purpose | Token | Value |
 | --- | --- | --- |
-| Main background | `--mi-ink` | `#101B2B` |
-| Secondary dark background | `--mi-ink-soft` | `#182A42` |
-| Cool surface | `--mi-paper` | `#EEF3F7` |
-| Raised surface | `--mi-paper-light` | `#FBFCFE` |
-| Surface contrast | `--mi-paper-deep` | `#DCE6EE` |
-| Main text | `--mi-copy` | `#13243A` |
-| Secondary text | `--mi-muted` | `#60748A` |
-| Current path and actions | `--mi-blue` | `#355DFF` |
-| Active path and control accent | `--mi-signal` | `#52D4E5` |
-| Baseline path | `--chart-baseline` | `#93A7BC` |
+| Main canvas | --mi-paper | #F1F3EE |
+| Raised surface | --mi-paper-light | #FBFCF7 |
+| Deep forest surface | --mi-ink | #18231E |
+| Secondary dark surface | --mi-ink-soft | #26352E |
+| Main text | --mi-copy | #17221D |
+| Secondary text | --mi-muted | #58645D |
+| Current path | --chart-current | #587562 |
+| Focused path and action | --mi-signal | #D96549 |
+| Baseline path | --chart-baseline | #A8B0A9 |
 
-The current trajectory uses cobalt and its focused path uses cyan. Dark surfaces use pale copy. Interactive controls retain visible focus outlines. Type uses Syne for display headings, Hanken Grotesk for reading text, and IBM Plex Mono for parameters and measured values.
+Typography retains the locally bundled Syne variable display face, Hanken Grotesk reading face, and IBM Plex Mono for parameters. The public experience uses local optimized photography as editorial context, never as simulation output. The wider-screen model gallery is controlled by vertical scrolling; small screens use an unpinned vertical sequence. Reduced-motion users receive the full content without scroll choreography.

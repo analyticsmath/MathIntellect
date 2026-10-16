@@ -1,5 +1,7 @@
 import React, { useLayoutEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SkipLink } from "./components/SkipLink";
 import { SiteHeader } from "./components/SiteHeader";
 import { SiteFooter } from "./components/SiteFooter";
@@ -13,36 +15,62 @@ export const MarketingShell: React.FC = () => {
     const root = document.querySelector<HTMLElement>(".mi-cinema");
     if (!root) return;
 
-    const supportsMotion =
-      window.matchMedia("(prefers-reduced-motion: no-preference)").matches &&
-      "IntersectionObserver" in window;
-    if (!supportsMotion) {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (reduceMotion.matches) {
       root.removeAttribute("data-motion");
       return;
     }
 
     root.setAttribute("data-motion", "ready");
-    const reveals = Array.from(root.querySelectorAll<HTMLElement>("[data-reveal]"));
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        });
-      },
-      { rootMargin: "0px 0px -10% 0px", threshold: 0.12 },
-    );
+    gsap.registerPlugin(ScrollTrigger);
 
-    reveals.forEach((element) => {
-      if (element.getBoundingClientRect().top < window.innerHeight * 0.88) {
-        element.classList.add("is-visible");
-      } else {
-        observer.observe(element);
-      }
-    });
+    const context = gsap.context(() => {
+      const reveals = gsap.utils.toArray<HTMLElement>("[data-reveal]", root);
+      reveals.forEach((element) => {
+        gsap.fromTo(
+          element,
+          { autoAlpha: 0, y: 26 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.84,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: element,
+              start: "top 84%",
+              once: true,
+              fastScrollEnd: true,
+            },
+          },
+        );
+      });
 
-    return () => observer.disconnect();
+      const plottedSections = gsap.utils.toArray<HTMLElement>("[data-path-draw]", root);
+      plottedSections.forEach((section) => {
+        const paths = section.querySelectorAll<SVGPathElement>(".mi-path");
+        gsap.fromTo(
+          paths,
+          { strokeDasharray: 1, strokeDashoffset: 1 },
+          {
+            strokeDashoffset: 0,
+            duration: 1.32,
+            stagger: 0.018,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: section,
+              start: "top 78%",
+              once: true,
+            },
+          },
+        );
+      });
+    }, root);
+
+    const refreshFrame = window.requestAnimationFrame(() => ScrollTrigger.refresh());
+    return () => {
+      window.cancelAnimationFrame(refreshFrame);
+      context.revert();
+    };
   }, [location.pathname]);
 
   return (

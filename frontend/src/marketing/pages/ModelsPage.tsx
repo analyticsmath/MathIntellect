@@ -1,35 +1,26 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { MODEL_STORIES } from "../film/filmMedia";
 import { ModelVisual } from "../film/ModelCinema";
-import { useScenario } from "../film/scenario";
 
 export function ModelsPage() {
-  const { hash } = useLocation();
-  const demo = useScenario();
-
   return (
     <div className="mi-models-page">
-      <header className="mi-page-intro mi-models-intro">
-        <h1 tabIndex={-1}>
-          Choose the model
-          <br />
-          that fits the question.
-        </h1>
-        <p>
-          A useful model makes its assumptions visible. Start with the kind of
-          uncertainty, decisions or interaction you need to examine.
+      <header className="mi-models-intro">
+        <div>
+          <h1 tabIndex={-1}>Choose a model that fits the system.</h1>
+          <p>
+            Different questions need different assumptions. Explore the four
+            model families, then open the public experiment or continue in your
+            workspace.
+          </p>
+          <Link to="/workbench" viewTransition className="mi-button mi-button--signal">
+            Open the public experiment <span aria-hidden="true">↗</span>
+          </Link>
+        </div>
+        <p className="mi-models-intro-note">
+          Every model describes the rules you supply. Its outputs belong to
+          those rules.
         </p>
-        <nav aria-label="Model families" className="mi-model-selector">
-          {MODEL_STORIES.map((model) => (
-            <Link
-              key={model.id}
-              to={"/models#" + model.id}
-              aria-current={hash === "#" + model.id ? "location" : undefined}
-            >
-              {model.name}
-            </Link>
-          ))}
-        </nav>
       </header>
 
       <div className="mi-model-details">
@@ -41,16 +32,12 @@ export function ModelsPage() {
             data-reveal
           >
             <div className="mi-model-detail-visual">
-              <ModelVisual
-                id={model.id}
-                paths={demo.current}
-                compact={false}
-              />
+              <ModelVisual id={model.id} />
             </div>
 
             <div className="mi-model-detail-copy">
-              <h2>{model.title}</h2>
-              <p className="mi-model-question">{model.question}</p>
+              <h2>{model.name}</h2>
+              <p className="mi-model-question">{model.title}</p>
               <p>{model.description}</p>
 
               <div className="mi-model-specs">
@@ -66,8 +53,8 @@ export function ModelsPage() {
 
               {model.id === "monte-carlo" && (
                 <p className="mi-model-note">
-                  The public workbench demonstrates additive diffusion with a
-                  Gaussian step, 24 paths and 50 steps.
+                  The public example uses additive diffusion with a Gaussian
+                  step, 24 paths, 50 steps, and seed 42.
                 </p>
               )}
 
@@ -76,21 +63,24 @@ export function ModelsPage() {
                 viewTransition
                 className="mi-button mi-button--ink"
               >
-                {model.id === "monte-carlo" ? "Open the public experiment" : "Start a simulation"}
+                {model.id === "monte-carlo"
+                  ? "Open the public experiment"
+                  : "Build this model"}
+                <span aria-hidden="true">↗</span>
               </Link>
             </div>
           </section>
         ))}
       </div>
 
-      <section className="mi-models-boundary">
-        <h2>Results belong to their assumptions.</h2>
+      <section className="mi-models-boundary" data-reveal>
+        <h2>Keep the assumptions beside the result.</h2>
         <p>
-          A simulation describes the calculation you specify. It does not certify
-          what will happen outside the model.
+          A simulation describes the calculation you specify. It does not
+          certify what will happen outside the model.
         </p>
         <Link to="/method" viewTransition className="mi-text-link">
-          Read how the public example works
+          Read how the public example works <span aria-hidden="true">↗</span>
         </Link>
       </section>
     </div>
@@ -98,4 +88,3 @@ export function ModelsPage() {
 }
 
 export default ModelsPage;
-

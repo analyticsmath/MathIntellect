@@ -53,7 +53,7 @@ export function SiteHeader() {
     <>
       <header className="mi-site-header">
         <Link to="/" viewTransition className="mi-brand" aria-label="Math Intellect home">
-          math intellect
+          Math Intellect
         </Link>
 
         <nav aria-label="Main navigation" className="mi-header-navigation">
@@ -76,10 +76,10 @@ export function SiteHeader() {
             type="button"
             aria-expanded={open}
             aria-controls="mi-navigation"
-            aria-label={open ? "Close menu" : "Menu"}
+            aria-label={open ? "Close menu" : "Open navigation"}
             onClick={() => setOpenFor(open ? "" : location.key)}
           >
-            {open ? "Close menu" : "Menu"}
+            {open ? "Close" : "Menu"}
           </button>
         </div>
       </header>
@@ -101,7 +101,7 @@ export function SiteHeader() {
               trigger.current?.focus();
             }}
           >
-            Close
+            Close menu
           </button>
 
           <nav aria-label="Site">
@@ -109,7 +109,7 @@ export function SiteHeader() {
               ["Home", "/"],
               ...links,
               ["Sign in", "/login"],
-              ["Start modeling", "/signup"],
+              ["Create an account", "/signup"],
             ].map(([label, to]) => (
               <Link key={to} to={to} viewTransition onClick={closeMenu}>
                 {label}
@@ -117,10 +117,9 @@ export function SiteHeader() {
             ))}
           </nav>
 
-          <p>Start with a question. Keep the conditions in view.</p>
+          <p>Start with a question. Keep every condition beside the result.</p>
         </div>
       )}
     </>
   );
 }
-

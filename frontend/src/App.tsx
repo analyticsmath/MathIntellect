@@ -69,7 +69,7 @@ function RouteExperienceManager() {
   useEffect(() => {
     positions.current[lastKey.current] = window.scrollY;
     lastKey.current = location.key;
-    const titles:Record<string,string>={'/':'Math Intellect | One start, many possible futures','/models':'Models | Math Intellect','/workbench':'Workbench | Math Intellect','/method':'Method | Math Intellect','/login':'Sign in | Math Intellect','/signup':'Create account | Math Intellect'};
+    const titles:Record<string,string>={'/':'Math Intellect | See the paths behind a result','/models':'Models | Math Intellect','/workbench':'Workbench | Math Intellect','/method':'Method | Math Intellect','/login':'Sign in | Math Intellect','/signup':'Create account | Math Intellect'};
     if (titles[location.pathname]) document.title=titles[location.pathname];
     const isHashNav = location.hash.length > 1;
 
