@@ -537,6 +537,22 @@
   background: var(--mi-paper-light);
 }
 
+.mi-cinema a.mi-button--signal {
+  color: #1d2923;
+}
+
+.mi-cinema a.mi-button--ink {
+  color: var(--mi-paper-light);
+}
+
+.mi-cinema a.mi-button--light {
+  color: var(--mi-ink);
+}
+
+.mi-cinema a.mi-button--outline {
+  color: var(--mi-paper-light);
+}
+
 .mi-text-link,
 .mi-rail-link {
   display: inline-flex;
