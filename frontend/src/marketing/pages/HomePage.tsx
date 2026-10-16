@@ -23,7 +23,7 @@ export function HomePage() {
             <span>{demo.paths} paths</span>
             <span>Seed {demo.seed}</span>
           </div>
-          <h1 id="mi-home-title" tabIndex={-1}>A model gives<br />every condition a path.</h1>
+          <h1 id="mi-home-title" tabIndex={-1}>A model turns<br />conditions into paths.</h1>
           <p>
             Change an assumption. See how the same model responds. Keep the
             inputs beside the outcomes.
