@@ -1,48 +1,33 @@
 import { Link } from "react-router-dom";
 import { KaTeXBlock } from "../../math/KaTeXBlock";
+import { useScenario } from "../film/scenario";
 
 export function MethodPage() {
+  const demo = useScenario();
+
   return (
     <div className="mi-method-page">
       <header className="mi-method-intro">
         <div className="mi-method-intro-copy">
-          <h1 tabIndex={-1}>Every result has a method.</h1>
+          <h1 tabIndex={-1}>What the calculation assumes.</h1>
           <p>
-            This is the calculation behind the public workbench: its starting
-            conditions, sampling rule, comparison, and limits.
+            The public workbench runs a seeded additive-diffusion example. This
+            page shows its starting conditions, sampling rule, comparison, and
+            limits.
           </p>
           <nav aria-label="Method contents" className="mi-method-nav">
             <a href="#starting-state">Starting conditions</a>
-            <a href="#sampling">Sampling</a>
+            <a href="#sampling">Sampling rule</a>
             <a href="#comparison">Comparison</a>
             <a href="#replay">Replay</a>
             <a href="#limits">Limits</a>
           </nav>
         </div>
-
-        <figure className="mi-method-hero-art" data-reveal>
-          <picture>
-            <source
-              type="image/webp"
-              srcSet="/media/math-intellect/cinematic/optimized/webp/mi-film-method-measurement-960.webp 960w, /media/math-intellect/cinematic/optimized/webp/mi-film-method-measurement-1920.webp 1920w"
-              sizes="(max-width: 900px) 100vw, 48vw"
-            />
-            <img
-              src="/media/math-intellect/cinematic/optimized/webp/mi-film-method-measurement-1920.webp"
-              width="1920"
-              height="1280"
-              alt="A close view of an old-fashioned radio"
-              loading="lazy"
-              decoding="async"
-            />
-          </picture>
-          <figcaption>
-            <a href="https://unsplash.com/photos/a-close-up-of-an-old-fashioned-radio-US1ndpdptUI" target="_blank" rel="noreferrer">
-              Photograph by Eric Prouzet
-            </a>
-            <span>Editorial context, not a data display.</span>
-          </figcaption>
-        </figure>
+        <div className="mi-method-equation-stage" data-reveal>
+          <p>At each step</p>
+          <KaTeXBlock math="x_{t+1}=x_t+\mu\Delta t+\sigma\sqrt{\Delta t}\,Z_t" />
+          <KaTeXBlock math="Z_t\sim\mathcal{N}(0,1),\qquad\Delta t=\frac{1}{50}" />
+        </div>
       </header>
 
       <div className="mi-method-body">
@@ -50,14 +35,14 @@ export function MethodPage() {
           <div><h2>Start from stated conditions.</h2></div>
           <div>
             <p>
-              The public example is additive diffusion. Each path begins at
-              zero. Drift and volatility are applied over fifty equal steps.
-              Twenty-four paths use the same seeded random sequence.
+              Each of the 24 paths begins at zero. Drift and volatility are
+              applied over fifty equal steps. The baseline volatility is 0.35;
+              the public control changes volatility only.
             </p>
             <dl className="mi-method-ledger">
               <div><dt>Starting value</dt><dd>0</dd></div>
               <div><dt>Drift</dt><dd>0.05</dd></div>
-              <div><dt>Volatility</dt><dd>0.35</dd></div>
+              <div><dt>Baseline volatility</dt><dd>0.35</dd></div>
               <div><dt>Seed</dt><dd>42</dd></div>
               <div><dt>Paths</dt><dd>24</dd></div>
               <div><dt>Steps</dt><dd>50</dd></div>
@@ -66,21 +51,21 @@ export function MethodPage() {
         </article>
 
         <article id="sampling" className="mi-method-section" data-reveal>
-          <div><h2>Build every path one step at a time.</h2></div>
+          <div><h2>Build each path one step at a time.</h2></div>
           <div>
             <p>
               At each step, the model adds a drift increment and a Gaussian
-              increment to the previous value. The time step is one fiftieth
-              of the full horizon.
+              increment to the previous value. The time step is one fiftieth of
+              the full horizon.
             </p>
             <div className="mi-method-equation">
               <KaTeXBlock math="x_{t+1}=x_t+\mu\Delta t+\sigma\sqrt{\Delta t}\,Z_t" />
               <KaTeXBlock math="Z_t\sim\mathcal{N}(0,1),\qquad\Delta t=\frac{1}{50}" />
             </div>
             <p>
-              A Mulberry32 generator produces repeatable uniform values. The
-              Box–Muller transform uses those values to create Gaussian pairs.
-              Each path contains fifty calculated steps after its starting value.
+              A Mulberry32 generator supplies repeatable uniform values. The
+              Box–Muller transform converts them to Gaussian pairs. Each path
+              contains fifty calculated steps after its starting value.
             </p>
           </div>
         </article>
@@ -90,55 +75,56 @@ export function MethodPage() {
           <div>
             <p>
               The baseline uses volatility 0.35. When volatility changes, drift,
-              seed, path count, and time horizon remain the same. Both sets of
-              paths share one vertical scale.
+              seed, path count, and horizon remain fixed. Both sets of paths
+              share one vertical scale.
             </p>
             <p>
-              The displayed mean and variance use the twenty-four endpoints.
-              Variance divides by 24: the population variance of this displayed
-              set, not an unbiased estimate of a larger population.
+              The displayed mean and variance are calculated from the 24
+              endpoints in each run. They summarize this finite sample.
             </p>
-            <div className="mi-method-equation">
-              <KaTeXBlock math="\bar{x}=\frac{1}{N}\sum_{i=1}^{N}x_i" />
-              <KaTeXBlock math="v=\frac{1}{N}\sum_{i=1}^{N}(x_i-\bar{x})^2" />
-            </div>
-            <p>
-              This isolates a setting inside the calculation. It does not
-              establish a cause or a probability in the outside world.
-            </p>
-          </div>
-        </article>
-
-        <article id="replay" className="mi-method-section" data-reveal>
-          <div><h2>Repeat the same calculation.</h2></div>
-          <div>
-            <p>
-              Replay uses the current input snapshot and the same algorithm.
-              The interface confirms a match only after the computed paths and
-              statistics agree with the displayed run.
-            </p>
-            <p>
-              This demonstrates repeatability for this browser implementation.
-              It does not prove that the assumptions are correct or that
-              different software versions will use identical arithmetic.
-            </p>
-            <Link to="/workbench" viewTransition className="mi-button mi-button--ink">
-              Run the experiment <span aria-hidden="true">↗</span>
+            <Link to="/workbench" viewTransition className="mi-text-link">
+              Change a condition in the workbench <span aria-hidden="true">↗</span>
             </Link>
           </div>
         </article>
 
-        <aside id="limits" className="mi-method-limits" data-reveal>
-          <h2>A model has a boundary.</h2>
-          <p>
-            These small samples illustrate one mathematical process. They do not
-            forecast events, estimate real market risk, or replace domain
-            judgment. A result is evidence about the inputs and rules shown here.
-          </p>
-          <Link to="/models" viewTransition className="mi-text-link mi-text-link--light">
-            Explore the model families <span aria-hidden="true">↗</span>
-          </Link>
-        </aside>
+        <article id="replay" className="mi-method-section mi-method-replay" data-reveal>
+          <div><h2>Repeat the exact inputs.</h2></div>
+          <div>
+            <p>
+              The seed fixes the random sequence. Replay the current inputs to
+              verify that the same paths and endpoint statistics return.
+            </p>
+            <button className="mi-button mi-button--ink" type="button" onClick={demo.replay}>
+              Replay this run <span aria-hidden="true">↻</span>
+            </button>
+            <p className="mi-repeat-status" role="status">
+              {demo.replayed
+                ? "Recomputed. The displayed paths and statistics match."
+                : "The current input snapshot is ready to replay."}
+            </p>
+          </div>
+        </article>
+
+        <article id="limits" className="mi-method-section mi-method-limit" data-reveal>
+          <div><h2>A simulation describes its assumptions.</h2></div>
+          <div>
+            <p>
+              This example uses an additive-diffusion model, a Gaussian
+              increment, fixed drift, and a finite set of seeded paths. Its
+              outputs do not validate those assumptions or predict a real-world
+              outcome.
+            </p>
+            <p>
+              A different question may require a different model family,
+              parameters, or observed data. The result should be read with its
+              inputs in view.
+            </p>
+            <Link to="/models" viewTransition className="mi-text-link">
+              Explore the model families <span aria-hidden="true">↗</span>
+            </Link>
+          </div>
+        </article>
       </div>
     </div>
   );

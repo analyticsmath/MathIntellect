@@ -4,15 +4,6 @@ import { TrajectoryPlot } from "../film/TrajectoryPlot";
 import { ModelCinema } from "../film/ModelCinema";
 
 const openingVolatility = 0.35;
-const originPhoto =
-  "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-origin-1920.webp";
-const originPhotoSrcSet =
-  "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-origin-960.webp 960w, " +
-  "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-origin-1280.webp 1280w, " +
-  "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-origin-1920.webp 1920w, " +
-  "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-origin-2560.webp 2560w";
-const originPhotoSource =
-  "https://unsplash.com/photos/milk-splash-frozen-in-time-against-black-background-6ieRRBACAqM";
 
 export function HomePage() {
   const demo = useScenario();
@@ -22,94 +13,50 @@ export function HomePage() {
   return (
     <div className="mi-home">
       <section className="mi-home-hero" aria-labelledby="mi-home-title">
-        <div className="mi-hero-layout">
-          <div className="mi-hero-copy">
-            <h1 id="mi-home-title" tabIndex={-1}>
-              See the paths
-              <br />
-              <span>behind a result.</span>
-            </h1>
-            <p>
-              Define a model, change an assumption, and inspect the outcomes.
-              Math Intellect keeps the conditions beside the evidence.
-            </p>
-
-            <div className="mi-hero-actions">
-              <a className="mi-button mi-button--signal" href="#experiment">
-                Explore the experiment <span aria-hidden="true">↓</span>
-              </a>
-              <Link
-                className="mi-text-link"
-                to="/workbench"
-                viewTransition
-              >
-                Open the workbench <span aria-hidden="true">↗</span>
-              </Link>
-            </div>
-          </div>
-
-          <figure className="mi-hero-art" data-reveal>
-            <picture>
-              <source
-                type="image/webp"
-                srcSet={originPhotoSrcSet}
-                sizes="(max-width: 900px) 100vw, 52vw"
-              />
-              <img
-                src={originPhoto}
-                srcSet={originPhotoSrcSet}
-                sizes="(max-width: 900px) 100vw, 52vw"
-                width="1920"
-                height="1280"
-                alt="A white liquid splash suspended against a dark background"
-                loading="eager"
-                fetchPriority="high"
-                decoding="async"
-              />
-            </picture>
-            <figcaption>
-              <a href={originPhotoSource} target="_blank" rel="noreferrer">
-                Photograph by Pete Godfrey
-              </a>
-              <span>Editorial context, separate from calculated results.</span>
-            </figcaption>
-          </figure>
+        <div className="mi-hero-data" data-path-draw>
+          <TrajectoryPlot current={demo.current} draw />
         </div>
-
-        <p className="mi-hero-integrity">
-          A reproducible example follows below. Its outcomes are calculated from
-          the inputs shown on screen.
-        </p>
+        <div className="mi-hero-copy">
+          <div className="mi-hero-conditions" aria-label="Public example conditions">
+            <span>Drift μ {demo.mu.toFixed(2)}</span>
+            <span>Volatility σ {demo.sigma.toFixed(2)}</span>
+            <span>{demo.paths} paths</span>
+            <span>Seed {demo.seed}</span>
+          </div>
+          <h1 id="mi-home-title" tabIndex={-1}>A model gives<br />every condition a path.</h1>
+          <p>
+            Change an assumption. See how the same model responds. Keep the
+            inputs beside the outcomes.
+          </p>
+          <div className="mi-hero-actions">
+            <a className="mi-button mi-button--signal" href="#experiment">
+              Explore the live experiment <span aria-hidden="true">↓</span>
+            </a>
+            <Link className="mi-text-link" to="/workbench" viewTransition>
+              Open the workbench <span aria-hidden="true">↗</span>
+            </Link>
+          </div>
+        </div>
       </section>
 
-      <section
-        id="experiment"
-        className="mi-home-experiment"
-        aria-labelledby="mi-experiment-title"
-      >
-        <div className="mi-experiment-heading" data-reveal>
-          <h2 id="mi-experiment-title">
-            One starting point.
-            <br />
-            Many possible paths.
-          </h2>
+      <section id="experiment" className="mi-home-experiment" aria-labelledby="mi-experiment-title">
+        <header className="mi-section-heading" data-reveal>
+          <h2 id="mi-experiment-title">Change one condition.</h2>
           <p>
-            Change volatility in a seeded additive diffusion model. Drift, seed,
-            path count, and horizon stay fixed so you can see what this one
-            condition changes.
+            Move volatility while drift, seed, path count, and horizon stay
+            fixed. Both runs share one scale.
           </p>
-        </div>
+        </header>
 
         <div className="mi-experiment-layout">
           <aside className="mi-experiment-controls" data-reveal>
-            <div>
-              <h3>Change a condition</h3>
-              <p>The model recalculates in your browser as you move the control.</p>
+            <div className="mi-control-intro">
+              <h3>Volatility</h3>
+              <p>The browser recalculates the same seeded model as you move the control.</p>
             </div>
-
             <div className="mi-control mi-control--home">
               <label htmlFor="home-sigma">
-                <span>Volatility</span>
+                <span>Current value</span>
                 <strong>σ {demo.sigma.toFixed(2)}</strong>
               </label>
               <input
@@ -123,10 +70,7 @@ export function HomePage() {
                 onChange={(event) => demo.setSigma(Number(event.target.value))}
                 aria-valuetext={"Volatility " + demo.sigma.toFixed(2)}
               />
-              <div className="mi-range-ends">
-                <span>0.05</span>
-                <span>0.90</span>
-              </div>
+              <div className="mi-range-ends"><span>0.05</span><span>0.90</span></div>
             </div>
 
             <dl className="mi-home-input-ledger">
@@ -136,101 +80,59 @@ export function HomePage() {
               <div><dt>Paths</dt><dd>{demo.paths}</dd></div>
               <div><dt>Steps</dt><dd>{demo.current.steps}</dd></div>
             </dl>
-
             <p className="mi-experiment-status" role="status">
               {changed
-                ? "The current run now differs from the baseline in volatility only."
-                : "Move the control to compare a changed run with the baseline."}
+                ? "The current run differs from the baseline in volatility only."
+                : "Move the control to compare the current run with the baseline."}
             </p>
           </aside>
 
-          <div className="mi-experiment-evidence" data-reveal data-path-draw>
+          <div className="mi-experiment-evidence" data-path-draw>
             <header className="mi-evidence-heading">
               <div>
-                <h3>Compare the outcomes</h3>
-                <p>Both runs share one origin and one vertical scale.</p>
+                <h3>Twenty-four paths. Two conditions.</h3>
+                <p>Each line begins at zero. Each endpoint belongs to the same seed.</p>
               </div>
               <span className="mi-evidence-seed">Seed {demo.seed}</span>
             </header>
 
             <div className="mi-home-plot">
-              <TrajectoryPlot
-                current={demo.current}
-                baseline={demo.baseline}
-                compare
-              />
+              <TrajectoryPlot current={demo.current} baseline={demo.baseline} compare draw />
             </div>
 
             <div className="mi-home-legend" aria-label="Plot legend">
-              <span><i className="mi-legend-dot mi-legend-dot--baseline" /> Baseline · σ 0.35</span>
-              <span><i className="mi-legend-dot mi-legend-dot--current" /> Current · σ {demo.sigma.toFixed(2)}</span>
+              <span><i className="mi-legend-line mi-legend-line--baseline" /> Baseline · σ 0.35</span>
+              <span><i className="mi-legend-line mi-legend-line--current" /> Current · σ {demo.sigma.toFixed(2)}</span>
             </div>
 
             <dl className="mi-home-metrics">
-              <div>
-                <dt>Current endpoint variance</dt>
-                <dd>{demo.current.variance.toFixed(4)}</dd>
-              </div>
-              <div>
-                <dt>Baseline endpoint variance</dt>
-                <dd>{demo.baseline.variance.toFixed(4)}</dd>
-              </div>
-              <div>
-                <dt>Change within this model</dt>
-                <dd>{varianceChange > 0 ? "+" : ""}{varianceChange.toFixed(4)}</dd>
-              </div>
+              <div><dt>Current endpoint variance</dt><dd>{demo.current.variance.toFixed(4)}</dd></div>
+              <div><dt>Baseline endpoint variance</dt><dd>{demo.baseline.variance.toFixed(4)}</dd></div>
+              <div><dt>Variance difference</dt><dd>{varianceChange > 0 ? "+" : ""}{varianceChange.toFixed(4)}</dd></div>
             </dl>
 
             <p className="mi-evidence-limit">
-              This isolates an input in this calculation. It does not establish a
-              cause or probability outside the model.
+              These statistics describe the 24 sampled endpoints in this run.
+              They do not establish outcomes outside the model.
             </p>
           </div>
         </div>
       </section>
 
-      <ModelCinema />
+      <ModelCinema
+        variant="overview"
+        title="Different questions need different models."
+        intro="Each family encodes a different structure. Scroll across to see what each one represents."
+      />
 
       <section className="mi-home-repeat" aria-labelledby="mi-repeat-title">
-        <figure className="mi-repeat-art" data-reveal>
-          <picture>
-            <source
-              type="image/webp"
-              srcSet="/media/math-intellect/cinematic/optimized/webp/mi-film-impact-aftermath-960.webp 960w, /media/math-intellect/cinematic/optimized/webp/mi-film-impact-aftermath-1920.webp 1920w"
-              sizes="(max-width: 900px) 100vw, 48vw"
-            />
-            <img
-              src="/media/math-intellect/cinematic/optimized/webp/mi-film-impact-aftermath-1920.webp"
-              width="1920"
-              height="1280"
-              alt="A second liquid splash with droplets suspended in motion"
-              loading="lazy"
-              decoding="async"
-            />
-          </picture>
-          <figcaption>
-            <a
-              href="https://unsplash.com/photos/milk-splash-with-droplets-against-black-background-UAjcZ1qBzE0"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Photograph by Pete Godfrey
-            </a>
-            <span>Illustration only; the run remains defined by its inputs.</span>
-          </figcaption>
-        </figure>
-
         <div className="mi-repeat-copy" data-reveal>
-          <h2 id="mi-repeat-title">Repeat the calculation exactly.</h2>
+          <h2 id="mi-repeat-title">Repeat the run. Keep its limits in view.</h2>
           <p>
-            The seed fixes the random sequence. Replay the current inputs and
-            check that the same paths and endpoint statistics return.
+            The seed fixes the random sequence. Replay the current inputs to
+            reproduce these paths and endpoint statistics.
           </p>
-          <button
-            className="mi-button mi-button--ink"
-            type="button"
-            onClick={demo.replay}
-          >
+          <button className="mi-button mi-button--ink" type="button" onClick={demo.replay}>
             Replay this run <span aria-hidden="true">↻</span>
           </button>
           <p className="mi-repeat-status" role="status">
@@ -239,9 +141,16 @@ export function HomePage() {
               : "The current input snapshot is ready to replay."}
           </p>
           <Link to="/method" viewTransition className="mi-text-link">
-            Read how the calculation works <span aria-hidden="true">↗</span>
+            Read the calculation and its limits <span aria-hidden="true">↗</span>
           </Link>
         </div>
+
+        <dl className="mi-repeat-ledger" data-reveal>
+          <div><dt>Model</dt><dd>Additive diffusion</dd></div>
+          <div><dt>Random sequence</dt><dd>Seed {demo.seed}</dd></div>
+          <div><dt>Sample</dt><dd>{demo.paths} paths × {demo.current.steps} steps</dd></div>
+          <div><dt>Current volatility</dt><dd>σ {demo.sigma.toFixed(2)}</dd></div>
+        </dl>
       </section>
     </div>
   );

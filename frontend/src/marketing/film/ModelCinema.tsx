@@ -4,208 +4,213 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MODEL_STORIES, type ModelId } from "./filmMedia";
 
-type ModelVisualProps = {
-  id: ModelId;
+type ModelCinemaProps = {
+  variant?: "overview" | "detail";
+  title: string;
+  intro: string;
 };
 
-const MODEL_MEDIA: Record<
-  ModelId,
-  { image: string; srcSet: string; alt: string; credit: string; source: string }
-> = {
-  "monte-carlo": {
-    image: "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-origin-1920.webp",
-    srcSet:
-      "/media/math-intellect/cinematic/optimized/webp/mi-film-impact-origin-960.webp 960w, /media/math-intellect/cinematic/optimized/webp/mi-film-impact-origin-1920.webp 1920w",
-    alt: "A white liquid splash suspended against a dark background",
-    credit: "Pete Godfrey on Unsplash",
-    source: "https://unsplash.com/photos/milk-splash-frozen-in-time-against-black-background-6ieRRBACAqM",
-  },
-  "game-theory": {
-    image: "/media/math-intellect/cinematic/optimized/webp/mi-film-game-theory-1920.webp",
-    srcSet:
-      "/media/math-intellect/cinematic/optimized/webp/mi-film-game-theory-960.webp 960w, /media/math-intellect/cinematic/optimized/webp/mi-film-game-theory-1920.webp 1920w",
-    alt: "Two people working together at a table with a laptop",
-    credit: "Adam Rutkowski on Unsplash",
-    source: "https://unsplash.com/photos/two-men-sitting-at-a-table-with-a-laptop-r_WVQzfgClw",
-  },
-  market: {
-    image: "/media/math-intellect/cinematic/optimized/webp/mi-film-market-observation-1920.webp",
-    srcSet:
-      "/media/math-intellect/cinematic/optimized/webp/mi-film-market-observation-960.webp 960w, /media/math-intellect/cinematic/optimized/webp/mi-film-market-observation-1920.webp 1920w",
-    alt: "Market data displayed across a set of trading screens",
-    credit: "Jakub Żerdzicki on Unsplash",
-    source: "https://unsplash.com/photos/trader-analyzing-stock-market-charts-on-multiple-screens-j_hho1mE47s",
-  },
-  conflict: {
-    image: "/media/math-intellect/optimized/webp/mi-murmuration-01-1920.webp",
-    srcSet:
-      "/media/math-intellect/optimized/webp/mi-murmuration-01-768.webp 768w, /media/math-intellect/optimized/webp/mi-murmuration-01-1280.webp 1280w, /media/math-intellect/optimized/webp/mi-murmuration-01-1920.webp 1920w",
-    alt: "A murmuration of starlings moving together across the sky",
-    credit: "James Wainscoat on Unsplash",
-    source: "https://unsplash.com/photos/b7MZ6iGIoSI",
-  },
-};
+function ModelVisual({ id }: { id: ModelId }) {
+  if (id === "monte-carlo") {
+    return (
+      <svg className="mi-model-schema" viewBox="0 0 1000 620" role="img" aria-label="Illustrative schema of a starting value branching into sampled paths">
+        <g className="mi-schema-grid" aria-hidden="true">
+          <path d="M80 105H930M80 205H930M80 305H930M80 405H930M80 505H930" />
+          <path d="M80 70V535M292 70V535M504 70V535M716 70V535M930 70V535" />
+        </g>
+        <g className="mi-schema-lines" aria-hidden="true">
+          <path d="M80 308C230 303 264 146 430 192S650 418 930 250" />
+          <path d="M80 308C230 303 288 391 440 351S702 143 930 204" />
+          <path d="M80 308C218 311 328 235 466 276S716 435 930 391" />
+          <path d="M80 308C218 311 317 455 484 411S700 190 930 334" />
+          <path d="M80 308C228 310 362 291 518 318S736 242 930 115" />
+          <path d="M80 308C244 304 354 117 506 151S710 316 930 462" />
+          <path d="M80 308C248 310 373 352 528 266S740 112 930 287" />
+          <path d="M80 308C255 305 382 423 544 378S734 338 930 424" />
+          <path d="M80 308C234 311 354 210 496 224S735 470 930 360" />
+        </g>
+        <circle className="mi-schema-origin" cx="80" cy="308" r="9" />
+        <g className="mi-schema-nodes" aria-hidden="true">
+          <circle cx="930" cy="250" r="7" /><circle cx="930" cy="204" r="7" />
+          <circle cx="930" cy="391" r="7" /><circle cx="930" cy="334" r="7" />
+        </g>
+      </svg>
+    );
+  }
 
-export function ModelVisual({ id }: ModelVisualProps) {
-  const media = MODEL_MEDIA[id];
+  if (id === "game-theory") {
+    return (
+      <svg className="mi-model-schema" viewBox="0 0 1000 620" role="img" aria-label="A payoff matrix maps each pair of strategies to both players' payoffs">
+        <g className="mi-schema-grid" aria-hidden="true">
+          <path d="M260 145H900M260 365H900M260 585H900M260 145V585M580 145V585M900 145V585" />
+        </g>
+        <g className="mi-schema-axis" aria-hidden="true">
+          <path d="M260 112H900M225 145V585" />
+          <path d="M370 112l-18-10m18 10l-18 10M225 280l-10-18m10 18l10-18" />
+        </g>
+        <g className="mi-schema-label" aria-hidden="true">
+          <text x="420" y="92">Player B · strategy</text>
+          <text x="150" y="386" transform="rotate(-90 150 386)">Player A · strategy</text>
+        </g>
+        <g className="mi-schema-payoffs" aria-hidden="true">
+          <circle cx="370" cy="255" r="16" /><circle cx="420" cy="255" r="16" />
+          <circle cx="690" cy="255" r="16" /><circle cx="740" cy="255" r="16" />
+          <circle cx="370" cy="475" r="16" /><circle cx="420" cy="475" r="16" />
+          <circle cx="690" cy="475" r="16" /><circle cx="740" cy="475" r="16" />
+        </g>
+      </svg>
+    );
+  }
+
+  if (id === "market") {
+    return (
+      <svg className="mi-model-schema" viewBox="0 0 1000 620" role="img" aria-label="Illustrative market paths begin at a shared initial state and diverge over time">
+        <g className="mi-schema-grid" aria-hidden="true">
+          <path d="M80 105H930M80 205H930M80 305H930M80 405H930M80 505H930" />
+          <path d="M80 70V535M292 70V535M504 70V535M716 70V535M930 70V535" />
+        </g>
+        <path className="mi-schema-band" d="M80 308C258 308 297 248 450 256S707 139 930 95L930 498C738 431 640 474 474 366S238 308 80 308Z" />
+        <g className="mi-schema-lines" aria-hidden="true">
+          <path d="M80 308C230 307 280 218 432 255S704 386 930 163" />
+          <path d="M80 308C230 308 285 379 451 342S702 190 930 288" />
+          <path d="M80 308C229 307 335 288 490 310S731 442 930 376" />
+          <path d="M80 308C233 307 310 424 468 401S738 163 930 221" />
+          <path d="M80 308C240 308 378 200 522 225S736 337 930 119" />
+          <path d="M80 308C233 308 360 347 520 322S720 206 930 453" />
+        </g>
+        <circle className="mi-schema-origin" cx="80" cy="308" r="9" />
+      </svg>
+    );
+  }
 
   return (
-    <figure className={"mi-model-visual mi-model-visual--" + id}>
-      <picture className="mi-model-picture">
-        <source
-          type="image/webp"
-          srcSet={media.srcSet}
-          sizes="(max-width: 900px) 100vw, (max-width: 1200px) 50vw, 44vw"
-        />
-        <img
-          src={media.image}
-          srcSet={media.srcSet}
-          sizes="(max-width: 900px) 100vw, (max-width: 1200px) 50vw, 44vw"
-          width="1920"
-          height="1280"
-          alt={media.alt}
-          loading="lazy"
-          decoding="async"
-        />
-      </picture>
-      <figcaption>
-        <span>{media.credit} · contextual photograph</span>
-        <a href={media.source} target="_blank" rel="noreferrer">
-          Photo source
-        </a>
-      </figcaption>
-    </figure>
+    <svg className="mi-model-schema" viewBox="0 0 1000 620" role="img" aria-label="Illustrative agent interaction network with directed choices between agents">
+      <g className="mi-schema-links" aria-hidden="true">
+        <path d="M190 324C290 230 333 180 438 160" />
+        <path d="M190 324C286 406 354 455 454 468" />
+        <path d="M438 160C538 228 599 271 692 311" />
+        <path d="M454 468C554 396 613 355 692 311" />
+        <path d="M692 311C778 228 817 190 894 142" />
+        <path d="M692 311C777 376 824 427 894 484" />
+        <path d="M438 160C625 97 730 92 894 142" />
+        <path d="M454 468C618 524 748 529 894 484" />
+      </g>
+      <g className="mi-schema-agents" aria-hidden="true">
+        <circle cx="190" cy="324" r="34" /><circle cx="438" cy="160" r="27" />
+        <circle cx="454" cy="468" r="27" /><circle cx="692" cy="311" r="42" />
+        <circle cx="894" cy="142" r="27" /><circle cx="894" cy="484" r="27" />
+      </g>
+      <g className="mi-schema-arrows" aria-hidden="true">
+        <path d="M396 168l28-8-14 26M409 447l27 18-27 4M656 294l28 17-29 9M861 157l28-15-9 28M864 467l29 17-28 8" />
+      </g>
+    </svg>
   );
 }
 
-export function ModelCinema() {
+export function ModelCinema({ variant = "overview", title, intro }: ModelCinemaProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
-  const railRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<ScrollTrigger | null>(null);
-  const progressRef = useRef<HTMLSpanElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
+  const progressFillRef = useRef<HTMLSpanElement>(null);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
     const viewport = viewportRef.current;
-    const rail = railRef.current;
-    if (!section || !viewport || !rail) return;
-
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (reduceMotion.matches) return;
+    const track = trackRef.current;
+    if (!section || !viewport || !track) return;
 
     gsap.registerPlugin(ScrollTrigger);
-    const media = gsap.matchMedia();
+    const media = gsap.matchMedia(section);
 
-    media.add("(min-width: 961px)", () => {
-      const travel = () => {
-        const cards = Array.from(rail.children) as HTMLElement[];
-        if (cards.length < 2) return 0;
-        const gap = parseFloat(window.getComputedStyle(rail).columnGap) || 0;
-        return (cards[0].getBoundingClientRect().width + gap) * (cards.length - 1);
-      };
-      const tween = gsap.to(rail, {
+    media.add("(min-width: 960px) and (prefers-reduced-motion: no-preference)", () => {
+      const travel = () => Math.max(0, track.scrollWidth - window.innerWidth);
+      gsap.to(track, {
         x: () => -travel(),
         ease: "none",
         scrollTrigger: {
-          trigger: section,
+          trigger: viewport,
           start: "top top",
-          end: () => "+=" + Math.max(travel(), window.innerHeight * 1.35),
+          end: () => "+=" + Math.max(window.innerHeight * 4.2, travel() * 1.35),
+          scrub: 0.8,
           pin: true,
-          pinSpacing: true,
-          scrub: 0.9,
-          snap: {
-            snapTo: 1 / Math.max(1, MODEL_STORIES.length - 1),
-            delay: 0.08,
-            duration: { min: 0.4, max: 0.8 },
-            ease: "power2.out",
-          },
-          anticipatePin: 1,
           invalidateOnRefresh: true,
-          onUpdate: (self) => progressRef.current?.style.setProperty("transform", "scaleX(" + self.progress + ")"),
+          onUpdate: (self) => {
+            if (progressFillRef.current) {
+              progressFillRef.current.style.transform = "scaleX(" + self.progress + ")";
+            }
+            if (progressRef.current) {
+              progressRef.current.setAttribute("aria-valuenow", String(Math.round(self.progress * 100)));
+            }
+          },
         },
       });
-
-      triggerRef.current = tween.scrollTrigger as ScrollTrigger;
-      return () => {
-        triggerRef.current = null;
-        tween.scrollTrigger?.kill();
-        tween.kill();
-      };
+      requestAnimationFrame(() => ScrollTrigger.refresh());
     });
 
-    const refreshFrame = window.requestAnimationFrame(() => ScrollTrigger.refresh());
-    return () => {
-      window.cancelAnimationFrame(refreshFrame);
-      media.revert();
-    };
-  }, []);
-
-  const bringCardIntoView = (index: number) => {
-    const trigger = triggerRef.current;
-    if (!trigger) return;
-    const fraction = index / Math.max(1, MODEL_STORIES.length - 1);
-    window.scrollTo({
-      top: trigger.start + (trigger.end - trigger.start) * fraction,
-      behavior: "smooth",
-    });
-  };
+    return () => media.revert();
+  }, [variant]);
 
   return (
     <section
       ref={sectionRef}
-      className="mi-model-cinema"
-      aria-labelledby="mi-model-cinema-title"
+      className={"mi-model-cinema mi-model-cinema--" + variant}
+      aria-labelledby={"mi-model-cinema-title-" + variant}
     >
-      <header className="mi-model-cinema-heading" data-reveal>
+      <header className="mi-model-cinema-intro">
         <div>
-          <h2 id="mi-model-cinema-title">Different systems call for different models.</h2>
-          <p>
-            Keep scrolling to move across four mathematical lenses. Each makes
-            another set of assumptions and outcomes available to inspect.
-          </p>
+          <h2 id={"mi-model-cinema-title-" + variant}>{title}</h2>
+          <p>{intro}</p>
         </div>
-        <span className="mi-model-scroll-hint">
-          Scroll to explore <span aria-hidden="true">↓</span>
-        </span>
+        <div className="mi-model-rail-status">
+          <span>Scroll to move through the models</span>
+          <div className="mi-model-rail-progress" role="progressbar" aria-label="Model exploration progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={0} ref={progressRef}>
+            <span ref={progressFillRef} />
+          </div>
+        </div>
       </header>
 
-      <div ref={viewportRef} className="mi-model-viewport">
-        <div ref={railRef} className="mi-model-track">
-          {MODEL_STORIES.map((model, index) => (
-            <article
-              key={model.id}
-              className={"mi-model-rail-card mi-model-rail-card--" + model.id}
-              onFocusCapture={() => bringCardIntoView(index)}
-            >
-              <ModelVisual id={model.id} />
-              <div className="mi-model-rail-copy">
-                <h3>{model.name}</h3>
-                <p className="mi-rail-question">{model.question}</p>
-                <p>{model.description}</p>
-                <div className="mi-rail-inputs">
-                  <strong>Inputs</strong>
-                  <span>{model.inputs.join(" · ")}</span>
+      <div className="mi-model-viewport" ref={viewportRef}>
+        <div className="mi-model-track" ref={trackRef}>
+          {MODEL_STORIES.map((model) => {
+            const headingId = "mi-model-" + model.id + "-" + variant;
+            const target = variant === "overview" ? "/models" : model.id === "monte-carlo" ? "/workbench" : "/app/simulations/new";
+            return (
+              <article
+                className={"mi-model-panel mi-model-panel--" + model.id}
+                key={model.id}
+                id={variant === "detail" ? model.id : undefined}
+                aria-labelledby={headingId}
+              >
+                <div className="mi-model-panel-art">
+                  <ModelVisual id={model.id} />
                 </div>
-                <Link
-                  to={"/models#" + model.id}
-                  viewTransition
-                  className="mi-rail-link"
-                >
-                  See the assumptions <span aria-hidden="true">↗</span>
-                </Link>
-              </div>
-            </article>
-          ))}
+                <div className="mi-model-panel-copy">
+                  <h3 id={headingId}>{model.name}</h3>
+                  <p className="mi-model-question">{variant === "detail" ? model.question : model.title}</p>
+                  <p className="mi-model-description">{model.description}</p>
+                  {variant === "detail" && (
+                    <div className="mi-model-specs">
+                      <div>
+                        <h4>Inputs</h4>
+                        <ul>{model.inputs.map((item) => <li key={item}>{item}</li>)}</ul>
+                      </div>
+                      <div>
+                        <h4>Outputs</h4>
+                        <ul>{model.outputs.map((item) => <li key={item}>{item}</li>)}</ul>
+                      </div>
+                    </div>
+                  )}
+                  <Link to={target} viewTransition className="mi-model-cta">
+                    {variant === "overview" ? "Explore this model" : model.id === "monte-carlo" ? "Open the public experiment" : "Build this model"}
+                    <span aria-hidden="true">↗</span>
+                  </Link>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </div>
-
-      <div className="mi-model-scroll-progress" aria-hidden="true">
-        <span ref={progressRef} />
-      </div>
-      <p className="mi-model-gallery-note">
-        The photographs set a context. They are not simulation results.
-      </p>
     </section>
   );
 }

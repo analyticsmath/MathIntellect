@@ -29,15 +29,15 @@ export const MarketingShell: React.FC = () => {
       reveals.forEach((element) => {
         gsap.fromTo(
           element,
-          { autoAlpha: 0, y: 26 },
+          { autoAlpha: 0, y: 24 },
           {
             autoAlpha: 1,
             y: 0,
-            duration: 0.84,
+            duration: 0.9,
             ease: "power3.out",
             scrollTrigger: {
               trigger: element,
-              start: "top 84%",
+              start: "top 82%",
               once: true,
               fastScrollEnd: true,
             },
@@ -53,13 +53,14 @@ export const MarketingShell: React.FC = () => {
           { strokeDasharray: 1, strokeDashoffset: 1 },
           {
             strokeDashoffset: 0,
-            duration: 1.32,
-            stagger: 0.018,
+            duration: 1.65,
+            stagger: 0.035,
             ease: "power2.out",
             scrollTrigger: {
               trigger: section,
-              start: "top 78%",
+              start: "top 88%",
               once: true,
+              fastScrollEnd: true,
             },
           },
         );
