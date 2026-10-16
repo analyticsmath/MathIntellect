@@ -39,9 +39,9 @@ export function WorkbenchPage() {
     <div className="mi-workbench-page">
       <header className="mi-page-intro mi-workbench-intro">
         <h1 tabIndex={-1}>
-          Change one condition.
+          Change a condition.
           <br />
-          <span>Read every path.</span>
+          Read its paths.
         </h1>
         <p>
           This open experiment calculates 24 additive diffusion paths in your

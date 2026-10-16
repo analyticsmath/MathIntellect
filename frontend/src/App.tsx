@@ -32,13 +32,13 @@ function PageLoader() {
     <div
       role="status"
       aria-live="polite"
-      className="min-h-screen grid place-items-center bg-[#101b2b] text-[#f7f9fc]"
+      className="min-h-screen grid place-items-center bg-[#0c100e] text-[#f4f7f5]"
     >
       <div className="text-center">
         <span className="block font-medium tracking-tight text-lg">
           math intellect
         </span>
-        <span aria-hidden="true" className="mx-auto mt-5 block h-px w-16 bg-[#52d4e5]" />
+        <span aria-hidden="true" className="mx-auto mt-5 block h-px w-16 bg-[#cfff4b]" />
       </div>
     </div>
   );
@@ -69,7 +69,7 @@ function RouteExperienceManager() {
   useEffect(() => {
     positions.current[lastKey.current] = window.scrollY;
     lastKey.current = location.key;
-    const titles:Record<string,string>={'/':'Math Intellect | See the paths behind a result','/models':'Models | Math Intellect','/workbench':'Workbench | Math Intellect','/method':'Method | Math Intellect','/login':'Sign in | Math Intellect','/signup':'Create account | Math Intellect'};
+    const titles:Record<string,string>={'/':'Math Intellect | A model in motion','/models':'Models | Math Intellect','/workbench':'Workbench | Math Intellect','/method':'Method | Math Intellect','/login':'Sign in | Math Intellect','/signup':'Create account | Math Intellect'};
     if (titles[location.pathname]) document.title=titles[location.pathname];
     const isHashNav = location.hash.length > 1;
 
