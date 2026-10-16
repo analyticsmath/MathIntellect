@@ -361,11 +361,11 @@
 @keyframes mi-route-out{to{opacity:0;transform:translateY(-8px)}}
 @keyframes mi-route-in{from{opacity:.76;clip-path:inset(0 0 100% 0);transform:translateY(14px)}to{opacity:1;clip-path:inset(0);transform:translateY(0)}}
 
-.mi-home-hero{display:grid;grid-template-columns:minmax(0,.93fr) minmax(420px,1.07fr);align-items:center;gap:clamp(18px,3vw,46px);min-height:calc(100svh - 84px);padding:clamp(46px,6vw,92px) clamp(22px,5.2vw,84px);overflow:hidden}
+.mi-home-hero{display:grid;grid-template-columns:minmax(0,1.22fr) minmax(360px,.78fr);align-items:center;gap:clamp(18px,3vw,46px);min-height:calc(100svh - 84px);padding:clamp(46px,6vw,92px) clamp(22px,5.2vw,84px);overflow:hidden}
 .mi-hero-art{position:relative;grid-column:2;grid-row:1;align-self:stretch;display:flex;align-items:center;justify-content:center;min-width:0;min-height:560px}
 .mi-hero-artwork{display:block;width:125%;max-width:none;height:auto;max-height:88svh;object-fit:contain;opacity:.92;mix-blend-mode:screen;transform:translateX(-8%)}
 .mi-hero-copy{grid-column:1;grid-row:1;display:flex;flex-direction:column;align-items:flex-start;gap:24px;width:100%;max-width:700px;margin:0}
-.mi-hero-copy h1{display:block;max-width:720px;font-size:clamp(54px,6.1vw,92px);font-weight:560;letter-spacing:-.082em;line-height:.91;color:var(--mi-on-night)}
+.mi-hero-copy h1{display:block;max-width:840px;font-size:clamp(50px,5.8vw,88px);font-weight:560;letter-spacing:-.082em;line-height:.91;color:var(--mi-on-night)}
 .mi-hero-line{display:block;overflow:hidden;padding:0 .03em .06em 0}
 .mi-hero-line>span{display:block}
 .mi-hero-copy>p{max-width:490px;margin:0;color:#c1c9c4;font-size:clamp(17px,1.35vw,20px);line-height:1.55}
@@ -487,4 +487,16 @@
  .mi-journey-visual{position:relative;top:auto;height:auto;overflow:visible}
  .mi-model-panel.is-active .mi-model-panel-copy{animation:none}
  ::view-transition-old(mi-route),::view-transition-new(mi-route){animation:none!important}
+}
+
+
+@media(min-width:960px){.mi-hero-line>span{white-space:nowrap}}
+@media(min-width:960px) and (max-width:1199px){
+ .mi-home-hero{grid-template-columns:minmax(0,1fr) minmax(360px,.95fr);gap:20px}
+ .mi-hero-copy h1{font-size:clamp(50px,5.5vw,66px)}
+}
+@media(min-width:960px) and (max-width:1080px){
+ .mi-home-hero{grid-template-columns:minmax(0,1fr) minmax(320px,.92fr);gap:16px}
+ .mi-hero-copy h1{font-size:clamp(44px,4.7vw,50px)}
+ .mi-hero-artwork{width:140%}
 }
