@@ -176,10 +176,12 @@
 .mi-model-panel--game-theory .mi-model-specs h4{color:#46544b}
 .mi-model-panel--game-theory .mi-model-cta{color:var(--mi-copy)}
 .mi-model-panel--game-theory .mi-model-cta:hover{color:#627d20}
-.mi-model-panel--market .mi-model-panel-art{inset:0 20% 0 -8%}
+.mi-model-panel--market .mi-model-panel-art{inset:0 50% 0 2%}
+.mi-model-panel--market .mi-model-schema{width:min(52vw,700px);height:min(88svh,580px)}
 .mi-model-panel--market .mi-model-panel-copy{width:min(500px,38vw);margin-left:auto;align-self:flex-end;margin-bottom:4vh}
 .mi-model-panel--conflict{background:#151c18}
-.mi-model-panel--conflict .mi-model-panel-art{inset:0 -8% 0 29%}
+.mi-model-panel--conflict .mi-model-panel-art{inset:0 -8% 0 38%}
+.mi-model-panel--conflict .mi-model-schema{width:min(56vw,760px);height:min(88svh,700px)}
 .mi-model-panel--conflict .mi-model-panel-copy{width:min(500px,40vw)}
 
 .mi-home-repeat{display:grid;grid-template-columns:minmax(0,.92fr) minmax(320px,.6fr);align-items:center;gap:clamp(44px,9vw,140px);min-height:660px;padding:clamp(92px,12vw,180px) clamp(22px,8.5vw,140px);color:var(--mi-on-night);background:var(--mi-night)}
@@ -284,7 +286,7 @@
  .mi-model-cinema-intro{align-items:flex-start;flex-direction:column}.mi-model-rail-status{flex-basis:auto;width:min(360px,100%);align-items:flex-start}
  .mi-model-viewport{height:auto;overflow:visible}.mi-model-scroll-progress{display:none}.mi-model-track{display:flex;flex-direction:column;width:100%;height:auto;transform:none!important}
  .mi-model-panel{flex:none;width:100%;height:auto;min-height:760px;padding:0}
- .mi-model-panel-art{inset:0 0 auto;height:52%}.mi-model-schema{width:100%;height:100%}.mi-model-panel--game-theory .mi-model-schema{width:100%;height:100%}
+ .mi-model-panel-art{inset:0 0 auto;height:52%}.mi-model-schema{width:100%;height:100%}.mi-model-panel--game-theory .mi-model-schema,.mi-model-panel--market .mi-model-schema,.mi-model-panel--conflict .mi-model-schema{width:100%;height:100%}
  .mi-model-panel-copy,.mi-model-cinema--detail .mi-model-panel-copy{align-self:auto;width:auto;max-width:720px;margin:auto 0 0;padding:40px clamp(22px,5.4vw,88px) 58px}
  .mi-model-panel--monte-carlo .mi-model-panel-copy,.mi-model-panel--market .mi-model-panel-copy{margin:auto 0 0}
  .mi-model-panel--game-theory .mi-model-panel-art,.mi-model-panel--market .mi-model-panel-art,.mi-model-panel--conflict .mi-model-panel-art{inset:0 0 auto}
