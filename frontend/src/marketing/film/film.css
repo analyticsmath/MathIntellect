@@ -143,7 +143,8 @@
 .mi-schema-nodes circle{fill:var(--mi-night);stroke:var(--mi-signal);stroke-width:4}
 .mi-schema-axis{fill:none;stroke:#657169;stroke-width:2}
 .mi-schema-label{fill:#89938d;font:20px "IBM Plex Mono",monospace}
-.mi-schema-payoffs{fill:var(--mi-signal);opacity:.85}
+.mi-schema-cell-label{fill:#89938d;font:18px "IBM Plex Mono",monospace;text-anchor:middle}
+.mi-schema-payoffs{fill:var(--mi-signal);opacity:.85;font:20px "IBM Plex Mono",monospace;text-anchor:middle}
 .mi-schema-links{fill:none;stroke:rgba(207,255,75,.52);stroke-width:3}
 .mi-schema-agents circle{fill:#111815;stroke:var(--mi-signal);stroke-width:3}
 .mi-schema-arrows{fill:none;stroke:var(--mi-signal);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
@@ -166,7 +167,8 @@
 .mi-model-panel--game-theory .mi-schema-grid{stroke:rgba(18,23,21,.13)}
 .mi-model-panel--game-theory .mi-schema-axis{stroke:#56615b}
 .mi-model-panel--game-theory .mi-schema-label{fill:#4b5750}
-.mi-model-panel--game-theory .mi-schema-payoffs{fill:#829187}
+.mi-model-panel--game-theory .mi-schema-cell-label{fill:#4b5750}
+.mi-model-panel--game-theory .mi-schema-payoffs{fill:#58635d;opacity:1}
 .mi-model-panel--game-theory .mi-model-panel-copy{width:min(520px,39vw);margin-left:auto}
 .mi-model-panel--game-theory .mi-model-question{color:#4a5550}
 .mi-model-panel--game-theory .mi-model-description,.mi-model-panel--game-theory .mi-model-specs li{color:#58635d}
