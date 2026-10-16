@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MODEL_STORIES, type ModelId } from "./filmMedia";
-import { useScenario } from "./scenario";
 
 type ModelVisualProps = {
   id: ModelId;
@@ -80,7 +79,6 @@ export function ModelVisual({ id }: ModelVisualProps) {
 }
 
 export function ModelCinema() {
-  const demo = useScenario();
   const sectionRef = useRef<HTMLElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const railRef = useRef<HTMLDivElement>(null);
