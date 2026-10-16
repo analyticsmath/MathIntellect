@@ -127,8 +127,27 @@ export function ModelCinema({ variant = "overview", title, intro }: ModelCinemaP
 
     media.add("(min-width: 960px) and (prefers-reduced-motion: no-preference)", () => {
       const travel = () => Math.max(0, track.scrollWidth - window.innerWidth);
-      const panelCount = track.children.length;
+      const panels = Array.from(track.children) as HTMLElement[];
+      const panelCount = panels.length;
       const snapStep = 1 / Math.max(1, panelCount - 1);
+      let activePanel = -1;
+      const activatePanel = (index: number) => {
+        if (index === activePanel || !panels[index]) return;
+        activePanel = index;
+        panels.forEach((panel, panelIndex) => panel.classList.toggle("is-active", panelIndex === index));
+        const panel = panels[index];
+        const drawn = Array.from(panel.querySelectorAll<SVGPathElement>(".mi-schema-lines path, .mi-schema-links path, .mi-schema-arrows path"));
+        drawn.forEach((path, pathIndex) => {
+          const length = path.getTotalLength();
+          gsap.killTweensOf(path);
+          gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
+          gsap.to(path, { strokeDashoffset: 0, duration: 0.95, delay: Math.min(pathIndex * 0.035, 0.28), ease: "power2.out", overwrite: "auto" });
+        });
+        const copy = panel.querySelector<HTMLElement>(".mi-model-panel-copy");
+        if (copy) {
+          gsap.fromTo(copy, { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.72, ease: "power3.out", overwrite: "auto" });
+        }
+      };
       gsap.to(track, {
         x: () => -travel(),
         ease: "none",
@@ -152,6 +171,7 @@ export function ModelCinema({ variant = "overview", title, intro }: ModelCinemaP
             if (progressRef.current) {
               progressRef.current.setAttribute("aria-valuenow", String(Math.round(self.progress * 100)));
             }
+            activatePanel(Math.min(panelCount - 1, Math.round(self.progress * (panelCount - 1))));
           },
         },
       });
@@ -173,7 +193,7 @@ export function ModelCinema({ variant = "overview", title, intro }: ModelCinemaP
           <p>{intro}</p>
         </div>
         <div className="mi-model-rail-status">
-          <span>Scroll to move through the models</span>
+          <span>Scroll through the model structures</span>
         </div>
       </header>
 
@@ -184,7 +204,7 @@ export function ModelCinema({ variant = "overview", title, intro }: ModelCinemaP
             const target = variant === "overview" ? "/models" : model.id === "monte-carlo" ? "/workbench" : "/app/simulations/new";
             return (
               <article
-                className={"mi-model-panel mi-model-panel--" + model.id}
+                className={"mi-model-panel mi-model-panel--" + model.id + (model.id === "monte-carlo" ? " is-active" : "")}
                 key={model.id}
                 id={variant === "detail" ? model.id : undefined}
                 aria-labelledby={headingId}

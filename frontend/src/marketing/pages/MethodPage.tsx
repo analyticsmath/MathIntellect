@@ -9,11 +9,9 @@ export function MethodPage() {
     <div className="mi-method-page">
       <header className="mi-method-intro">
         <div className="mi-method-intro-copy">
-          <h1 tabIndex={-1}>What the calculation assumes.</h1>
+          <h1 tabIndex={-1}>The calculation, step by step.</h1>
           <p>
-            The public workbench runs a seeded additive-diffusion example. This
-            page shows its starting conditions, sampling rule, comparison, and
-            limits.
+            The public workbench runs one seeded additive-diffusion example. Follow its starting conditions, sampling rule, comparison, and limits.
           </p>
           <nav aria-label="Method contents" className="mi-method-nav">
             <a href="#starting-state">Starting conditions</a>
@@ -24,7 +22,6 @@ export function MethodPage() {
           </nav>
         </div>
         <div className="mi-method-equation-stage" data-reveal>
-          <p>At each step</p>
           <KaTeXBlock math="x_{t+1}=x_t+\mu\Delta t+\sigma\sqrt{\Delta t}\,Z_t" />
           <KaTeXBlock math="Z_t\sim\mathcal{N}(0,1),\qquad\Delta t=\frac{1}{50}" />
         </div>

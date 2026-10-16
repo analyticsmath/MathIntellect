@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useScenario } from "../film/scenario";
 import { TrajectoryPlot } from "../film/TrajectoryPlot";
+import { ModelJourney } from "../film/ModelJourney";
 import { ModelCinema } from "../film/ModelCinema";
 
 const openingVolatility = 0.35;
@@ -12,39 +13,55 @@ export function HomePage() {
 
   return (
     <div className="mi-home">
-      <section className="mi-home-hero" aria-labelledby="mi-home-title">
-        <div className="mi-hero-data" data-path-draw>
-          <TrajectoryPlot current={demo.current} draw />
+      <section className="mi-home-hero" data-home-hero aria-labelledby="mi-home-title">
+        <div className="mi-hero-art" aria-hidden="true">
+          <img
+            className="mi-hero-artwork"
+            src="/media/math-intellect/generated/mi-pathfield-hero.webp"
+            alt=""
+            decoding="async"
+            fetchPriority="high"
+          />
         </div>
         <div className="mi-hero-copy">
-          <div className="mi-hero-conditions" aria-label="Public example conditions">
-            <span>Drift μ {demo.mu.toFixed(2)}</span>
-            <span>Volatility σ {demo.sigma.toFixed(2)}</span>
-            <span>{demo.paths} paths</span>
-            <span>Seed {demo.seed}</span>
-          </div>
-          <h1 id="mi-home-title" tabIndex={-1}>A model turns<br />conditions into paths.</h1>
-          <p>
-            Change an assumption. See how the same model responds. Keep the
-            inputs beside the outcomes.
+          <h1 id="mi-home-title" tabIndex={-1}>
+            <span className="mi-hero-line"><span data-hero-line>One assumption.</span></span>
+            <span className="mi-hero-line"><span data-hero-line>Many possible paths.</span></span>
+          </h1>
+          <p data-hero-copy>
+            Follow a seeded model from its conditions to its outcomes. Change volatility alone and see how the same model responds.
           </p>
-          <div className="mi-hero-actions">
-            <a className="mi-button mi-button--signal" href="#experiment">
-              Explore the live experiment <span aria-hidden="true">↓</span>
+          <div className="mi-hero-actions" data-hero-actions>
+            <a className="mi-button mi-button--signal" href="#model-story">
+              Follow the calculation <span aria-hidden="true">↓</span>
             </a>
             <Link className="mi-text-link" to="/workbench" viewTransition>
               Open the workbench <span aria-hidden="true">↗</span>
             </Link>
           </div>
+          <div className="mi-hero-conditions" aria-label="Public example conditions" data-hero-conditions>
+            <span>Drift μ {demo.mu.toFixed(2)}</span>
+            <span>Volatility σ {demo.sigma.toFixed(2)}</span>
+            <span>{demo.paths} paths</span>
+            <span>{demo.current.steps} steps</span>
+            <span>Seed {demo.seed}</span>
+          </div>
         </div>
       </section>
 
+      <ModelJourney
+        mu={demo.mu}
+        sigma={demo.sigma}
+        seed={demo.seed}
+        paths={demo.paths}
+        current={demo.current}
+      />
+
       <section id="experiment" className="mi-home-experiment" aria-labelledby="mi-experiment-title">
         <header className="mi-section-heading" data-reveal>
-          <h2 id="mi-experiment-title">Change one condition.</h2>
+          <h2 id="mi-experiment-title">Change volatility. Hold the rest fixed.</h2>
           <p>
-            Move volatility while drift, seed, path count, and horizon stay
-            fixed. Both runs share one scale.
+            The baseline stays at σ 0.35. Adjust one value and compare both runs on the same scale.
           </p>
         </header>
 
@@ -52,7 +69,7 @@ export function HomePage() {
           <aside className="mi-experiment-controls" data-reveal>
             <div className="mi-control-intro">
               <h3>Volatility</h3>
-              <p>The browser recalculates the same seeded model as you move the control.</p>
+              <p>The browser recalculates this seeded model as you move the control.</p>
             </div>
             <div className="mi-control mi-control--home">
               <label htmlFor="home-sigma">
@@ -82,21 +99,21 @@ export function HomePage() {
             </dl>
             <p className="mi-experiment-status" role="status">
               {changed
-                ? "The current run differs from the baseline in volatility only."
+                ? "Only volatility differs from the baseline."
                 : "Move the control to compare the current run with the baseline."}
             </p>
           </aside>
 
-          <div className="mi-experiment-evidence" data-path-draw>
+          <div className="mi-experiment-evidence">
             <header className="mi-evidence-heading">
               <div>
-                <h3>Twenty-four paths. Two conditions.</h3>
-                <p>Each line begins at zero. Each endpoint belongs to the same seed.</p>
+                <h3>Two runs. One shared scale.</h3>
+                <p>Each line begins at zero. The seed remains fixed.</p>
               </div>
               <span className="mi-evidence-seed">Seed {demo.seed}</span>
             </header>
 
-            <div className="mi-home-plot">
+            <div className="mi-home-plot" data-path-draw>
               <TrajectoryPlot current={demo.current} baseline={demo.baseline} compare draw />
             </div>
 
@@ -112,8 +129,7 @@ export function HomePage() {
             </dl>
 
             <p className="mi-evidence-limit">
-              These statistics describe the 24 sampled endpoints in this run.
-              They do not establish outcomes outside the model.
+              These values summarize the 24 sampled endpoints in each run. They do not establish outcomes outside the model.
             </p>
           </div>
         </div>
@@ -121,16 +137,15 @@ export function HomePage() {
 
       <ModelCinema
         variant="overview"
-        title="Different questions need different models."
-        intro="Each family encodes a different structure. Scroll across to see what each one represents."
+        title="Choose a structure that fits the question."
+        intro="A path simulation, a payoff game, a market process, and an agent network ask different things. Scroll to see what each structure requires."
       />
 
       <section className="mi-home-repeat" aria-labelledby="mi-repeat-title">
         <div className="mi-repeat-copy" data-reveal>
-          <h2 id="mi-repeat-title">Repeat the run. Keep its limits in view.</h2>
+          <h2 id="mi-repeat-title">A result should be repeatable.</h2>
           <p>
-            The seed fixes the random sequence. Replay the current inputs to
-            reproduce these paths and endpoint statistics.
+            The seed fixes the random sequence. Replay the current inputs to reproduce these paths and endpoint statistics.
           </p>
           <button className="mi-button mi-button--ink" type="button" onClick={demo.replay}>
             Replay this run <span aria-hidden="true">↻</span>

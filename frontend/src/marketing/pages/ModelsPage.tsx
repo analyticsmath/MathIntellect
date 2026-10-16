@@ -5,18 +5,18 @@ export function ModelsPage() {
   return (
     <div className="mi-models-page">
       <header className="mi-models-intro" data-reveal>
-        <h1 tabIndex={-1}>Start with the structure of your question.</h1>
+        <h1 tabIndex={-1}>Choose a structure that fits the question.</h1>
         <p>
-          Monte Carlo, Game Theory, Market Dynamics, and Agent Interaction each
-          model a different kind of system. Their outputs are only as useful as
-          the conditions supplied.
+          Monte Carlo, Game Theory, Market Dynamics, and Agent Interaction model
+          different systems. Each structure needs different inputs and produces
+          different kinds of evidence.
         </p>
       </header>
 
       <ModelCinema
         variant="detail"
-        title="Four model families. Four different questions."
-        intro="Scroll through each structure, its inputs, and the outputs it makes available."
+        title="Different models. Different evidence."
+        intro="Scroll through each structure, the inputs it uses, and the outputs it can provide. The diagrams describe model structure, not live calculations."
       />
 
       <section className="mi-models-boundary" data-reveal>
@@ -24,8 +24,8 @@ export function ModelsPage() {
           <h2>Every result belongs to its model.</h2>
           <p>
             The public experiment demonstrates seeded additive diffusion. The
-            other families describe separate model structures and are configured
-            in the workspace.
+            other families describe separate structures and are configured in
+            the workspace.
           </p>
         </div>
         <Link to="/method" viewTransition className="mi-text-link">

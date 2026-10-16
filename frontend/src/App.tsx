@@ -12,12 +12,12 @@ import {
 import { ProtectedRoute } from './shared/ui/ProtectedRoute';
 import { useAuth } from './shared/hooks/useAuth';
 import { AppErrorBoundary } from './components/ui/AppErrorBoundary';
+import MarketingShell from './marketing/MarketingShell';
+import HomePage from './marketing/pages/HomePage';
+import ModelsPage from './marketing/pages/ModelsPage';
+import WorkbenchPage from './marketing/pages/WorkbenchPage';
+import MethodPage from './marketing/pages/MethodPage';
 
-const MarketingShell = lazy(() => import('./marketing/MarketingShell'));
-const HomePage = lazy(() => import('./marketing/pages/HomePage'));
-const ModelsPage = lazy(() => import('./marketing/pages/ModelsPage'));
-const WorkbenchPage = lazy(() => import('./marketing/pages/WorkbenchPage'));
-const MethodPage = lazy(() => import('./marketing/pages/MethodPage'));
 const LoginPage = lazy(() => import('./auth/LoginPage'));
 const SignupPage = lazy(() => import('./auth/SignupPage'));
 
