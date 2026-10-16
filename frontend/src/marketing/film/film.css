@@ -129,7 +129,9 @@
 .mi-model-rail-status{display:flex;flex-direction:column;align-items:flex-end;gap:14px;flex:0 0 190px;padding-bottom:4px;color:var(--mi-muted-night);font:11px/1.4 "IBM Plex Mono",monospace}
 .mi-model-rail-progress{width:100%;height:2px;overflow:hidden;background:rgba(244,247,245,.22)}
 .mi-model-rail-progress span{display:block;width:100%;height:100%;background:var(--mi-signal);transform:scaleX(0);transform-origin:left}
-.mi-model-viewport{width:100%;height:100svh;overflow:hidden}
+.mi-model-viewport{position:relative;width:100%;height:100svh;overflow:hidden}
+.mi-model-scroll-progress{position:absolute;right:clamp(24px,5.4vw,86px);bottom:22px;left:clamp(24px,5.4vw,86px);z-index:5;height:2px;overflow:hidden;background:rgba(244,247,245,.24);pointer-events:none}
+.mi-model-scroll-progress span{display:block;width:100%;height:100%;background:var(--mi-signal);transform:scaleX(0);transform-origin:left}
 .mi-model-track{display:flex;width:max-content;height:100%}
 .mi-model-panel{position:relative;display:flex;align-items:center;flex:0 0 100vw;width:100vw;height:100svh;min-height:640px;overflow:hidden;padding:clamp(24px,5.4vw,86px);isolation:isolate}
 .mi-model-panel-art{position:absolute;inset:0;z-index:-1;display:grid;place-items:center;overflow:hidden;pointer-events:none}
@@ -277,7 +279,7 @@
  .mi-section-heading{grid-template-columns:1fr}.mi-section-heading p{max-width:600px}
  .mi-experiment-layout,.mi-workbench{grid-template-columns:1fr}.mi-experiment-controls{max-width:680px}
  .mi-model-cinema-intro{align-items:flex-start;flex-direction:column}.mi-model-rail-status{flex-basis:auto;width:min(360px,100%);align-items:flex-start}
- .mi-model-viewport{height:auto;overflow:visible}.mi-model-track{display:flex;flex-direction:column;width:100%;height:auto;transform:none!important}
+ .mi-model-viewport{height:auto;overflow:visible}.mi-model-scroll-progress{display:none}.mi-model-track{display:flex;flex-direction:column;width:100%;height:auto;transform:none!important}
  .mi-model-panel{flex:none;width:100%;height:auto;min-height:760px;padding:0}
  .mi-model-panel-art{inset:0 0 auto;height:52%}.mi-model-schema{width:100%;height:100%}
  .mi-model-panel-copy,.mi-model-cinema--detail .mi-model-panel-copy{align-self:auto;width:auto;max-width:720px;margin:auto 0 0;padding:40px clamp(22px,5.4vw,88px) 58px}
@@ -322,6 +324,7 @@
  .mi-cinema *, .mi-cinema *::before, .mi-cinema *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
  ::view-transition-old(mi-route),::view-transition-new(mi-route){animation:none!important}
  .mi-model-viewport{height:auto;overflow:visible}
+ .mi-model-scroll-progress{display:none}
  .mi-model-track{display:flex;flex-direction:column;width:100%;height:auto;transform:none!important}
  .mi-model-panel{flex:none;width:100%;height:auto;min-height:740px}
 }
