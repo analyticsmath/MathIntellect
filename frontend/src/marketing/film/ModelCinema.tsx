@@ -125,6 +125,8 @@ export function ModelCinema({ variant = "overview", title, intro }: ModelCinemaP
 
     media.add("(min-width: 960px) and (prefers-reduced-motion: no-preference)", () => {
       const travel = () => Math.max(0, track.scrollWidth - window.innerWidth);
+      const panelCount = track.children.length;
+      const snapStep = 1 / Math.max(1, panelCount - 1);
       gsap.to(track, {
         x: () => -travel(),
         ease: "none",
@@ -133,6 +135,12 @@ export function ModelCinema({ variant = "overview", title, intro }: ModelCinemaP
           start: "top top",
           end: () => "+=" + Math.max(window.innerHeight * 4.2, travel() * 1.35),
           scrub: 0.8,
+          snap: {
+            snapTo: snapStep,
+            delay: 0.14,
+            duration: { min: 0.35, max: 0.8 },
+            ease: "power2.inOut",
+          },
           pin: true,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
@@ -164,9 +172,6 @@ export function ModelCinema({ variant = "overview", title, intro }: ModelCinemaP
         </div>
         <div className="mi-model-rail-status">
           <span>Scroll to move through the models</span>
-          <div className="mi-model-rail-progress" role="progressbar" aria-label="Model exploration progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={0} ref={progressRef}>
-            <span ref={progressFillRef} />
-          </div>
         </div>
       </header>
 
@@ -209,6 +214,9 @@ export function ModelCinema({ variant = "overview", title, intro }: ModelCinemaP
               </article>
             );
           })}
+        </div>
+        <div className="mi-model-scroll-progress" role="progressbar" aria-label="Model exploration progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={0} ref={progressRef}>
+          <span ref={progressFillRef} />
         </div>
       </div>
     </section>
