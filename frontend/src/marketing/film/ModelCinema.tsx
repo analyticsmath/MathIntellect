@@ -98,7 +98,12 @@ export function ModelCinema() {
     const media = gsap.matchMedia();
 
     media.add("(min-width: 961px)", () => {
-      const travel = () => Math.max(0, rail.scrollWidth - viewport.clientWidth);
+      const travel = () => {
+        const cards = Array.from(rail.children) as HTMLElement[];
+        if (cards.length < 2) return 0;
+        const gap = parseFloat(window.getComputedStyle(rail).columnGap) || 0;
+        return (cards[0].getBoundingClientRect().width + gap) * (cards.length - 1);
+      };
       const tween = gsap.to(rail, {
         x: () => -travel(),
         ease: "none",
@@ -109,6 +114,12 @@ export function ModelCinema() {
           pin: true,
           pinSpacing: true,
           scrub: 0.9,
+          snap: {
+            snapTo: 1 / Math.max(1, MODEL_STORIES.length - 1),
+            delay: 0.08,
+            duration: { min: 0.4, max: 0.8 },
+            ease: "power2.out",
+          },
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => progressRef.current?.style.setProperty("transform", "scaleX(" + self.progress + ")"),

@@ -341,9 +341,9 @@
 .mi-hero-layout {
   width: min(1500px, 100%);
   display: grid;
-  grid-template-columns: minmax(380px, 0.92fr) minmax(450px, 1.08fr);
+  grid-template-columns: minmax(490px, 1.06fr) minmax(420px, 0.94fr);
   align-items: center;
-  gap: clamp(42px, 7vw, 112px);
+  gap: clamp(42px, 6vw, 92px);
   margin: 0 auto;
 }
 
@@ -353,7 +353,7 @@
 
 .mi-hero-copy h1 {
   max-width: 780px;
-  font-size: clamp(58px, 7.25vw, 112px);
+  font-size: clamp(52px, 5.9vw, 90px);
   line-height: 0.91;
 }
 
