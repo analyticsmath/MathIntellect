@@ -40,7 +40,7 @@ function ModelVisual({ id }: { id: ModelId }) {
 
   if (id === "game-theory") {
     return (
-      <svg className="mi-model-schema" viewBox="0 0 1000 620" role="img" aria-label="A payoff matrix maps each pair of strategies to both players' payoffs">
+      <svg className="mi-model-schema" viewBox="0 0 1000 620" role="img" aria-label="Conceptual payoff matrix: each strategy pair maps to both players' payoffs">
         <g className="mi-schema-grid" aria-hidden="true">
           <path d="M260 145H900M260 365H900M260 585H900M260 145V585M580 145V585M900 145V585" />
         </g>
@@ -52,11 +52,13 @@ function ModelVisual({ id }: { id: ModelId }) {
           <text x="420" y="92">Player B · strategy</text>
           <text x="150" y="386" transform="rotate(-90 150 386)">Player A · strategy</text>
         </g>
+        <g className="mi-schema-cell-label" aria-hidden="true">
+          <text x="420" y="136">B₁</text><text x="740" y="136">B₂</text>
+          <text x="244" y="262">A₁</text><text x="244" y="482">A₂</text>
+        </g>
         <g className="mi-schema-payoffs" aria-hidden="true">
-          <circle cx="370" cy="255" r="16" /><circle cx="420" cy="255" r="16" />
-          <circle cx="690" cy="255" r="16" /><circle cx="740" cy="255" r="16" />
-          <circle cx="370" cy="475" r="16" /><circle cx="420" cy="475" r="16" />
-          <circle cx="690" cy="475" r="16" /><circle cx="740" cy="475" r="16" />
+          <text x="420" y="262">(u₁, v₁)</text><text x="740" y="262">(u₂, v₂)</text>
+          <text x="420" y="482">(u₃, v₃)</text><text x="740" y="482">(u₄, v₄)</text>
         </g>
       </svg>
     );
