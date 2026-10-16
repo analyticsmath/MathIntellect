@@ -40,7 +40,7 @@ The home page teaches one concrete example before introducing the wider model ca
 
 - Let the path field establish first, then hold long enough to read the conditions before the volatility comparison begins.
 - The current/baseline comparison follows scroll progress; it must stay reversible when scrolling back.
-- The four model families form a desktop horizontal journey controlled by vertical scroll. Each panel gets a readable hold before the next visual handoff. Touch and reduced-motion layouts use ordinary scrolling with every section available.
+- The four model families form a desktop horizontal journey controlled by vertical scroll. Scrub the handoff continuously, then settle on the nearest complete panel after the visitor pauses; keep a fine progress line visible while the sequence is pinned. Touch and reduced-motion layouts use ordinary scrolling with every section available.
 - Route changes use the browser's View Transition API with a single restrained reveal of the new page. Keep header and footer continuity; never cover navigation with a long loader.
 - Use motion to reveal actual relationships and state changes. Do not animate every label or run unrelated loops.
 - Respect reduced-motion preferences, keep all controls keyboard usable, and make the underlying experience complete without animation.
