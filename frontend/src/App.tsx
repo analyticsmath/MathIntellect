@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import type { MouseEvent as ReactMouseEvent } from 'react';
 import {
   BrowserRouter,
   Navigate,
@@ -6,6 +7,7 @@ import {
   Route,
   Routes,
   useLocation,
+  useNavigate,
   useNavigationType,
   useParams,
 } from 'react-router-dom';
@@ -185,14 +187,81 @@ function AppRoutes() {
   );
 }
 
+function AppTransitionLayer() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [phase, setPhase] = useState<"cover" | "reveal" | null>(null);
+  const transitioning = useRef(false);
+  const coverTimer = useRef<number | null>(null);
+  const revealTimer = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (coverTimer.current !== null) window.clearTimeout(coverTimer.current);
+    if (revealTimer.current !== null) window.clearTimeout(revealTimer.current);
+  }, []);
+
+  const handleClickCapture = (event: ReactMouseEvent<HTMLDivElement>) => {
+    if (
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) return;
+
+    const target = event.target;
+    const anchor = target instanceof Element
+      ? target.closest<HTMLAnchorElement>("a[href]")
+      : null;
+    if (!anchor || anchor.hasAttribute("download") || (anchor.target && anchor.target !== "_self")) return;
+
+    const destination = new URL(anchor.href, window.location.href);
+    const publicRoutes = new Set(["/", "/models", "/workbench", "/method", "/login", "/signup"]);
+    if (
+      destination.origin !== window.location.origin ||
+      !publicRoutes.has(location.pathname) ||
+      !publicRoutes.has(destination.pathname) ||
+      (destination.pathname === location.pathname && destination.search === location.search)
+    ) return;
+
+    const nextLocation = destination.pathname + destination.search + destination.hash;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      event.preventDefault();
+      navigate(nextLocation);
+      return;
+    }
+
+    event.preventDefault();
+    if (transitioning.current) return;
+    transitioning.current = true;
+    setPhase("cover");
+    coverTimer.current = window.setTimeout(() => {
+      navigate(nextLocation);
+      window.requestAnimationFrame(() => setPhase("reveal"));
+      revealTimer.current = window.setTimeout(() => {
+        setPhase(null);
+        transitioning.current = false;
+      }, 620);
+    }, 300);
+  };
+
+  return (
+    <div className="mi-app-surface" onClickCapture={handleClickCapture}>
+      <Suspense fallback={<PageLoader />}>
+        <AppRoutes />
+      </Suspense>
+      {phase && <div className={"mi-route-curtain mi-route-curtain--" + phase} aria-hidden="true" />}
+    </div>
+  );
+}
+
 function App() {
   return (
     <BrowserRouter>
       <AppErrorBoundary>
         <ApiErrorToast />
-        <Suspense fallback={<PageLoader />}>
-          <AppRoutes />
-        </Suspense>
+        <AppTransitionLayer />
       </AppErrorBoundary>
     </BrowserRouter>
   );

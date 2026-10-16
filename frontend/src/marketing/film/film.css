@@ -500,3 +500,13 @@
  .mi-hero-copy h1{font-size:clamp(44px,4.7vw,50px)}
  .mi-hero-artwork{width:140%}
 }
+
+
+.mi-route-curtain{position:fixed;inset:0;z-index:160;pointer-events:none;background:#0b100d;will-change:transform}
+.mi-route-curtain::after{position:absolute;top:0;right:0;bottom:0;width:3px;content:"";background:var(--mi-signal)}
+.mi-route-curtain--cover{transform-origin:left center;animation:mi-curtain-cover 300ms cubic-bezier(.6,0,.2,1) both}
+.mi-route-curtain--reveal{transform-origin:right center;animation:mi-curtain-reveal 620ms cubic-bezier(.18,.72,.14,1) both}
+.mi-route-curtain--reveal::after{right:auto;left:0}
+@keyframes mi-curtain-cover{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes mi-curtain-reveal{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+@media(prefers-reduced-motion:reduce){.mi-route-curtain{display:none!important}}
