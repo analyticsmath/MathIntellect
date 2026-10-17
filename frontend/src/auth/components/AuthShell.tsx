@@ -1,5 +1,9 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { useRef, type ReactNode } from "react";
+import { Link } from "react-router-dom";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { Photo } from "../../marketing/editorial/Photo";
+import "./auth.css";
 
 interface AuthShellProps {
   title: string;
@@ -7,57 +11,116 @@ interface AuthShellProps {
   footerPrompt: string;
   footerLinkLabel: string;
   footerLinkTo: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-export const AuthShell: React.FC<AuthShellProps> = ({
+export function AuthShell({
   title,
   subtitle,
   footerPrompt,
   footerLinkLabel,
   footerLinkTo,
   children,
-}) => {
+}: AuthShellProps) {
+  const root = useRef<HTMLElement>(null);
+  const signup = footerLinkTo === "/login";
+  useGSAP(
+    () => {
+      const media = gsap.matchMedia();
+      media.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.from(".mi-auth-photo img", {
+          scale: 1.15,
+          duration: 1.9,
+          ease: "power3.out",
+        });
+        gsap.from(".mi-auth-image-copy > *", {
+          y: 50,
+          opacity: 0,
+          stagger: 0.12,
+          duration: 1.2,
+          delay: 0.25,
+          ease: "power3.out",
+        });
+        gsap.from(
+          ".mi-auth-form-heading, .mi-auth-form form > *, .mi-auth-switch",
+          {
+            y: 28,
+            opacity: 0,
+            stagger: 0.065,
+            duration: 0.9,
+            delay: 0.3,
+            ease: "power3.out",
+            clearProps: "transform,opacity",
+          },
+        );
+      });
+      return () => media.revert();
+    },
+    { scope: root },
+  );
   return (
-    <main className="min-h-screen w-full flex flex-col justify-between bg-mi-canvas text-mi-ink p-6 md:p-12">
-      {/* Auth Topbar / Logo */}
-      <div className="w-full max-w-5xl mx-auto flex items-center justify-between">
-        <Link
-          to="/"
-          className="font-medium text-lg tracking-tight text-mi-ink focus-visible:ring-2 focus-visible:ring-mi-focus"
-        >
-          <span>Math Intellect</span>
+    <main
+      ref={root}
+      id="main-content"
+      className={"mi-auth " + (signup ? "mi-auth--signup" : "")}
+    >
+      <section className="mi-auth-visual" aria-label="Explore the possible">
+        <figure className="mi-auth-photo">
+          <Photo
+            id={signup ? "climbers" : "glider"}
+            priority
+            sizes="(max-width:800px) 100vw, 110vh"
+          />
+        </figure>
+        <Link to="/" className="mi-auth-brand">
+          Math Intellect
         </Link>
-        <Link to="/" className="text-xs font-mono text-mi-muted hover:text-mi-ink">
-          ← Return to site
+        <div className="mi-auth-image-copy">
+          <p>
+            {signup ? (
+              <>
+                A question.
+                <br />A whole new view.
+              </>
+            ) : (
+              <>
+                A little curiosity.
+                <br />A different horizon.
+              </>
+            )}
+          </p>
+          <span>
+            {signup
+              ? "Set the conditions. Explore what follows."
+              : "Your next possibility starts here."}
+          </span>
+        </div>
+        <Link to="/" className="mi-auth-back">
+          Explore the site <span aria-hidden="true">↗</span>
         </Link>
-      </div>
-
-      {/* Center Form Territory (380-420px high-luminance open composition) */}
-      <div className="w-full max-w-[420px] mx-auto my-12 border border-mi-rule bg-mi-paper p-8 shadow-sm">
-        <div className="mb-6">
-          <h1 className="text-2xl md:text-3xl font-medium tracking-tight text-mi-ink">
-            {title}
-          </h1>
-          <p className="mt-2 text-sm text-mi-text leading-relaxed">
-            {subtitle}
+      </section>
+      <section className="mi-auth-form">
+        <Link to="/" className="mi-auth-mobile-brand">
+          Math Intellect
+        </Link>
+        <div className="mi-auth-form-inner">
+          <div className="mi-auth-form-heading">
+            <h1 tabIndex={-1}>{title}</h1>
+            <p>{subtitle}</p>
+          </div>
+          {children}
+          <p className="mi-auth-switch">
+            {footerPrompt}{" "}
+            <Link to={footerLinkTo}>
+              {footerLinkLabel}
+              <span aria-hidden="true"> ↗</span>
+            </Link>
           </p>
         </div>
-
-        {children}
-
-        <div className="mt-6 pt-5 border-t border-mi-rule text-xs font-mono text-mi-muted text-center">
-          {footerPrompt}{' '}
-          <Link to={footerLinkTo} className="text-mi-ink font-semibold underline underline-offset-2 hover:text-mi-change">
-            {footerLinkLabel}
-          </Link>
-        </div>
-      </div>
-
-      {/* Quiet Auth Footer Note */}
-      <div className="w-full max-w-5xl mx-auto text-center text-xs font-mono text-mi-muted">
-        Mathematical models for exploring assumptions and outcomes
-      </div>
+        <p className="mi-auth-note">
+          A place to turn assumptions into understanding.
+        </p>
+      </section>
     </main>
   );
-};
+}

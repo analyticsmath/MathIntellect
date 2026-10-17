@@ -15,6 +15,8 @@ const routeScenes: Record<string, { label: string; photo: PhotoId }> = {
   "/login": { label: "Welcome back.", photo: "observer" },
   "/signup": { label: "Start with a question.", photo: "climbers" },
 };
+export const COVER_MS = 600;
+export const REVEAL_MS = 1000;
 const publicRoutes = [
   "/",
   "/models",
@@ -33,8 +35,6 @@ export function PublicTransitionProvider({ children }: PropsWithChildren) {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const mounted = useRef(true);
   const pending = useRef(false);
-  const locationKey = location.pathname + location.search + location.hash;
-  const observedLocation = useRef(locationKey);
   const clearTimer = () => {
     if (timer.current !== null) {
       clearTimeout(timer.current);
@@ -50,12 +50,9 @@ export function PublicTransitionProvider({ children }: PropsWithChildren) {
   }, []);
   useEffect(() => {
     const cancelInterrupted = () => {
-      observedLocation.current = locationKey;
-      if (pending.current) {
-        clearTimer();
-        pending.current = false;
-        setPhase("idle");
-      }
+      clearTimer();
+      pending.current = false;
+      setPhase("idle");
     };
     window.addEventListener("popstate", cancelInterrupted);
     window.addEventListener("hashchange", cancelInterrupted);
@@ -63,7 +60,7 @@ export function PublicTransitionProvider({ children }: PropsWithChildren) {
       window.removeEventListener("popstate", cancelInterrupted);
       window.removeEventListener("hashchange", cancelInterrupted);
     };
-  }, [locationKey]);
+  }, []);
   const capture = (e: MouseEvent<HTMLDivElement>) => {
     if (
       e.defaultPrevented ||
@@ -114,29 +111,31 @@ export function PublicTransitionProvider({ children }: PropsWithChildren) {
       timer.current = setTimeout(() => {
         timer.current = null;
         if (mounted.current) setPhase("idle");
-      }, 670);
-    }, 450);
+      }, REVEAL_MS);
+    }, COVER_MS);
   };
   return (
     <div onClickCapture={capture}>
       {children}
       {phase !== "idle" && (
         <div
-          key={revision + phase}
+          key={revision}
           className={"mi-curtain mi-curtain--" + phase}
           aria-hidden="true"
         >
-          <div className="mi-curtain-plane" />
-          <div className="mi-curtain-plane" />
+          <div className="mi-curtain-wash" />
           <div className="mi-curtain-scene">
-            <span>{scene.label}</span>
+            <span>
+              {scene.label.split(" ").map((word, index) => (
+                <span className="mi-transition-word" key={index}>
+                  <i style={{ animationDelay: `${140 + index * 45}ms` }}>
+                    {word}&nbsp;
+                  </i>
+                </span>
+              ))}
+            </span>
             <figure>
-              <Photo
-                id={scene.photo}
-                decorative
-                priority
-                sizes="(max-width:800px) 45vw, 20vw"
-              />
+              <Photo id={scene.photo} decorative priority sizes="100vw" />
             </figure>
           </div>
         </div>

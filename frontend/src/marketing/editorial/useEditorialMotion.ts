@@ -11,6 +11,114 @@ export function useEditorialMotion(root: RefObject<HTMLDivElement | null>) {
       if (!element) return;
       const media = gsap.matchMedia();
       media.add("(prefers-reduced-motion: no-preference)", () => {
+        const intro = element.querySelector(".mi-page-intro");
+        if (intro) {
+          gsap.from(intro.querySelectorAll(".mi-line > span"), {
+            yPercent: 115,
+            stagger: 0.1,
+            duration: 1.15,
+            delay: 0.25,
+            ease: "power4.out",
+          });
+          gsap.from(intro.querySelectorAll(":scope > div > *"), {
+            y: 35,
+            opacity: 0,
+            stagger: 0.12,
+            duration: 1,
+            delay: 0.4,
+            ease: "power3.out",
+          });
+        }
+        gsap.utils
+          .toArray<HTMLElement>(".mi-model-detail", element)
+          .forEach((section) => {
+            const figure = section.querySelector("figure");
+            gsap.fromTo(
+              figure,
+              { clipPath: "inset(14% 9% 14% 9%)" },
+              {
+                clipPath: "inset(0% 0% 0% 0%)",
+                ease: "none",
+                scrollTrigger: {
+                  trigger: section,
+                  start: "top 90%",
+                  end: "top 18%",
+                  scrub: 0.65,
+                },
+              },
+            );
+            gsap.from(section.querySelectorAll(":scope > div > *"), {
+              y: 50,
+              opacity: 0,
+              stagger: 0.12,
+              duration: 1.05,
+              ease: "power3.out",
+              scrollTrigger: { trigger: section, start: "top 76%", once: true },
+            });
+            gsap.from(section.querySelectorAll("dl > div"), {
+              x: 25,
+              opacity: 0,
+              stagger: 0.16,
+              duration: 0.8,
+              scrollTrigger: {
+                trigger: section.querySelector("dl"),
+                start: "top 90%",
+                once: true,
+              },
+            });
+          });
+        gsap.utils
+          .toArray<HTMLElement>(".mi-models-banner, .mi-method-banner", element)
+          .forEach((banner) => {
+            gsap.fromTo(
+              banner,
+              { clipPath: "inset(5% 9% 5% 9%)" },
+              {
+                clipPath: "inset(0% 0% 0% 0%)",
+                ease: "none",
+                scrollTrigger: {
+                  trigger: banner,
+                  start: "top 95%",
+                  end: "top 15%",
+                  scrub: 0.6,
+                },
+              },
+            );
+          });
+        gsap.utils
+          .toArray<HTMLElement>(
+            ".mi-experiment-controls, .mi-experiment-results",
+            element,
+          )
+          .forEach((panel, index) => {
+            gsap.from(panel, {
+              y: 60,
+              opacity: 0,
+              duration: 1.1,
+              delay: index * 0.12,
+              ease: "power3.out",
+              clearProps: "transform,opacity",
+              scrollTrigger: { trigger: panel, start: "top 92%", once: true },
+            });
+          });
+        gsap.utils
+          .toArray<HTMLElement>(".mi-method-body article h2", element)
+          .forEach((heading) => {
+            gsap.fromTo(
+              heading,
+              { y: 28 },
+              {
+                y: -12,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: heading,
+                  start: "top bottom",
+                  end: "bottom top",
+                  scrub: 0.5,
+                },
+              },
+            );
+          });
         if (element.querySelector(".mi-hero")) {
           gsap.from(".mi-hero-media img", {
             scale: 1.13,
@@ -101,6 +209,11 @@ export function useEditorialMotion(root: RefObject<HTMLDivElement | null>) {
               .to(
                 ".mi-hero-media, .mi-hero-shade, .mi-hero-type-plane",
                 { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7, ease: "none" },
+                0,
+              )
+              .to(
+                ".mi-hero-media img",
+                { yPercent: -4, duration: 1, ease: "none" },
                 0,
               )
               .to(

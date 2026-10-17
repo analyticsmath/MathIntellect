@@ -1,0 +1,300 @@
+.mi-auth {
+  --auth-paper: #faf9f6;
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: 1.08fr 1fr;
+  background: var(--auth-paper);
+  color: #211e20;
+  font-family: "Instrument Sans Variable", sans-serif;
+}
+.mi-auth a:focus-visible,
+.mi-auth button:focus-visible {
+  outline: 2px solid #e74b2b;
+  outline-offset: 5px;
+}
+.mi-auth-visual {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  min-height: 680px;
+  overflow: hidden;
+  background: #2c1c30;
+  color: white;
+}
+.mi-auth-photo {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  overflow: hidden;
+}
+.mi-auth-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 72% center;
+}
+.mi-auth-visual:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(16, 16, 22, 0.25),
+    transparent 35%,
+    rgba(16, 16, 22, 0.68)
+  );
+}
+.mi-auth-brand,
+.mi-auth-back,
+.mi-auth-image-copy {
+  position: absolute;
+  z-index: 1;
+}
+.mi-auth-brand {
+  top: 40px;
+  left: 40px;
+  font-size: 25px;
+  letter-spacing: -0.07em;
+  text-decoration: none;
+  color: inherit;
+}
+.mi-auth-image-copy {
+  left: 7%;
+  right: 5%;
+  bottom: 15%;
+}
+.mi-auth-image-copy p {
+  font-family: "Geist Variable", sans-serif;
+  font-size: clamp(45px, 4.8vw, 86px);
+  font-weight: 450;
+  letter-spacing: -0.075em;
+  line-height: 1.02;
+  margin: 0 0 25px;
+}
+.mi-auth-image-copy > span {
+  font-size: 15px;
+  color: #fff;
+}
+.mi-auth-back {
+  bottom: 35px;
+  left: 7%;
+  right: 7%;
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #ffffff65;
+  padding-top: 18px;
+  color: inherit;
+  text-decoration: none;
+  font-size: 14px;
+}
+.mi-auth-back span {
+  transition: transform 0.35s;
+}
+.mi-auth-back:hover span {
+  transform: translate(4px, -4px);
+}
+.mi-auth-form {
+  min-height: 100svh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 100px clamp(30px, 5.5vw, 100px) 85px;
+}
+.mi-auth-form-inner {
+  width: 100%;
+  max-width: 470px;
+  margin: auto;
+}
+.mi-auth-form h1 {
+  font-family: "Geist Variable", sans-serif;
+  font-size: clamp(42px, 4.2vw, 70px);
+  font-weight: 450;
+  letter-spacing: -0.075em;
+  line-height: 1.02;
+  margin: 0 0 20px;
+  max-width: 480px;
+}
+.mi-auth-form-heading > p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #6f6667;
+  max-width: 340px;
+  margin: 0 0 38px;
+}
+.mi-auth-form form {
+  display: grid;
+  gap: 23px;
+}
+.mi-auth-form form > * {
+  margin: 0 !important;
+}
+.mi-auth-form label {
+  font-family: inherit !important;
+  font-size: 13px !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  color: #433b42 !important;
+  margin-bottom: 9px !important;
+}
+.mi-auth-form input {
+  width: 100%;
+  height: 50px;
+  border: 0;
+  border-bottom: 1px solid #bfb6b7;
+  background: transparent;
+  border-radius: 0;
+  padding: 7px 0;
+  font: inherit;
+  font-size: 17px;
+  color: #211e20;
+  transition:
+    border-color 0.25s,
+    background 0.25s;
+}
+.mi-auth-form input:focus {
+  outline: none;
+  border-color: #e74b2b;
+  background: #eee9e452;
+  box-shadow: 0 1px 0 #e74b2b;
+}
+.mi-auth-form button[type="submit"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  width: 100%;
+  height: 57px;
+  margin-top: 8px !important;
+  background: #2c1c30;
+  color: #fff;
+  border-radius: 0;
+  font-size: 15px;
+  transition:
+    background 0.3s,
+    transform 0.3s;
+  cursor: pointer;
+}
+.mi-auth-form button[type="submit"]:hover {
+  background: #e74b2b;
+  transform: translateY(-2px);
+}
+.mi-auth-form button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+  transform: none;
+}
+.mi-auth-switch {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #6f6667;
+  margin-top: 32px;
+}
+.mi-auth-switch a {
+  color: #211e20;
+  text-underline-offset: 5px;
+  margin-left: 5px;
+  white-space: nowrap;
+}
+.mi-auth-switch a:hover {
+  color: #b5351f;
+}
+.mi-auth-note {
+  position: absolute;
+  bottom: 27px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 12px;
+  color: #6f6667;
+  padding: 0 25px;
+}
+.mi-auth-help {
+  font-size: 12px;
+  color: #6f6667;
+}
+.mi-auth-mobile-brand {
+  display: none;
+}
+.mi-auth-form [role="alert"] {
+  padding: 14px;
+  border: 1px solid #b5351f;
+  color: #912a1a;
+  font:
+    14px/1.5 "Instrument Sans Variable",
+    sans-serif;
+}
+@media (min-width: 801px) {
+  .mi-auth--signup .mi-auth-form {
+    padding-top: 55px;
+    padding-bottom: 75px;
+  }
+  .mi-auth--signup .mi-auth-form-heading > p {
+    margin-bottom: 25px;
+  }
+  .mi-auth--signup form {
+    gap: 16px;
+  }
+}
+@media (max-width: 800px) {
+  .mi-auth {
+    display: flex;
+    flex-direction: column;
+  }
+  .mi-auth-visual {
+    position: relative;
+    height: 44svh;
+    min-height: 320px;
+  }
+  .mi-auth-brand {
+    top: 25px;
+    left: 24px;
+    font-size: 23px;
+  }
+  .mi-auth-image-copy {
+    left: 24px;
+    bottom: 65px;
+  }
+  .mi-auth-image-copy p {
+    font-size: 43px;
+    margin-bottom: 12px;
+  }
+  .mi-auth-image-copy > span {
+    font-size: 12px;
+  }
+  .mi-auth-back {
+    left: 24px;
+    right: 24px;
+    bottom: 20px;
+    padding-top: 10px;
+    font-size: 12px;
+  }
+  .mi-auth-form {
+    min-height: 0;
+    padding: 50px 25px 90px;
+  }
+  .mi-auth-form h1 {
+    font-size: 45px;
+    max-width: 390px;
+  }
+  .mi-auth-form-inner {
+    max-width: 500px;
+  }
+  .mi-auth-note {
+    bottom: 25px;
+  }
+  .mi-auth-form-heading > p {
+    margin-bottom: 28px;
+  }
+  .mi-auth-form input {
+    font-size: 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mi-auth * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

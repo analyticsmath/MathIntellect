@@ -41,10 +41,10 @@ it("covers before navigation then clears its curtain", () => {
   fireEvent.click(screen.getByRole("link", { name: "Models" }));
   expect(screen.getByText("Home destination")).toBeTruthy();
   expect(document.querySelector(".mi-curtain--cover")).not.toBeNull();
-  act(() => vi.advanceTimersByTime(450));
+  act(() => vi.advanceTimersByTime(600));
   expect(screen.getByText("Models destination")).toBeTruthy();
   expect(document.querySelector(".mi-curtain--reveal")).not.toBeNull();
-  act(() => vi.advanceTimersByTime(700));
+  act(() => vi.advanceTimersByTime(1050));
   expect(document.querySelector(".mi-curtain")).toBeNull();
 });
 it("replaces a pending destination without navigating to the stale route", () => {
@@ -52,7 +52,7 @@ it("replaces a pending destination without navigating to the stale route", () =>
   fireEvent.click(screen.getByRole("link", { name: "Models" }));
   act(() => vi.advanceTimersByTime(200));
   fireEvent.click(screen.getByRole("link", { name: "Method" }));
-  act(() => vi.advanceTimersByTime(450));
+  act(() => vi.advanceTimersByTime(600));
   expect(screen.getByText("Method destination")).toBeTruthy();
   expect(screen.queryByText("Models destination")).toBeNull();
 });
@@ -67,13 +67,13 @@ it("cancels a pending destination when browser history moves", () => {
 it("keeps a new transition intact when navigation starts during a reveal", () => {
   mount();
   fireEvent.click(screen.getByRole("link", { name: "Models" }));
-  act(() => vi.advanceTimersByTime(650));
+  act(() => vi.advanceTimersByTime(800));
   expect(screen.getByText("Models destination")).toBeTruthy();
   fireEvent.click(screen.getByRole("link", { name: "Method" }));
-  act(() => vi.advanceTimersByTime(500));
+  act(() => vi.advanceTimersByTime(600));
   expect(screen.getByText("Method destination")).toBeTruthy();
   expect(document.querySelector(".mi-curtain--reveal")).not.toBeNull();
-  act(() => vi.advanceTimersByTime(620));
+  act(() => vi.advanceTimersByTime(1050));
   expect(document.querySelector(".mi-curtain")).toBeNull();
   expect(vi.getTimerCount()).toBe(0);
 });
@@ -96,5 +96,54 @@ it("cancels pending navigation when unmounted", () => {
   const view = mount();
   fireEvent.click(screen.getByRole("link", { name: "Models" }));
   view.unmount();
+  expect(vi.getTimerCount()).toBe(0);
+});
+it("keeps the photographic layer mounted when moving between marketing and account shells", () => {
+  render(
+    <MemoryRouter>
+      <PublicTransitionProvider>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <main>
+                <h1>Marketing shell</h1>
+                <Link to="/login">Enter account</Link>
+              </main>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <main>
+                <h1>Account shell</h1>
+                <Link to="/signup">Create account</Link>
+              </main>
+            }
+          />
+          <Route path="/signup" element={<h1>Registration shell</h1>} />
+        </Routes>
+      </PublicTransitionProvider>
+    </MemoryRouter>,
+  );
+  fireEvent.click(screen.getByText("Enter account"));
+  const curtain = document.querySelector(".mi-curtain");
+  act(() => vi.advanceTimersByTime(600));
+  expect(screen.getByText("Account shell")).toBeTruthy();
+  expect(document.querySelector(".mi-curtain")).toBe(curtain);
+  act(() => vi.advanceTimersByTime(1000));
+  fireEvent.click(screen.getByText("Create account"));
+  act(() => vi.advanceTimersByTime(600));
+  expect(screen.getByText("Registration shell")).toBeTruthy();
+  expect(document.querySelector(".mi-curtain--reveal")).not.toBeNull();
+  act(() => vi.advanceTimersByTime(1000));
+  expect(document.querySelector(".mi-curtain")).toBeNull();
+});
+it("clears a revealing layer immediately when browser history interrupts", () => {
+  mount();
+  fireEvent.click(screen.getByRole("link", { name: "Models" }));
+  act(() => vi.advanceTimersByTime(600));
+  act(() => window.dispatchEvent(new PopStateEvent("popstate")));
+  expect(document.querySelector(".mi-curtain")).toBeNull();
   expect(vi.getTimerCount()).toBe(0);
 });

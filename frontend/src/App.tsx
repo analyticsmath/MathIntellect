@@ -18,8 +18,9 @@ import ModelsPage from "./marketing/pages/ModelsPage";
 import WorkbenchPage from "./marketing/pages/WorkbenchPage";
 import MethodPage from "./marketing/pages/MethodPage";
 
-const LoginPage = lazy(() => import("./auth/LoginPage"));
-const SignupPage = lazy(() => import("./auth/SignupPage"));
+import LoginPage from "./auth/LoginPage";
+import SignupPage from "./auth/SignupPage";
+import { PublicTransitionProvider } from "./marketing/possibility/transitions/PublicTransitionProvider";
 
 const AppDashboardPage = lazy(() => import("./app/pages/AppDashboardPage"));
 const AppSimulationPage = lazy(() => import("./app/pages/AppSimulationPage"));
@@ -99,52 +100,60 @@ function AppRoutes() {
   return (
     <>
       <RouteExperienceManager />
-      <Routes location={location}>
-        {/* Public Marketing Experience */}
-        <Route element={<MarketingShell />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/models" element={<ModelsPage />} />
-          <Route path="/workbench" element={<WorkbenchPage />} />
-          <Route path="/method" element={<MethodPage />} />
-        </Route>
+      <PublicTransitionProvider>
+        <Routes location={location}>
+          {/* Public Marketing Experience */}
+          <Route element={<MarketingShell />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/models" element={<ModelsPage />} />
+            <Route path="/workbench" element={<WorkbenchPage />} />
+            <Route path="/method" element={<MethodPage />} />
+          </Route>
 
-        {/* Legacy Public Redirects */}
-        <Route path="/features" element={<Navigate to="/models" replace />} />
-        <Route path="/product" element={<Navigate to="/workbench" replace />} />
-        <Route path="/pricing" element={<Navigate to="/workbench" replace />} />
+          {/* Legacy Public Redirects */}
+          <Route path="/features" element={<Navigate to="/models" replace />} />
+          <Route
+            path="/product"
+            element={<Navigate to="/workbench" replace />}
+          />
+          <Route
+            path="/pricing"
+            element={<Navigate to="/workbench" replace />}
+          />
 
-        {/* Unauthenticated Auth Routes */}
-        <Route element={<PublicOnlyRoute />}>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-        </Route>
+          {/* Unauthenticated Auth Routes */}
+          <Route element={<PublicOnlyRoute />}>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+          </Route>
 
-        {/* Protected Application Routes (Untouched) */}
-        <Route
-          path="/app"
-          element={
-            <ProtectedRoute>
-              <Outlet />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<AppDashboardPage />} />
-          <Route path="simulations/new" element={<AppSimulationPage />} />
-          <Route path="analytics/:id" element={<AppAnalyticsPage />} />
-          <Route path="feed" element={<AppFeedPage />} />
-          <Route path="profile" element={<AppProfilePage />} />
-        </Route>
+          {/* Protected Application Routes (Untouched) */}
+          <Route
+            path="/app"
+            element={
+              <ProtectedRoute>
+                <Outlet />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<AppDashboardPage />} />
+            <Route path="simulations/new" element={<AppSimulationPage />} />
+            <Route path="analytics/:id" element={<AppAnalyticsPage />} />
+            <Route path="feed" element={<AppFeedPage />} />
+            <Route path="profile" element={<AppProfilePage />} />
+          </Route>
 
-        {/* Legacy Protected Redirects */}
-        <Route
-          path="/simulations/new"
-          element={<Navigate to="/app/simulations/new" replace />}
-        />
-        <Route path="/analytics/:id" element={<LegacyAnalyticsRedirect />} />
+          {/* Legacy Protected Redirects */}
+          <Route
+            path="/simulations/new"
+            element={<Navigate to="/app/simulations/new" replace />}
+          />
+          <Route path="/analytics/:id" element={<LegacyAnalyticsRedirect />} />
 
-        {/* Catch-all */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+          {/* Catch-all */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </PublicTransitionProvider>
     </>
   );
 }

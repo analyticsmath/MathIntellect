@@ -7,7 +7,6 @@ import { SkipLink } from "./components/SkipLink";
 import { SiteHeader } from "./components/SiteHeader";
 import { SiteFooter } from "./components/SiteFooter";
 import { ScenarioProvider } from "./film/ScenarioContext";
-import { PublicTransitionProvider } from "./possibility/transitions/PublicTransitionProvider";
 import "./editorial/editorial.css";
 import "@fontsource-variable/geist";
 import "lenis/dist/lenis.css";
@@ -53,16 +52,14 @@ export function MarketingShell() {
   }, []);
   return (
     <ScenarioProvider>
-      <PublicTransitionProvider>
-        <div className="mi-public">
-          <SkipLink />
-          <SiteHeader />
-          <main id="main-content">
-            <Outlet />
-          </main>
-          <SiteFooter />
-        </div>
-      </PublicTransitionProvider>
+      <div className="mi-public">
+        <SkipLink />
+        <SiteHeader />
+        <main id="main-content">
+          <Outlet />
+        </main>
+        <SiteFooter />
+      </div>
     </ScenarioProvider>
   );
 }

@@ -43,9 +43,16 @@ export function EditorialModels() {
           }
         >
           <figure data-parallax>
-            <Photo id={m.photo} sizes="(max-width:800px) 100vw, 50vw" />
+            <Photo
+              id={m.photo}
+              sizes={
+                m.photo === "glider"
+                  ? "(max-width:800px) 170vw, 140vh"
+                  : "(max-width:800px) 100vw, 75vw"
+              }
+            />
           </figure>
-          <div data-reveal>
+          <div>
             <h2>{m.name}</h2>
             <h3>{m.question}</h3>
             <p>{m.detail}</p>
