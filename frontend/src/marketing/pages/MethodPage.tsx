@@ -1,4 +1,4 @@
 export {
-  MethodPublication as default,
-  MethodPublication as MethodPage,
-} from "../possibility/method/MethodPublication";
+  EditorialMethod as default,
+  EditorialMethod as MethodPage,
+} from "../editorial/Method";

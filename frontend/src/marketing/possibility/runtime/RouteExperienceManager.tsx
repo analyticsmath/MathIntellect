@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
 const titles: Record<string, string> = {
-  "/": "Math Intellect | A model in motion",
+  "/": "Math Intellect | Explore the possible",
   "/models": "Models | Math Intellect",
   "/workbench": "Workbench | Math Intellect",
   "/method": "Method | Math Intellect",

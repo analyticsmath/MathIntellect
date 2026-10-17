@@ -14,7 +14,10 @@ import ModelsPage from "../pages/ModelsPage";
 import WorkbenchPage from "../pages/WorkbenchPage";
 import MethodPage from "../pages/MethodPage";
 import { SiteHeader } from "../components/SiteHeader";
-
+import { SiteFooter } from "../components/SiteFooter";
+vi.mock("../editorial/useEditorialMotion", () => ({
+  useEditorialMotion: () => {},
+}));
 beforeEach(() => {
   Object.defineProperty(window, "matchMedia", {
     writable: true,
@@ -29,55 +32,53 @@ afterEach(() => {
   cleanup();
   vi.restoreAllMocks();
 });
-function mount(
-  route = "/",
-  children = (
-    <>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/workbench" element={<WorkbenchPage />} />
-      <Route path="/models" element={<ModelsPage />} />
-      <Route path="/method" element={<MethodPage />} />
-    </>
-  ),
-) {
+function mount(route = "/") {
   return render(
     <MemoryRouter initialEntries={[route]}>
       <ScenarioProvider>
-        <Routes>{children}</Routes>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/models" element={<ModelsPage />} />
+          <Route path="/workbench" element={<WorkbenchPage />} />
+          <Route path="/method" element={<MethodPage />} />
+        </Routes>
+        <SiteFooter />
       </ScenarioProvider>
     </MemoryRouter>,
   );
 }
-describe("Possibility Engine public experience", () => {
-  it("opens on product-native trajectories and carries an edited condition into the instrument", () => {
+describe("editorial public experience", () => {
+  it("opens with local photography and no decorative graphs or eyebrows", () => {
     const { container } = mount();
-    const hero = container.querySelector(".pe-hero");
-    expect(hero).not.toBeNull();
-    expect(hero?.querySelector("img")).toBeNull();
-    expect(hero?.querySelectorAll(".pe-path").length).toBe(24);
+    const hero = container.querySelector(".mi-hero");
+    expect(hero?.querySelector("img")?.getAttribute("src")).toMatch(
+      /vanes-1600.webp/,
+    );
+    expect(container.querySelector("svg")).toBeNull();
+    expect(container.querySelector("[class*=eyebrow]")).toBeNull();
+    expect(container.querySelectorAll("img").length).toBeGreaterThan(10);
+    expect(screen.getByRole("heading", { level: 1 }).textContent).toBe(
+      "Explore thepossible.",
+    );
+    expect(container.querySelector(".mi-footer-wordmark")?.textContent).toBe(
+      "Math Intellect",
+    );
+  });
+  it("recalculates numeric results, invalidates replay and restores conditions", () => {
+    mount("/workbench");
+    fireEvent.click(
+      screen.getByRole("button", { name: /Repeat this calculation/ }),
+    );
+    expect(screen.getByText(/Every path and statistic matches/)).toBeTruthy();
     fireEvent.change(screen.getByRole("slider", { name: "Volatility" }), {
       target: { value: "0.6" },
     });
-    fireEvent.click(screen.getByRole("link", { name: /Open the workbench/ }));
-    expect(
-      (screen.getByRole("slider", { name: "Volatility" }) as HTMLInputElement)
-        .value,
-    ).toBe("0.6");
     expect(screen.getByText("0.2368")).toBeTruthy();
-  });
-  it("invalidates replay after a seed edit and restores canonical conditions", () => {
-    mount("/workbench");
-    fireEvent.click(
-      screen.getByRole("button", { name: /Replay the same inputs/ }),
-    );
-    expect(screen.getByRole("status").textContent).toMatch(/Every path/);
+    expect(screen.queryByText(/Every path and statistic matches/)).toBeNull();
     fireEvent.change(screen.getByRole("spinbutton", { name: "Random seed" }), {
       target: { value: "43" },
     });
-    expect(screen.getByRole("status").textContent).not.toMatch(/Every path/);
-    fireEvent.click(
-      screen.getByRole("button", { name: /Restore the opening conditions/ }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /Reset conditions/ }));
     expect(
       (
         screen.getByRole("spinbutton", {
@@ -86,19 +87,22 @@ describe("Possibility Engine public experience", () => {
       ).value,
     ).toBe("42");
   });
-  it("opens the requested atlas model from a direct hash", () => {
-    mount("/models#game-theory");
+  it("explains the account models without presenting unrelated illustrative engines", () => {
+    const { container } = mount("/models#game-theory");
+    for (const id of [
+      "monte-carlo",
+      "game-theory",
+      "market-dynamics",
+      "agent-interaction",
+    ])
+      expect(container.querySelector("#" + id)).not.toBeNull();
+    expect(screen.getByText(/pure-strategy Nash equilibria/)).toBeTruthy();
     expect(
-      screen.getByRole("heading", { name: "Map the payoff." }),
-    ).toBeTruthy();
-    expect(
-      screen
-        .getByRole("link", { name: "Game Theory" })
-        .getAttribute("aria-current"),
-    ).toBe("true");
+      screen.queryByText(/AR\(1\)|flocking|mixed-strategy solver/),
+    ).toBeNull();
   });
-  it("exposes the method anchors and a focusable equation explanation", () => {
-    const { container } = mount("/method#comparison");
+  it("offers direct method anchors and clearly bounded calculation details", () => {
+    const { container } = mount("/method");
     for (const id of [
       "starting-state",
       "sampling",
@@ -107,14 +111,14 @@ describe("Possibility Engine public experience", () => {
       "limits",
     ])
       expect(container.querySelector("#" + id)).not.toBeNull();
-    fireEvent.click(screen.getByRole("button", { name: "Explain volatility" }));
+    expect(screen.getByRole("math")).toBeTruthy();
     expect(
-      screen
-        .getByRole("button", { name: "Explain volatility" })
-        .getAttribute("aria-pressed"),
-    ).toBe("true");
+      screen.getByText(
+        /Twenty-four paths do not describe every possible outcome/,
+      ),
+    ).toBeTruthy();
   });
-  it("keeps the menu keyboard-contained and restores focus and scrolling", () => {
+  it("keeps navigation keyboard-contained and restores focus and scrolling", () => {
     const prior = document.body.style.overflow;
     render(
       <MemoryRouter>
@@ -125,8 +129,9 @@ describe("Possibility Engine public experience", () => {
     fireEvent.click(trigger);
     const menu = screen.getByRole("dialog", { name: "Navigation" });
     expect(document.body.style.overflow).toBe("hidden");
-    const close = within(menu).getByRole("button", { name: /Close/ });
-    expect(document.activeElement).toBe(close);
+    expect(document.activeElement).toBe(
+      within(menu).getByRole("button", { name: /Close/ }),
+    );
     fireEvent.keyDown(window, { key: "Tab", shiftKey: true });
     expect(document.activeElement).toBe(
       within(menu).getByRole("link", { name: /Create an account/ }),
@@ -136,55 +141,45 @@ describe("Possibility Engine public experience", () => {
     expect(document.activeElement).toBe(trigger);
     expect(document.body.style.overflow).toBe(prior);
   });
-});
-
-it("downloads the exact current model inputs and computed result", async () => {
-  let exported: Blob | undefined;
-  Object.defineProperty(URL, "createObjectURL", {
-    configurable: true,
-    writable: true,
-    value: vi.fn((blob: Blob) => {
-      exported = blob;
-      return "blob:result";
-    }),
+  it("downloads exact current inputs and computed results", async () => {
+    let exported: Blob | undefined;
+    Object.defineProperty(URL, "createObjectURL", {
+      configurable: true,
+      value: vi.fn((blob: Blob) => {
+        exported = blob;
+        return "blob:result";
+      }),
+    });
+    Object.defineProperty(URL, "revokeObjectURL", {
+      configurable: true,
+      value: vi.fn(),
+    });
+    const click = vi
+      .spyOn(HTMLAnchorElement.prototype, "click")
+      .mockImplementation(() => {});
+    mount("/workbench");
+    fireEvent.change(screen.getByRole("slider", { name: "Volatility" }), {
+      target: { value: "0.6" },
+    });
+    fireEvent.click(
+      screen.getByRole("button", { name: "Download this result" }),
+    );
+    expect(click).toHaveBeenCalledOnce();
+    const content = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsText(exported!);
+    });
+    const record = JSON.parse(content);
+    expect(record.inputs).toEqual({
+      volatility: 0.6,
+      drift: 0.05,
+      seed: 42,
+      steps: 50,
+      paths: 24,
+    });
+    expect(record.results.paths).toHaveLength(24);
+    expect(record.results.variance).toBeCloseTo(0.236844103, 8);
   });
-  Object.defineProperty(URL, "revokeObjectURL", {
-    configurable: true,
-    writable: true,
-    value: vi.fn(),
-  });
-  const click = vi
-    .spyOn(HTMLAnchorElement.prototype, "click")
-    .mockImplementation(() => {});
-  mount("/workbench");
-  fireEvent.change(screen.getByRole("slider", { name: "Volatility" }), {
-    target: { value: "0.6" },
-  });
-  fireEvent.click(screen.getByRole("button", { name: "Save this result" }));
-  expect(click).toHaveBeenCalledOnce();
-  const content = await new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = reject;
-    reader.readAsText(exported!);
-  });
-  const record = JSON.parse(content);
-  expect(Object.keys(record)).toEqual(["model", "inputs", "results"]);
-  expect(record.inputs).toEqual({
-    volatility: 0.6,
-    drift: 0.05,
-    seed: 42,
-    steps: 50,
-    paths: 24,
-  });
-  expect(record.results.paths).toHaveLength(24);
-  expect(record.results.variance).toBeCloseTo(0.236844103, 8);
-});
-
-it.each([
-  ["market", "Systems respond to systems."],
-  ["conflict", "Local rules. Collective behaviour."],
-])("preserves legacy atlas hash %s", (hash, title) => {
-  mount("/models#" + hash);
-  expect(screen.getByRole("heading", { name: title })).toBeTruthy();
 });

@@ -1,0 +1,543 @@
+[
+  {
+    "filename": "02-nasa-turning-vanes.jpg",
+    "status": "Selected after visual review for editorial metaphor; no product or photographer endorsement implied.",
+    "creator": "NASA",
+    "photoId": "b-P6xrDMFSU",
+    "canonicalUrl": "https://unsplash.com/photos/b-P6xrDMFSU",
+    "imageUrl": "https://images.unsplash.com/photo-1614730073452-26212f842765?fm=jpg&q=95",
+    "license": "Unsplash License (free)",
+    "licenseUrl": "https://unsplash.com/license",
+    "verifiedFrom": "Canonical Unsplash source page turn14view1; creator and free license explicitly displayed",
+    "retrievalDate": "2026-10-17",
+    "dimensions": [
+      3000,
+      2400
+    ],
+    "orientation": "landscape",
+    "thematicGroup": "Experiment / scale",
+    "intendedRole": "Langley tunnel turning vanes; geometric depth and scale, no abstract graph layer.",
+    "sha256": "a638d94e7d6ab0405a1cb39896f5a2e6613fa3fa71d23368f71462fc6fbad66a",
+    "nonEndorsement": "No affiliation or endorsement implied. Review visible people and marks in final usage.",
+    "sourceType": "Real photograph per canonical Unsplash photo page; no AI generation used",
+    "sourceMasterNote": "Full intrinsic resolution JPEG via canonical image link, q95, no resizing cap; not camera RAW.",
+    "editorialAssessment": "Hero/collage potential: high",
+    "compositionAndCropIntent": "Tiny human against monumental curved vanes is exceptional scale evidence. Full 5:4 composition strongest; 16:9 crop sacrifices curve. Portrait crop should keep human bottom center and lit rib field.",
+    "cameraFromSourcePage": "Not listed",
+    "publicationDate": "2021-03-03",
+    "rootApproval": "Selected for new direction",
+    "id": "vanes",
+    "derivatives": [
+      {
+        "file": "vanes-480.webp",
+        "width": 480,
+        "height": 384,
+        "bytes": 31956
+      },
+      {
+        "file": "vanes-960.webp",
+        "width": 960,
+        "height": 768,
+        "bytes": 92442
+      },
+      {
+        "file": "vanes-1600.webp",
+        "width": 1600,
+        "height": 1280,
+        "bytes": 223118
+      },
+      {
+        "file": "vanes-2400.webp",
+        "width": 2400,
+        "height": 1920,
+        "bytes": 408260
+      }
+    ]
+  },
+  {
+    "filename": "05-glider.jpg",
+    "status": "Selected after visual review for editorial metaphor; no product or photographer endorsement implied.",
+    "creator": "Marek Piwnicki",
+    "photoId": "fjmwD2l2JF4",
+    "canonicalUrl": "https://unsplash.com/photos/fjmwD2l2JF4",
+    "imageUrl": "https://images.unsplash.com/photo-1688760323721-23f34142d757?fm=jpg&q=95",
+    "license": "Unsplash License (free)",
+    "licenseUrl": "https://unsplash.com/license",
+    "verifiedFrom": "Canonical Unsplash source page turn14view4; creator and free license explicitly displayed",
+    "retrievalDate": "2026-10-17",
+    "dimensions": [
+      5377,
+      3025
+    ],
+    "orientation": "landscape",
+    "thematicGroup": "Flight / negative space",
+    "intendedRole": "Glider in cloud field; observe proportion and motion.",
+    "sha256": "ea2e2a7fa415768a4731c1580c302f121c7fcb21b48c647d44c9d58a3a92df5b",
+    "nonEndorsement": "No affiliation or endorsement implied. Review visible people and marks in final usage.",
+    "sourceType": "Real photograph per canonical Unsplash photo page; no AI generation used",
+    "sourceMasterNote": "Full intrinsic resolution JPEG via canonical image link, q95, no resizing cap; not camera RAW.",
+    "editorialAssessment": "Motion/flight hero candidate",
+    "compositionAndCropIntent": "Glider diagonals against clouds, wide 16:9 original. Keep wing tips clear. Left cloud bank can support dark headline; no artificial smoke trails.",
+    "cameraFromSourcePage": "Canon EOS R6",
+    "publicationDate": "2023-07-07",
+    "rootApproval": "Selected for new direction",
+    "id": "glider",
+    "derivatives": [
+      {
+        "file": "glider-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 4890
+      },
+      {
+        "file": "glider-960.webp",
+        "width": 960,
+        "height": 540,
+        "bytes": 11096
+      },
+      {
+        "file": "glider-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 26334
+      },
+      {
+        "file": "glider-2400.webp",
+        "width": 2400,
+        "height": 1350,
+        "bytes": 48654
+      }
+    ]
+  },
+  {
+    "filename": "06-velodrome.jpg",
+    "status": "Selected after visual review for editorial metaphor; no product or photographer endorsement implied.",
+    "creator": "Kato Blackmore",
+    "photoId": "etKB38ze5iY",
+    "canonicalUrl": "https://unsplash.com/photos/etKB38ze5iY",
+    "imageUrl": "https://images.unsplash.com/photo-1753769914520-394cf8b645f8?fm=jpg&q=95",
+    "license": "Unsplash License (free)",
+    "licenseUrl": "https://unsplash.com/license",
+    "verifiedFrom": "Canonical Unsplash source page turn14view5; creator and free license explicitly displayed",
+    "retrievalDate": "2026-10-17",
+    "dimensions": [
+      4418,
+      2945
+    ],
+    "orientation": "landscape",
+    "thematicGroup": "Human motion",
+    "intendedRole": "Kyiv velodrome training; use track geometry and genuine movement.",
+    "sha256": "dd06d54d7037694594f3c4bb3a60d3fd31f1960318070f164fa8241cf5d24e3e",
+    "nonEndorsement": "No affiliation or endorsement implied. Review visible people and marks in final usage.",
+    "sourceType": "Real photograph per canonical Unsplash photo page; no AI generation used",
+    "sourceMasterNote": "Full intrinsic resolution JPEG via canonical image link, q95, no resizing cap; not camera RAW.",
+    "editorialAssessment": "Human motion: strong",
+    "compositionAndCropIntent": "Monochrome pair on inclined track; genuine motion, excellent lines. Wide native ratio. Upper track offers quiet space; portrait could isolate single cyclist but pair relationship is more useful.",
+    "cameraFromSourcePage": "SONY ILCE-6400",
+    "publicationDate": "2025-07-29",
+    "rootApproval": "Selected for new direction",
+    "id": "velodrome",
+    "derivatives": [
+      {
+        "file": "velodrome-480.webp",
+        "width": 480,
+        "height": 320,
+        "bytes": 11466
+      },
+      {
+        "file": "velodrome-960.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 57710
+      },
+      {
+        "file": "velodrome-1600.webp",
+        "width": 1600,
+        "height": 1067,
+        "bytes": 417830
+      },
+      {
+        "file": "velodrome-2400.webp",
+        "width": 2400,
+        "height": 1600,
+        "bytes": 1166746
+      }
+    ]
+  },
+  {
+    "filename": "07-runner-motion.jpg",
+    "status": "Selected after visual review for editorial metaphor; no product or photographer endorsement implied.",
+    "creator": "Kenny Leys",
+    "photoId": "wfPCw0s6Jg4",
+    "canonicalUrl": "https://unsplash.com/photos/wfPCw0s6Jg4",
+    "imageUrl": "https://images.unsplash.com/photo-1777911045174-37d19edb0c02?fm=jpg&q=95",
+    "license": "Unsplash License (free)",
+    "licenseUrl": "https://unsplash.com/license",
+    "verifiedFrom": "Canonical Unsplash source page turn14view6; creator and free license explicitly displayed",
+    "retrievalDate": "2026-10-17",
+    "dimensions": [
+      4837,
+      3226
+    ],
+    "orientation": "landscape",
+    "thematicGroup": "Human motion",
+    "intendedRole": "Blurred stride, tight body detail; action collage candidate.",
+    "sha256": "310d0c3f3159261c755c0d697d962e45bed2c85ef24023a357e1f0bae9d756ca",
+    "nonEndorsement": "No affiliation or endorsement implied. Review visible people and marks in final usage.",
+    "sourceType": "Real photograph per canonical Unsplash photo page; no AI generation used",
+    "sourceMasterNote": "Full intrinsic resolution JPEG via canonical image link, q95, no resizing cap; not camera RAW.",
+    "editorialAssessment": "Human macro-action: strong",
+    "compositionAndCropIntent": "Tight stride with warm track and electric yellow shoes; supports body/experiment collage. Crop does not need face. Preserve shoe and full bent leg.",
+    "cameraFromSourcePage": "Canon EOS R5",
+    "publicationDate": "2026-05-04",
+    "rootApproval": "Selected for new direction",
+    "id": "runner",
+    "derivatives": [
+      {
+        "file": "runner-480.webp",
+        "width": 480,
+        "height": 320,
+        "bytes": 13248
+      },
+      {
+        "file": "runner-960.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 42762
+      },
+      {
+        "file": "runner-1600.webp",
+        "width": 1600,
+        "height": 1067,
+        "bytes": 187850
+      },
+      {
+        "file": "runner-2400.webp",
+        "width": 2400,
+        "height": 1601,
+        "bytes": 721294
+      }
+    ]
+  },
+  {
+    "filename": "09-observer-atacama.jpg",
+    "status": "Selected after visual review for editorial metaphor; no product or photographer endorsement implied.",
+    "creator": "Denise Elbs",
+    "photoId": "DX5LR0Wwy3g",
+    "canonicalUrl": "https://unsplash.com/photos/DX5LR0Wwy3g",
+    "imageUrl": "https://images.unsplash.com/photo-1713671331597-2cc216a44667?fm=jpg&q=95",
+    "license": "Unsplash License (free)",
+    "licenseUrl": "https://unsplash.com/license",
+    "verifiedFrom": "Canonical Unsplash source page turn14view8; creator and free license explicitly displayed",
+    "retrievalDate": "2026-10-17",
+    "dimensions": [
+      5096,
+      3397
+    ],
+    "orientation": "landscape",
+    "thematicGroup": "Observation / human",
+    "intendedRole": "Human telescope scale in Chile; alternate observation beat.",
+    "sha256": "ef47d32d3b109ccea4773c9ffed4a0ec38fd95a7b92d83e8cffdf449710f9087",
+    "nonEndorsement": "No affiliation or endorsement implied. Review visible people and marks in final usage.",
+    "sourceType": "Real photograph per canonical Unsplash photo page; no AI generation used",
+    "sourceMasterNote": "Full intrinsic resolution JPEG via canonical image link, q95, no resizing cap; not camera RAW.",
+    "editorialAssessment": "Observation intimacy: strong",
+    "compositionAndCropIntent": "Illuminated observatory doorway and silhouette against night sky. Quiet left sky gives type space. More human and intimate than dome panorama.",
+    "cameraFromSourcePage": "Canon EOS R6",
+    "publicationDate": "2024-04-21",
+    "rootApproval": "Selected for new direction",
+    "id": "observer",
+    "derivatives": [
+      {
+        "file": "observer-480.webp",
+        "width": 480,
+        "height": 319,
+        "bytes": 14402
+      },
+      {
+        "file": "observer-960.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 89288
+      },
+      {
+        "file": "observer-1600.webp",
+        "width": 1600,
+        "height": 1066,
+        "bytes": 398500
+      },
+      {
+        "file": "observer-2400.webp",
+        "width": 2400,
+        "height": 1600,
+        "bytes": 1092276
+      }
+    ]
+  },
+  {
+    "filename": "11-watch-tools.jpg",
+    "status": "Selected after visual review for editorial metaphor; no product or photographer endorsement implied.",
+    "creator": "Ruben Caldera",
+    "photoId": "HNsBsXOmfEM",
+    "canonicalUrl": "https://unsplash.com/photos/HNsBsXOmfEM",
+    "imageUrl": "https://images.unsplash.com/photo-1789238959604-908d95334e96?fm=jpg&q=95",
+    "license": "Unsplash License (free)",
+    "licenseUrl": "https://unsplash.com/license",
+    "verifiedFrom": "Canonical Unsplash source page turn14view10; creator and free license explicitly displayed",
+    "retrievalDate": "2026-10-17",
+    "dimensions": [
+      4096,
+      2304
+    ],
+    "orientation": "landscape",
+    "thematicGroup": "Precision / repair",
+    "intendedRole": "Watch movement beside tools; physical intervention, inspect for branding.",
+    "sha256": "0e6f0b25353ac91e5fb1b87b13723c2785ee234b7dfbe232b7ba20883fe365f3",
+    "nonEndorsement": "No affiliation or endorsement implied. Review visible people and marks in final usage.",
+    "sourceType": "Real photograph per canonical Unsplash photo page; no AI generation used",
+    "sourceMasterNote": "Full intrinsic resolution JPEG via canonical image link, q95, no resizing cap; not camera RAW.",
+    "editorialAssessment": "Precision tabletop: strong",
+    "compositionAndCropIntent": "Disassembled real movement and tools on charcoal surface. Negative space upper left; excellent precision-object collage option. Keep tools and mechanism relationship.",
+    "cameraFromSourcePage": "Xiaomi 13T Pro",
+    "publicationDate": "2026-09-12",
+    "rootApproval": "Selected for new direction",
+    "id": "mechanism",
+    "derivatives": [
+      {
+        "file": "mechanism-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 12498
+      },
+      {
+        "file": "mechanism-960.webp",
+        "width": 960,
+        "height": 540,
+        "bytes": 48546
+      },
+      {
+        "file": "mechanism-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 133496
+      },
+      {
+        "file": "mechanism-2400.webp",
+        "width": 2400,
+        "height": 1350,
+        "bytes": 230672
+      }
+    ]
+  },
+  {
+    "filename": "15-turbine-blade.jpg",
+    "status": "Selected after visual review for editorial metaphor; no product or photographer endorsement implied.",
+    "creator": "Jones Lee",
+    "photoId": "dk8xbzGVNb8",
+    "canonicalUrl": "https://unsplash.com/photos/dk8xbzGVNb8",
+    "imageUrl": "https://images.unsplash.com/photo-1777811950974-18d3b5032e4b?fm=jpg&q=95",
+    "license": "Unsplash License (free)",
+    "licenseUrl": "https://unsplash.com/license",
+    "verifiedFrom": "Canonical Unsplash source page turn14view14; creator and free license explicitly displayed",
+    "retrievalDate": "2026-10-17",
+    "dimensions": [
+      6000,
+      4000
+    ],
+    "orientation": "landscape",
+    "thematicGroup": "Engineering / scale",
+    "intendedRole": "Blade form against sky; potentially strong negative-space composition.",
+    "sha256": "130b2e18789f970251972ff6cc46d50b8e58f71cc1b41732595c555e2b91f26b",
+    "nonEndorsement": "No affiliation or endorsement implied. Review visible people and marks in final usage.",
+    "sourceType": "Real photograph per canonical Unsplash photo page; no AI generation used",
+    "sourceMasterNote": "Full intrinsic resolution JPEG via canonical image link, q95, no resizing cap; not camera RAW.",
+    "editorialAssessment": "Physical scale: strong",
+    "compositionAndCropIntent": "Close blade/tower against pale cloud field, elegant real engineering crop. Left nacelle occupies foreground; right sky gives room. Panoramic crop feasible; portrait retains tower/blades.",
+    "cameraFromSourcePage": "RICOH GR IIIx",
+    "publicationDate": "2026-05-03",
+    "rootApproval": "Selected for new direction",
+    "id": "turbine",
+    "derivatives": [
+      {
+        "file": "turbine-480.webp",
+        "width": 480,
+        "height": 320,
+        "bytes": 3302
+      },
+      {
+        "file": "turbine-960.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 8154
+      },
+      {
+        "file": "turbine-1600.webp",
+        "width": 1600,
+        "height": 1067,
+        "bytes": 20082
+      },
+      {
+        "file": "turbine-2400.webp",
+        "width": 2400,
+        "height": 1600,
+        "bytes": 36750
+      }
+    ]
+  },
+  {
+    "filename": "02-chess-street.jpg",
+    "canonicalUrl": "https://unsplash.com/photos/two-men-playing-chess-on-a-street-MpKusShuiy8",
+    "creator": "Robbi",
+    "imageUrl": "https://images.unsplash.com/photo-1758767054899-1ea3c3b060e3?fm=jpg&q=95",
+    "license": "Unsplash License (free)",
+    "licenseUrl": "https://unsplash.com/license",
+    "published": "2025-09-25",
+    "camera": "SONY ILCE-6400",
+    "retrieved": "2026-10-17",
+    "dimensions": [
+      3349,
+      5954
+    ],
+    "sha256": "e0496b33acdc88cdd60178c1677aab49e675ed88573c082cd0ec660b4d1a35db",
+    "status": "Selected after visual review for editorial metaphor; no product or photographer endorsement implied.",
+    "verification": "Canonical Unsplash source page explicitly credits photographer and free license; downloaded source image link at q95 without resize cap.",
+    "nonEndorsement": "No affiliation or endorsement implied; inspect people and visible marks in final usage.",
+    "thematicRole": "Meaningful interaction / portrait",
+    "visualReview": "Color documentary street chess with two people leaning into shared board. Faces, hands, board form a readable triangle; lively real environment. Warm stool and teal shirt balance existing technical cast. Best as native portrait rather than forcing full-width panorama.",
+    "focalPoint": "50% 48%",
+    "aiMedia": false,
+    "sourceMasterNote": "Full intrinsic-resolution q95 JPEG via canonical source image link, not camera RAW.",
+    "rootApproval": "Selected for new direction",
+    "id": "chess",
+    "derivatives": [
+      {
+        "file": "chess-480.webp",
+        "width": 480,
+        "height": 853,
+        "bytes": 50148
+      },
+      {
+        "file": "chess-960.webp",
+        "width": 960,
+        "height": 1707,
+        "bytes": 137570
+      },
+      {
+        "file": "chess-1600.webp",
+        "width": 1600,
+        "height": 2845,
+        "bytes": 558096
+      },
+      {
+        "file": "chess-2400.webp",
+        "width": 2400,
+        "height": 4267,
+        "bytes": 1374442
+      }
+    ]
+  },
+  {
+    "filename": "05-murmuration.jpg",
+    "canonicalUrl": "https://unsplash.com/photos/a-flock-of-birds-flying-in-a-cloudy-sky-OXeTDNIjMck",
+    "creator": "Doncoombez",
+    "imageUrl": "https://images.unsplash.com/photo-1764880851145-e2f60244b54a?fm=jpg&q=95",
+    "license": "Unsplash License (free)",
+    "licenseUrl": "https://unsplash.com/license",
+    "published": "2025-12-04",
+    "camera": "NIKON Z9",
+    "retrieved": "2026-10-17",
+    "dimensions": [
+      3008,
+      4512
+    ],
+    "sha256": "dfe01b176e7d0f09753b0849082e34178c26756bbdbd9e11c53af063875ecccc",
+    "status": "Selected after visual review for editorial metaphor; no product or photographer endorsement implied.",
+    "verification": "Canonical Unsplash source page explicitly credits photographer and free license; downloaded source image link at q95 without resize cap.",
+    "nonEndorsement": "No affiliation or endorsement implied; inspect people and visible marks in final usage.",
+    "thematicRole": "Natural collective flow / portrait",
+    "visualReview": "New flock against blue-white cloud plane; individual birds visible rather than opaque silhouette. Strong vertical formation. Portrait strongest; landscape crop across upper/middle flock loses lower tail but retains collective field. No fish source reused.",
+    "focalPoint": "50% 43%",
+    "aiMedia": false,
+    "sourceMasterNote": "Full intrinsic-resolution q95 JPEG via canonical source image link, not camera RAW.",
+    "rootApproval": "Selected for new direction",
+    "id": "birds",
+    "derivatives": [
+      {
+        "file": "birds-480.webp",
+        "width": 480,
+        "height": 720,
+        "bytes": 23414
+      },
+      {
+        "file": "birds-960.webp",
+        "width": 960,
+        "height": 1440,
+        "bytes": 61280
+      },
+      {
+        "file": "birds-1600.webp",
+        "width": 1600,
+        "height": 2400,
+        "bytes": 138596
+      },
+      {
+        "file": "birds-2400.webp",
+        "width": 2400,
+        "height": 3600,
+        "bytes": 226972
+      }
+    ]
+  },
+  {
+    "filename": "06-dunes-town.jpg",
+    "canonicalUrl": "https://unsplash.com/photos/desert-dunes-meet-a-coastal-town-at-sunset-aYl_mBU5cXQ",
+    "creator": "Marc Wieland",
+    "imageUrl": "https://images.unsplash.com/photo-1774284572948-91b4674d8ebc?fm=jpg&q=95",
+    "license": "Unsplash License (free)",
+    "licenseUrl": "https://unsplash.com/license",
+    "published": "2026-03-23",
+    "camera": "not listed",
+    "retrieved": "2026-10-17",
+    "dimensions": [
+      3873,
+      2179
+    ],
+    "sha256": "ddbece24bc1086c6d94b71617beb54d96f6d802dee42e06e79382ee435777a61",
+    "status": "Selected after visual review for editorial metaphor; no product or photographer endorsement implied.",
+    "verification": "Canonical Unsplash source page explicitly credits photographer and free license; downloaded source image link at q95 without resize cap.",
+    "nonEndorsement": "No affiliation or endorsement implied; inspect people and visible marks in final usage.",
+    "thematicRole": "Aerial landscape / panorama",
+    "visualReview": "Exceptional wide dune field meeting dense settlement under warm sunset. Natural/human boundary creates a genuinely rich landscape system without roads/interchange/crowd. Preserve dune-town division around right third; quieter left dunes support type.",
+    "focalPoint": "50% 55%",
+    "aiMedia": false,
+    "sourceMasterNote": "Full intrinsic-resolution q95 JPEG via canonical source image link, not camera RAW.",
+    "rootApproval": "Selected for new direction",
+    "id": "dunes",
+    "derivatives": [
+      {
+        "file": "dunes-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 14900
+      },
+      {
+        "file": "dunes-960.webp",
+        "width": 960,
+        "height": 540,
+        "bytes": 45466
+      },
+      {
+        "file": "dunes-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 137888
+      },
+      {
+        "file": "dunes-2400.webp",
+        "width": 2400,
+        "height": 1350,
+        "bytes": 331108
+      }
+    ]
+  }
+]

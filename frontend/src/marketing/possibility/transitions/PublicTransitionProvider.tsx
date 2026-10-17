@@ -1,91 +1,72 @@
 import {
   useEffect,
   useRef,
+  useState,
   type MouseEvent,
   type PropsWithChildren,
 } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+const publicRoutes = [
+  "/",
+  "/models",
+  "/workbench",
+  "/method",
+  "/login",
+  "/signup",
+];
 export function PublicTransitionProvider({ children }: PropsWithChildren) {
-  const navigate = useNavigate(),
-    location = useLocation();
-  const active = useRef<{
-    clone: Element;
-    animation?: Animation;
-    frame?: number;
-  } | null>(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [phase, setPhase] = useState<"idle" | "cover" | "reveal">("idle");
+  const [revision, setRevision] = useState(0);
+  const destination = useRef("");
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const mounted = useRef(true);
   const pending = useRef(false);
-  const cancel = () => {
-    const current = active.current;
-    if (current) {
-      current.animation?.cancel();
-      if (current.frame) cancelAnimationFrame(current.frame);
-      current.clone.remove();
-      active.current = null;
+  const locationKey = location.pathname + location.search + location.hash;
+  const observedLocation = useRef(locationKey);
+  const clearTimer = () => {
+    if (timer.current !== null) {
+      clearTimeout(timer.current);
+      timer.current = null;
     }
-    pending.current = false;
   };
-  useEffect(() => () => cancel(), []);
   useEffect(() => {
-    if (!pending.current) {
-      cancel();
-      return;
-    }
-    if (!active.current) return;
-    pending.current = false;
-    const current = active.current;
-    let attempts = 0;
-    const handoff = () => {
-      if (active.current !== current) return;
-      const target = document.querySelector<SVGElement>(
-        'main [data-transition-actor="trajectory"]',
-      );
-      if (!target && attempts++ < 8) {
-        current.frame = requestAnimationFrame(handoff);
-        return;
-      }
-      if (!target) {
-        cancel();
-        return;
-      }
-      const source = current.clone.getBoundingClientRect(),
-        destination = target.getBoundingClientRect();
-      current.animation = current.clone.animate(
-        [
-          { transform: "translate(0,0) scale(1)", opacity: 1 },
-          {
-            transform: `translate(${destination.x - source.x}px, ${destination.y - source.y}px) scale(${destination.width / source.width}, ${destination.height / source.height})`,
-            opacity: 0,
-          },
-        ],
-        {
-          duration: 520,
-          easing: "cubic-bezier(.22,.61,.36,1)",
-          fill: "forwards",
-        },
-      );
-      current.animation.finished
-        .then(() => {
-          if (active.current === current) {
-            cancel();
-          }
-        })
-        .catch(() => {});
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      clearTimer();
     };
-    current.frame = requestAnimationFrame(handoff);
-  }, [location.key]);
-  const capture = (event: MouseEvent<HTMLDivElement>) => {
+  }, []);
+  useEffect(() => {
+    const cancelInterrupted = () => {
+      observedLocation.current = locationKey;
+      if (pending.current) {
+        clearTimer();
+        pending.current = false;
+        setPhase("idle");
+      }
+    };
+    window.addEventListener("popstate", cancelInterrupted);
+    window.addEventListener("hashchange", cancelInterrupted);
+    return () => {
+      window.removeEventListener("popstate", cancelInterrupted);
+      window.removeEventListener("hashchange", cancelInterrupted);
+    };
+  }, [locationKey]);
+  const capture = (e: MouseEvent<HTMLDivElement>) => {
     if (
-      event.defaultPrevented ||
-      event.button !== 0 ||
-      event.metaKey ||
-      event.ctrlKey ||
-      event.shiftKey ||
-      event.altKey
+      e.defaultPrevented ||
+      e.button !== 0 ||
+      e.metaKey ||
+      e.ctrlKey ||
+      e.shiftKey ||
+      e.altKey
     )
       return;
     const anchor =
-      event.target instanceof Element
-        ? event.target.closest<HTMLAnchorElement>("a[href]")
+      e.target instanceof Element
+        ? e.target.closest<HTMLAnchorElement>("a[href]")
         : null;
     if (
       !anchor ||
@@ -95,39 +76,47 @@ export function PublicTransitionProvider({ children }: PropsWithChildren) {
       return;
     const url = new URL(anchor.href, window.location.href);
     if (url.origin !== window.location.origin) return;
-    cancel();
-    if (url.pathname === location.pathname) return;
+    const cancelPending = () => {
+      clearTimer();
+      pending.current = false;
+      setPhase("idle");
+    };
+    if (pending.current) cancelPending();
     if (
-      anchor.dataset.transitionKind !== "trajectory" ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      url.pathname === location.pathname ||
+      !publicRoutes.includes(url.pathname)
     )
       return;
-    const source = anchor
-      .closest("section")
-      ?.querySelector<SVGElement>('[data-transition-actor="trajectory"]');
-    if (!source || typeof source.animate !== "function") return;
-    const rect = source.getBoundingClientRect();
-    if (!rect.width || !rect.height) return;
-    const clone = source.cloneNode(true) as SVGElement;
-    clone.setAttribute("aria-hidden", "true");
-    clone.removeAttribute("aria-labelledby");
-    clone.classList.add("pe-transition-actor");
-    Object.assign(clone.style, {
-      position: "fixed",
-      left: rect.x + "px",
-      top: rect.y + "px",
-      width: rect.width + "px",
-      height: rect.height + "px",
-      zIndex: "90",
-      pointerEvents: "none",
-      color: getComputedStyle(source).color,
-      transformOrigin: "0 0",
-    });
-    document.body.appendChild(clone);
-    active.current = { clone };
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    e.preventDefault();
+    destination.current = url.pathname + url.search + url.hash;
     pending.current = true;
-    event.preventDefault();
-    navigate(url.pathname + url.search + url.hash);
+    setRevision((v) => v + 1);
+    setPhase("cover");
+    timer.current = setTimeout(() => {
+      if (!mounted.current) return;
+      pending.current = false;
+      timer.current = null;
+      navigate(destination.current);
+      setPhase("reveal");
+      timer.current = setTimeout(() => {
+        timer.current = null;
+        if (mounted.current) setPhase("idle");
+      }, 670);
+    }, 450);
   };
-  return <div onClickCapture={capture}>{children}</div>;
+  return (
+    <div onClickCapture={capture}>
+      {children}
+      {phase !== "idle" && (
+        <div
+          key={revision + phase}
+          className={"mi-curtain mi-curtain--" + phase}
+          aria-hidden="true"
+        >
+          <span>Math Intellect</span>
+        </div>
+      )}
+    </div>
+  );
 }

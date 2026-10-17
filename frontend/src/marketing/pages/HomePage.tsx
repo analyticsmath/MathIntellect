@@ -1,4 +1,4 @@
 export {
-  HomeFilm as default,
-  HomeFilm as HomePage,
-} from "../possibility/home/HomeFilm";
+  EditorialHome as default,
+  EditorialHome as HomePage,
+} from "../editorial/Home";

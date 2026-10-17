@@ -1,106 +1,92 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { OriginSymbol } from "../possibility/Primitives";
-
+import { Photo, type PhotoId } from "../editorial/Photo";
 const routes = [
-  { label: "Home", to: "/" },
-  { label: "Models", to: "/models" },
-  { label: "Workbench", to: "/workbench" },
-  { label: "Method", to: "/method" },
-];
-
+  { label: "Home", to: "/", photo: "vanes" },
+  { label: "Models", to: "/models", photo: "chess" },
+  { label: "Try an example", to: "/workbench", photo: "birds" },
+  { label: "How it works", to: "/method", photo: "mechanism" },
+] as const;
 export function SiteHeader() {
   const location = useLocation();
   const [openFor, setOpenFor] = useState("");
-  const [preview, setPreview] = useState(0);
+  const [preview, setPreview] = useState<PhotoId>("vanes");
   const open = openFor === location.key;
   const trigger = useRef<HTMLButtonElement>(null);
   const menu = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     if (!open) return;
-    const previousOverflow = document.body.style.overflow;
+    const prior = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    const items = () =>
+    const elements = () =>
       Array.from(menu.current?.querySelectorAll<HTMLElement>("a,button") ?? []);
-    items()[0]?.focus();
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
+    elements()[0]?.focus();
+    const keydown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
         setOpenFor("");
         trigger.current?.focus();
       }
-      if (event.key === "Tab") {
-        const focusable = items();
-        if (event.shiftKey && document.activeElement === focusable[0]) {
-          event.preventDefault();
-          focusable.at(-1)?.focus();
-        } else if (
-          !event.shiftKey &&
-          document.activeElement === focusable.at(-1)
-        ) {
-          event.preventDefault();
-          focusable[0]?.focus();
+      if (e.key === "Tab") {
+        const list = elements();
+        if (e.shiftKey && document.activeElement === list[0]) {
+          e.preventDefault();
+          list.at(-1)?.focus();
+        } else if (!e.shiftKey && document.activeElement === list.at(-1)) {
+          e.preventDefault();
+          list[0]?.focus();
         }
       }
     };
-    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keydown", keydown);
     return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = prior;
+      window.removeEventListener("keydown", keydown);
     };
   }, [open]);
-
-  const closeMenu = () => setOpenFor("");
+  const close = () => setOpenFor("");
   return (
     <>
-      <header className="pe-site-header">
-        <Link to="/" className="pe-brand" aria-label="Math Intellect home">
-          <span className="pe-brand-mark" aria-hidden="true">
+      <header
+        className={
+          "mi-site-header" +
+          (location.pathname !== "/" ? " mi-site-header--light" : "")
+        }
+      >
+        <Link to="/" className="mi-brand" aria-label="Math Intellect home">
+          <span className="mi-brand-mark" aria-hidden="true">
             ∗
           </span>
           Math Intellect
         </Link>
-        <nav aria-label="Main navigation" className="pe-header-navigation">
-          {routes
-            .filter(({ to }) => to === "/models" || to === "/method")
-            .map(({ label, to }) => (
-              <Link
-                key={to}
-                to={to}
-                aria-current={location.pathname === to ? "page" : undefined}
-              >
-                {label}
-              </Link>
-            ))}
+        <nav aria-label="Main navigation" className="mi-header-links">
+          {routes.slice(1).map((r) => (
+            <Link
+              key={r.to}
+              to={r.to}
+              aria-current={location.pathname === r.to ? "page" : undefined}
+            >
+              {r.label}
+            </Link>
+          ))}
         </nav>
-        <div className="pe-header-actions">
-          <Link to="/workbench" className="pe-header-run">
-            Workbench <span aria-hidden="true">↗</span>
+        <div className="mi-header-actions">
+          <Link className="mi-header-signin" to="/login">
+            Sign in
           </Link>
           <button
-            ref={trigger}
             type="button"
+            ref={trigger}
+            className="mi-menu-button"
             aria-expanded={open}
             aria-controls="mi-navigation"
             aria-label={open ? "Close navigation" : "Open navigation"}
-            onClick={() => {
-              setPreview(
-                Math.max(
-                  0,
-                  routes.findIndex(({ to }) => to === location.pathname),
-                ),
-              );
-              setOpenFor(open ? "" : location.key);
-            }}
+            onClick={() => setOpenFor(open ? "" : location.key)}
           >
-            <span
-              className={"pe-menu-icon" + (open ? " is-open" : "")}
-              aria-hidden="true"
-            >
+            <span className="mi-menu-symbol" aria-hidden="true">
               <i />
               <i />
             </span>
-            <span className="pe-menu-label">{open ? "Close" : "Menu"}</span>
+            Menu
           </button>
         </div>
       </header>
@@ -111,58 +97,48 @@ export function SiteHeader() {
           role="dialog"
           aria-modal="true"
           aria-label="Navigation"
-          className="pe-navigation"
+          className="mi-navigation"
         >
-          <button
-            className="pe-menu-close"
-            type="button"
-            onClick={() => {
-              closeMenu();
-              trigger.current?.focus();
-            }}
-          >
-            Close <span aria-hidden="true">×</span>
-          </button>
-          <div className="pe-menu-composition">
+          <div className="mi-menu-top">
+            <span className="mi-brand">Math Intellect</span>
+            <button
+              className="mi-menu-close"
+              onClick={() => {
+                close();
+                trigger.current?.focus();
+              }}
+            >
+              Close <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div className="mi-menu-composition">
             <nav aria-label="Site">
-              {routes.map(({ label, to }, index) => (
+              {routes.map((r) => (
                 <Link
-                  className="pe-menu-route"
-                  key={to}
-                  to={to}
-                  onClick={closeMenu}
-                  onMouseEnter={() => setPreview(index)}
-                  onFocus={() => setPreview(index)}
-                  aria-current={location.pathname === to ? "page" : undefined}
+                  key={r.to}
+                  to={r.to}
+                  className="mi-menu-route"
+                  onClick={close}
+                  onFocus={() => setPreview(r.photo)}
+                  onMouseEnter={() => setPreview(r.photo)}
+                  aria-current={location.pathname === r.to ? "page" : undefined}
                 >
-                  <span>{label}</span>
+                  <span>{r.label}</span>
                   <span aria-hidden="true">↗</span>
                 </Link>
               ))}
             </nav>
-            <figure
-              className={"pe-menu-preview pe-menu-preview--" + preview}
-              aria-hidden="true"
-            >
-              <OriginSymbol />
-              <span>
-                {preview === 3
-                  ? "xₜ₊₁ = xₜ + μΔt + σ√Δt Zₜ"
-                  : preview === 2
-                    ? "x₀ → 24 paths"
-                    : preview === 1
-                      ? "state → path → matrix → network"
-                      : "x₀ = 0"}
-              </span>
+            <figure className="mi-menu-preview" aria-hidden="true">
+              <Photo key={preview} id={preview} decorative sizes="50vw" />
             </figure>
           </div>
-          <div className="pe-menu-bottom">
+          <div className="mi-menu-bottom">
             <p>Give your next question a mathematical form.</p>
             <div>
-              <Link to="/login" onClick={closeMenu}>
+              <Link to="/login" onClick={close}>
                 Sign in
               </Link>
-              <Link to="/signup" onClick={closeMenu}>
+              <Link to="/signup" onClick={close}>
                 Create an account <span aria-hidden="true">↗</span>
               </Link>
             </div>
