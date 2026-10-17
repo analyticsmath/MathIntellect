@@ -7,6 +7,7 @@ import { SiteHeader } from "./components/SiteHeader";
 import { SiteFooter } from "./components/SiteFooter";
 import { ScenarioProvider } from "./film/ScenarioContext";
 import "./film/film.css";
+import "./film/refinement.css";
 
 export const MarketingShell: React.FC = () => {
   const location = useLocation();
@@ -25,21 +26,6 @@ export const MarketingShell: React.FC = () => {
     gsap.registerPlugin(ScrollTrigger);
 
     const context = gsap.context(() => {
-      const hero = root.querySelector<HTMLElement>("[data-home-hero]");
-      if (hero) {
-        const heroImage = hero.querySelector<HTMLElement>(".mi-hero-image");
-        const lines = gsap.utils.toArray<HTMLElement>("[data-hero-line]", hero);
-        const copy = hero.querySelector<HTMLElement>("[data-hero-copy]");
-        const conditions = hero.querySelector<HTMLElement>("[data-hero-conditions]");
-        const actions = hero.querySelector<HTMLElement>("[data-hero-actions]");
-        const entrance = gsap.timeline({ delay: 0.08, defaults: { ease: "power2.out" } });
-        if (heroImage) entrance.fromTo(heroImage, { autoAlpha: 0, scale: 1.045 }, { autoAlpha: 1, scale: 1, duration: 1.35 }, 0);
-        if (lines.length) entrance.fromTo(lines, { autoAlpha: 0, yPercent: 108 }, { autoAlpha: 1, yPercent: 0, duration: 1.02, stagger: 0.18, ease: "power3.out" }, 0.22);
-        if (copy) entrance.fromTo(copy, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.78 }, 1.56);
-        if (actions) entrance.fromTo(actions, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.72 }, 1.94);
-        if (conditions) entrance.fromTo(conditions, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.72 }, 2.28);
-      }
-
       const reveals = gsap.utils.toArray<HTMLElement>("[data-reveal]", root);
       reveals.forEach((element) => {
         gsap.fromTo(
@@ -58,6 +44,11 @@ export const MarketingShell: React.FC = () => {
             },
           },
         );
+      });
+
+      gsap.fromTo(root.querySelectorAll(".mi-footer-wordmark-line a"), { yPercent: 42 }, {
+        yPercent: 0, ease: "none",
+        scrollTrigger: { trigger: ".mi-footer-wordmark-line", start: "top bottom", end: "bottom 88%", scrub: 0.65 },
       });
 
       const plottedSections = gsap.utils.toArray<HTMLElement>("[data-path-draw]", root);

@@ -31,7 +31,7 @@ export const MODEL_STORIES: ModelStory[] = [
   },
   {
     id: "game-theory",
-    photo: PHOTO_LIBRARY.chess,
+    photo: PHOTO_LIBRARY.strategy,
     name: "Game Theory",
     title: "Every choice changes the payoff.",
     question: "Which outcomes suit each player?",
@@ -53,7 +53,7 @@ export const MODEL_STORIES: ModelStory[] = [
   },
   {
     id: "conflict",
-    photo: PHOTO_LIBRARY.cityCrossing,
+    photo: PHOTO_LIBRARY.collectiveFlight,
     name: "Agent Interaction",
     title: "The rules matter as much as the players.",
     question: "How do strategy and repeated rounds shape the result?",

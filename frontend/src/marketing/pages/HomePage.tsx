@@ -3,7 +3,8 @@ import { useScenario } from "../film/scenario";
 import { TrajectoryPlot } from "../film/TrajectoryPlot";
 import { ModelJourney } from "../film/ModelJourney";
 import { ModelCinema } from "../film/ModelCinema";
-import { PHOTO_LIBRARY } from "../film/photoLibrary";
+import { HomeHero } from "../film/HomeHero";
+import { ObservationBridge } from "../film/ObservationBridge";
 
 const openingVolatility = 0.35;
 
@@ -14,56 +15,8 @@ export function HomePage() {
 
   return (
     <div className="mi-home">
-      <section className="mi-home-hero" data-home-hero aria-labelledby="mi-home-title">
-        <figure className="mi-hero-art">
-          <picture className="mi-hero-picture">
-            <source
-              media="(max-width: 959px)"
-              srcSet={PHOTO_LIBRARY.hero.portraitSrc + " 900w"}
-              sizes="100vw"
-              type="image/webp"
-            />
-            <img
-              className="mi-hero-image"
-              src={PHOTO_LIBRARY.hero.wideSrc}
-              srcSet={PHOTO_LIBRARY.hero.wideSrc + " 1800w"}
-              sizes="(min-width: 960px) 48vw, 100vw"
-              width={PHOTO_LIBRARY.hero.wideDimensions.width}
-              height={PHOTO_LIBRARY.hero.wideDimensions.height}
-              alt={PHOTO_LIBRARY.hero.alt}
-              decoding="async"
-              fetchPriority="high"
-            />
-          </picture>
-          <figcaption className="mi-hero-photo-credit">
-            Photograph by <a href={PHOTO_LIBRARY.hero.sourceUrl} target="_blank" rel="noreferrer">{PHOTO_LIBRARY.hero.photographer}</a> on <a href="https://unsplash.com" target="_blank" rel="noreferrer">Unsplash</a>
-          </figcaption>
-        </figure>
-        <div className="mi-hero-copy">
-          <h1 id="mi-home-title" tabIndex={-1}>
-            <span className="mi-hero-line"><span data-hero-line>Change an assumption.</span></span>
-            <span className="mi-hero-line"><span data-hero-line>See every path.</span></span>
-          </h1>
-          <p data-hero-copy>
-            Explore a seeded simulation from the assumptions that define it to the paths they produce. Adjust volatility, hold everything else fixed, and compare the result.
-          </p>
-          <div className="mi-hero-actions" data-hero-actions>
-            <a className="mi-button mi-button--signal" href="#model-story">
-              Follow the calculation <span aria-hidden="true">↓</span>
-            </a>
-            <Link className="mi-text-link" to="/workbench" viewTransition>
-              Open the workbench <span aria-hidden="true">↗</span>
-            </Link>
-          </div>
-          <div className="mi-hero-conditions" aria-label="Public example conditions" data-hero-conditions>
-            <span>Drift μ {demo.mu.toFixed(2)}</span>
-            <span>Volatility σ {demo.sigma.toFixed(2)}</span>
-            <span>{demo.paths} paths</span>
-            <span>{demo.current.steps} steps</span>
-            <span>Seed {demo.seed}</span>
-          </div>
-        </div>
-      </section>
+      <HomeHero />
+      <ObservationBridge />
 
       <ModelJourney
         mu={demo.mu}
@@ -75,7 +28,7 @@ export function HomePage() {
 
       <section id="experiment" className="mi-home-experiment" aria-labelledby="mi-experiment-title">
         <header className="mi-section-heading" data-reveal>
-          <h2 id="mi-experiment-title">Change volatility. Hold the rest fixed.</h2>
+          <h2 id="mi-experiment-title">Change one condition. See the difference.</h2>
           <p>
             The baseline stays at σ 0.35. Adjust one value and compare both runs on the same scale.
           </p>
@@ -153,8 +106,8 @@ export function HomePage() {
 
       <ModelCinema
         variant="overview"
-        title="Choose a structure that fits the question."
-        intro="Each photograph sets a real-world context; each diagram explains a model structure. Keep scrolling through four different questions. Only the seeded diffusion run is calculated here."
+        title="Find the model behind your question."
+        intro="Uncertainty, strategic choices, changing markets, and collective behaviour call for different mathematical structures. Explore the question each model can frame."
       />
 
       <section className="mi-home-repeat" aria-labelledby="mi-repeat-title">

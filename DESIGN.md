@@ -6,7 +6,7 @@ Math Intellect lets people define mathematical models, run simulations, compare 
 
 ## Story thesis
 
-**Change an assumption. See every path.**
+**Make uncertainty visible.**
 
 The protagonist is one repeatable run. The visitor sees its conditions, its complete set of outcomes, the effect of changing one value, and the limits of what that run can tell them. Photography establishes real systems and people; the plot remains the only evidence of the calculation.
 
@@ -16,7 +16,9 @@ The site moves through a deliberate intensity curve: a cinematic real-world syst
 
 ### Opening: a system in motion
 
-Aerial urban infrastructure gives the first viewport a real sense of many routes sharing one starting environment. A single-colour headline states the product action: “Change an assumption. See every path.” Supporting copy names simulations, comparison, and inspection in plain language. The photograph is a contextual image, never a simulated result. The crop moves with restraint. It arrives before the title and holds long enough to read.
+A complete physical fluid-impact photograph shares one graphite viewport with a two-line title. Its subject is the entry into the story, not a visualization of the public model. The title is single-colour and the primary action is immediately useful. Desktop scrolling brings the image toward the visitor while the title holds before receding. Mobile uses the full portrait subject below the copy with native scrolling.
+
+A separate water-surface passage changes scale from isolated impact to a field of possible motion. The words “One starting point. Many possible paths.” reveal on scroll as the photographic frame expands. The next section then explicitly switches from physical context to calculated data.
 
 ### Conditions: make the model legible
 
@@ -44,21 +46,21 @@ End on the actual calculation surface and a direct invitation to build a model. 
 
 ## Photography plan
 
-The storyboard was fixed before the photos were selected. Five free Unsplash photographs were reviewed at full size, downloaded, cropped to wide and portrait layouts, and stored as local WebP files under `frontend/public/media/math-intellect/unsplash/`. They provide real-world context; the simulation plot remains the evidence. Each image is credited on the page and recorded here with its source, served dimensions, crop intent, alt text, retrieval date, and non-endorsement note.
+The current casting follows `docs/design/math-intellect-refinement-2026-10-17.md`. All active photos are local WebP, visibly credited, and contextual rather than calculated output. Source metadata and dimensions are maintained in `frontend/src/marketing/film/photoLibrary.ts`. Earlier city, chess and crossing derivatives remain in the repository as archived assets.
 
-| Role | Photographer and Unsplash source | Photo ID | Delivered WebP dimensions | Focal intent and alt text |
-| --- | --- | --- | --- | --- |
-| Opening system | J F, [Unsplash photo](https://unsplash.com/photos/an-aerial-view-of-a-city-intersection-at-night-A1QE-1VGKPM) | A1QE-1VGKPM | 1800 × 1220; 900 × 1150 | Keep converging and diverging traffic lanes in frame. “Aerial view of a city interchange at night, with traffic tracing several routes.” |
-| Monte Carlo paths | Cosmin Andrei Buzamat, [Unsplash photo](https://unsplash.com/photos/aerial-view-of-a-river-delta-with-branching-waterways-mVNA-yH7wNM) | mVNA-yH7wNM | 1400 × 960; 800 × 1100 | Preserve branching channels as a natural counterpart to sampled paths. “Top-down view of branching waterways crossing a textured river bed.” |
-| Game Theory | Haroon Khalid, [Unsplash photo](https://unsplash.com/photos/chess-pieces-are-arranged-on-a-chessboard-53qe9oTOdc8) | 53qe9oTOdc8 | 1400 × 960; 800 × 1100 | Keep the king and surrounding pieces visible to establish competing strategies. “Chess pieces arranged across a board, with a wooden king surrounded by possible moves.” |
-| Market Dynamics | Daniel Miksha, [Unsplash photo](https://unsplash.com/photos/aerial-view-of-stacked-shipping-containers-at-a-port-37mW7MvAOvU) | 37mW7MvAOvU | 1400 × 960; 800 × 1100 | Retain the container grid and port lanes as a connected market system. “Aerial view of stacked shipping containers arranged in port lanes.” |
-| Agent Interaction | Xuedi Liu, [Unsplash photo](https://unsplash.com/photos/crowded-crosswalk-in-a-busy-city-street-cu3sTi1Tf7s) | cu3sTi1Tf7s | 1400 × 960; 800 × 1100 | Keep the crossing and separate streams of pedestrians visible. “A crowd moves through a striped city crosswalk from several directions.” |
+| Role | Photographer | Source | Local delivery |
+| --- | --- | --- | --- |
+| Physical impact hero | Pete Godfrey | https://unsplash.com/photos/milk-splash-frozen-in-time-against-black-background-6ieRRBACAqM | 2560 × 1707; portrait 960 × 1280, existing verified repository photo |
+| Surface and scale bridge | Valeriia Miller | https://unsplash.com/photos/dark-water-ripples-create-an-interesting-pattern-ye_2-LjeFVM | New download 17 October 2026; WebP 1800 × 1100 |
+| Monte Carlo | Cosmin Andrei Buzamat | https://unsplash.com/photos/aerial-view-of-a-river-delta-with-branching-waterways-mVNA-yH7wNM | 1400 × 960; 800 × 1100 |
+| Strategic exchange | Adam Rutkowski | https://unsplash.com/photos/two-men-sitting-at-a-table-with-a-laptop-r_WVQzfgClw | New WebP derivative 1400 × 933; retain both people on mobile |
+| Market system | Daniel Miksha | https://unsplash.com/photos/aerial-view-of-stacked-shipping-containers-at-a-port-37mW7MvAOvU | 1400 × 960; 800 × 1100 |
+| Collective behaviour | James Wainscoat | https://unsplash.com/photos/b7MZ6iGIoSI | New WebP derivative 1600 × 1067; retain the flock formation |
 
-All five photo pages identified these files as free under the Unsplash License. The original source dimensions are not represented as verified; the dimensions above describe the local responsive crops. The files were retrieved on 2026-10-17. Every photo is contextual and does not represent a calculated result or imply photographer endorsement. Reject generated artwork, premium-only Unsplash+ images, generic laptop shots, and images that do not add a clear role.
-
+No generated artwork or invented brand icon is used. The current live source checks reconfirmed free Unsplash licensing for the hero, water surface and strategic exchange. The flock retains the repository's prior provenance record and standard Unsplash licensing. No photograph represents a customer, forecast, or model result.
 ## Art direction
 
-- Pure white, near-black, and one decisive signal red. Let photography carry its natural colour. Red is reserved for the selected input, the active result, and essential interaction states.
+- Graphite, pure white, cool grey and restrained mineral green. Let photography supply the broader colour. Green marks controls and plotted current data; no red or orange interface accent.
 - No gradients, glows, glass, cyan, purple, indigo, orange-led interface, cream surfaces, or decorative texture.
 - Use one colour for each complete heading. Do not colour a word or line independently.
 - Keep the Math Intellect name as a typographic wordmark. Add no invented symbol or replacement logo.
@@ -71,7 +73,7 @@ All five photo pages identified these files as free under the Unsplash License. 
 - Use scroll-linked movement for the sticky calculation story. Progress follows the reader, holds on each meaningful state, and reconstructs cleanly on reverse scroll.
 - Keep plot drawing long enough to read as trajectories. The plot must resolve before explanatory text advances.
 - Map vertical scrolling to the horizontal model gallery on desktop. Each panel completes before the next takes over. Use native vertical panels for touch and reduced motion.
-- Keep page transitions restrained and continuous. Carry a real image or the current product object only when it exists in both source and destination layouts.
+- Preserve the approved page curtain exactly. The refinement must not modify App.tsx or its curtain rules in film.css. Add independent hero camera motion, image-plane expansion and a scroll-composed model gallery with complete reading holds.
 - Motion must not hide essential information. Honor reduced motion and fast scrolling.
 
 ## Reference principles
@@ -83,4 +85,4 @@ All five photo pages identified these files as free under the Unsplash License. 
 
 ## Acceptance
 
-The opening image must be real, locally served, and credited. The generated hero file and invented logo mark must be absent. Every public statement must describe an actual capability, model input, output, or limitation. All four model scenes must be reachable by scrolling without clicking. Image, plot, and copy must resolve at a readable pace on desktop, mobile, keyboard navigation, and reduced motion.
+The opening image must be real, locally served, and credited. The complete Math Intellect name occupies the footer width on one line. The menu must work with keyboard focus, Escape and restored body scrolling. The generated hero file and invented logo mark must be absent. Every public statement must describe an actual capability, model input, output, or limitation. All four model scenes must be reachable by scrolling without clicking. Image, plot, and copy must resolve at a readable pace on desktop, mobile, keyboard navigation, and reduced motion.

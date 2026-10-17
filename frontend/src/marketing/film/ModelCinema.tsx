@@ -126,67 +126,53 @@ export function ModelCinema({ variant = "overview", title, intro }: ModelCinemaP
     const media = gsap.matchMedia(section);
 
     media.add("(min-width: 960px) and (prefers-reduced-motion: no-preference)", () => {
-      const travel = () => Math.max(0, track.scrollWidth - window.innerWidth);
       const panels = Array.from(track.children) as HTMLElement[];
-      const panelCount = panels.length;
-      const snapStep = 1 / Math.max(1, panelCount - 1);
-      let activePanel = -1;
-      const activatePanel = (index: number) => {
-        if (index === activePanel || !panels[index]) return;
-        activePanel = index;
-        panels.forEach((panel, panelIndex) => panel.classList.toggle("is-active", panelIndex === index));
-        const panel = panels[index];
-        const photo = panel.querySelector<HTMLElement>(".mi-model-panel-photo img");
-        const drawn = Array.from(panel.querySelectorAll<SVGPathElement>(".mi-schema-lines path, .mi-schema-links path, .mi-schema-arrows path"));
-        const sequence = gsap.timeline({ defaults: { ease: "power2.out" } });
+      const hold = 0.95;
+      const move = 1.15;
+      const camera = gsap.timeline();
+      const stops = [0];
 
+      panels.forEach((panel, index) => {
+        const photo = panel.querySelector(".mi-model-panel-photo img");
+        const copy = panel.querySelector(".mi-model-panel-copy");
+        const drawn = Array.from(panel.querySelectorAll<SVGPathElement>(".mi-schema-lines path, .mi-schema-links path, .mi-schema-arrows path"));
         drawn.forEach((path) => {
           const length = path.getTotalLength();
-          gsap.killTweensOf(path);
           gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
         });
-
-        if (photo) {
-          gsap.killTweensOf(photo);
-          sequence.fromTo(photo, { autoAlpha: 0.72, scale: 1.035 }, { autoAlpha: 1, scale: 1, duration: 1.12 }, 0);
+        const start = camera.duration();
+        if (index > 0) {
+          camera.to(track, { x: () => -index * viewport.clientWidth, duration: move, ease: "power2.inOut" }, start);
+          if (photo) camera.fromTo(photo, { scale: 1.18, xPercent: 5 }, { scale: 1, xPercent: 0, duration: move, ease: "power2.out" }, start);
+          if (copy) camera.fromTo(copy, { y: 28, opacity: 0.6 }, { y: 0, opacity: 1, duration: move * 0.75, ease: "power2.out" }, start + 0.22);
         }
-        if (drawn.length) {
-          sequence.to(drawn, { strokeDashoffset: 0, duration: 1.25, stagger: 0.045, ease: "power2.out" }, 0.18);
-        }
-        const copy = panel.querySelector<HTMLElement>(".mi-model-panel-copy");
-        if (copy) {
-          gsap.killTweensOf(copy);
-          sequence.fromTo(copy, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.76, ease: "power3.out" }, 0.82);
-        }
-      };
-      gsap.to(track, {
-        x: () => -travel(),
-        ease: "none",
-        scrollTrigger: {
-          trigger: viewport,
-          start: "top 84px",
-          end: () => "+=" + Math.max((window.innerHeight - 84) * 4.2, travel() * 1.35),
-          scrub: 1,
-          snap: {
-            snapTo: snapStep,
-            delay: 0.18,
-            duration: { min: 0.55, max: 1.05 },
-            ease: "power2.inOut",
-          },
-          pin: true,
-          invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            if (progressFillRef.current) {
-              progressFillRef.current.style.transform = "scaleX(" + self.progress + ")";
-            }
-            if (progressRef.current) {
-              progressRef.current.setAttribute("aria-valuenow", String(Math.round(self.progress * 100)));
-            }
-            activatePanel(Math.min(panelCount - 1, Math.round(self.progress * (panelCount - 1))));
-          },
+        const arrival = start + (index > 0 ? move : 0);
+        if (drawn.length) camera.to(drawn, { strokeDashoffset: 0, duration: hold, stagger: 0.015, ease: "power2.out" }, arrival);
+        if (photo) camera.to(photo, { scale: 1.045, duration: hold, ease: "none" }, arrival);
+        camera.to({}, { duration: hold }, arrival);
+        if (index > 0) stops.push(arrival + hold * 0.4);
+      });
+      stops[stops.length - 1] = camera.duration();
+      const snapPoints = stops.map((stop) => stop / camera.duration());
+      ScrollTrigger.create({
+        animation: camera,
+        trigger: viewport,
+        start: "top 78px",
+        end: () => "+=" + Math.max(window.innerHeight * 5.8, (track.scrollWidth - viewport.clientWidth) * 1.6),
+        scrub: 0.8,
+        pin: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        snap: { snapTo: snapPoints, delay: 0.25, duration: { min: 0.4, max: 0.75 }, ease: "power2.inOut" },
+        onUpdate: (self) => {
+          if (progressFillRef.current) progressFillRef.current.style.transform = "scaleX(" + self.progress + ")";
+          if (progressRef.current) progressRef.current.setAttribute("aria-valuenow", String(Math.round(self.progress * 100)));
+          const visible = Math.round(-Number(gsap.getProperty(track, "x")) / viewport.clientWidth);
+          panels.forEach((panel, index) => panel.classList.toggle("is-active", index === visible));
         },
       });
-      requestAnimationFrame(() => ScrollTrigger.refresh());
+      const frame = requestAnimationFrame(() => ScrollTrigger.refresh());
+      return () => cancelAnimationFrame(frame);
     });
 
     return () => media.revert();
@@ -204,7 +190,7 @@ export function ModelCinema({ variant = "overview", title, intro }: ModelCinemaP
           <p>{intro}</p>
         </div>
         <div className="mi-model-rail-status">
-          <span>Keep scrolling to move between model questions</span>
+          <span>Explore the model families <span aria-hidden="true">→</span></span>
         </div>
       </header>
 
@@ -224,18 +210,19 @@ export function ModelCinema({ variant = "overview", title, intro }: ModelCinemaP
                   <picture className="mi-model-panel-photo">
                     <source
                       media="(max-width: 959px)"
-                      srcSet={model.photo.portraitSrc + " 800w"}
+                      srcSet={model.photo.portraitSrc + " " + model.photo.portraitDimensions.width + "w"}
                       sizes="100vw"
                       type="image/webp"
                     />
                     <img
                       src={model.photo.wideSrc}
-                      srcSet={model.photo.wideSrc + " 1400w"}
+                      srcSet={model.photo.wideSrc + " " + model.photo.wideDimensions.width + "w"}
                       sizes="(min-width: 960px) 46vw, 100vw"
                       width={model.photo.wideDimensions.width}
                       height={model.photo.wideDimensions.height}
                       alt={model.photo.alt}
-                      loading="lazy"
+                      loading="eager"
+                      fetchPriority="low"
                       decoding="async"
                     />
                   </picture>

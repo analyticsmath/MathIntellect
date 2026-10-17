@@ -126,9 +126,9 @@ export function ModelJourney({ mu, sigma, seed, paths, current }: ModelJourneyPr
   return (
     <section className="mi-journey" id="model-story" ref={sectionRef} aria-labelledby="mi-journey-title">
       <header className="mi-journey-intro" data-reveal>
-        <h2 id="mi-journey-title">Follow one calculation from input to evidence.</h2>
+        <h2 id="mi-journey-title">From assumptions to outcomes.</h2>
         <p>
-          This public example keeps its conditions in view as it moves from a seeded model to its sampled outcomes.
+          Follow a repeatable 24-path example. Its starting conditions remain visible as the model becomes a plot, then a distribution.
         </p>
       </header>
 
