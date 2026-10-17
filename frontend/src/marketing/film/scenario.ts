@@ -1,10 +1,28 @@
-import { createContext, useContext, useMemo, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useMemo,
+  useState,
+  type SetStateAction,
+} from "react";
 import { runDeterministicMonteCarlo } from "../../math/deterministicModels";
 export function useScenarioState() {
-  const [sigma, setSigma] = useState(0.35);
-  const [mu, setMu] = useState(0.05);
-  const [seed, setSeed] = useState(42);
+  const [sigma, setSigmaState] = useState(0.35);
+  const [mu, setMuState] = useState(0.05);
+  const [seed, setSeedState] = useState(42);
   const [replayedKey, setReplayedKey] = useState("");
+  const setSigma = (value: SetStateAction<number>) => {
+    setReplayedKey("");
+    setSigmaState(value);
+  };
+  const setMu = (value: SetStateAction<number>) => {
+    setReplayedKey("");
+    setMuState(value);
+  };
+  const setSeed = (value: SetStateAction<number>) => {
+    setReplayedKey("");
+    setSeedState(value);
+  };
   const paths = 24;
   const current = useMemo(
     () => runDeterministicMonteCarlo(sigma, mu, 50, paths, seed),
@@ -49,4 +67,3 @@ export function useScenario() {
     throw new Error("Scenario controls require the marketing provider.");
   return value;
 }
-

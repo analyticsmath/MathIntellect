@@ -1,0 +1,19 @@
+.pe-site {
+  --pe-void: #090a0c;
+  --pe-carbon: #111318;
+  --pe-mineral: #f2f1ed;
+  --pe-muted: #a3a7b1;
+  --pe-rule: #33363d;
+  --pe-ink: #111318;
+  --pe-blue: #466cff;
+  --pe-baseline: #7a808b;
+  --pe-space: clamp(24px, 4.4vw, 72px);
+  --pe-mono: "IBM Plex Mono", monospace;
+  --pe-display: "Instrument Sans Variable", sans-serif;
+  --pe-grid: repeat(12, minmax(0, 1fr));
+  color: var(--pe-mineral);
+  background: var(--pe-void);
+  font-family: var(--pe-display);
+  font-weight: 400;
+  line-height: 1.45;
+}

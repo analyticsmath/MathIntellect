@@ -1,0 +1,103 @@
+[
+  {
+    "creator": "Clement Souchet",
+    "photoId": "kHb2gnSO0sA",
+    "canonicalUrl": "https://unsplash.com/photos/aerial-view-of-shibuya-crossing-with-crowds-and-traffic-kHb2gnSO0sA",
+    "license": "Unsplash",
+    "licenseUrl": "https://unsplash.com/license",
+    "imageUrl": "https://images.unsplash.com/photo-1759491125973-6c46d3f86c13?fm=jpg&q=95",
+    "dimensions": [8256, 5504],
+    "retrieved": "2026-10-17",
+    "cropIntent": "Dense aerial Shibuya crossing. Monochrome photographic original; retain central diagonal crossing and people. Desktop 16:9 around center 45%/53%; mobile 4:5 center 44%/55%. Buildings provide framing; avoid treating points as measured real-world data.",
+    "derivativesRequired": [
+      "desktop AVIF/WebP",
+      "tablet AVIF/WebP",
+      "mobile AVIF/WebP"
+    ],
+    "nonEndorsement": "People depicted do not endorse Math Intellect.",
+    "sha256": "98d85ac9ed90c7feea6e420c7ffb98f30d10114cf6a60f78d50e11948b9398ee",
+    "sourceFilename": "worldCollision.jpg",
+    "role": "worldCollision"
+  },
+  {
+    "creator": "Michal Vrba",
+    "photoId": "hfLOe6v3dhM",
+    "canonicalUrl": "https://unsplash.com/photos/a-hand-moving-a-white-chess-king-piece-hfLOe6v3dhM",
+    "license": "Unsplash",
+    "licenseUrl": "https://unsplash.com/license",
+    "imageUrl": "https://images.unsplash.com/photo-1768744644048-e3f372444195?fm=jpg&q=95",
+    "dimensions": [7008, 4672],
+    "retrieved": "2026-10-17",
+    "cropIntent": "Hand and white king above real chessboard. Wide center 48%/52%; mobile 4:5 center 44%/54%. The available free replacement is a KING rather than approved bishop. Hand and king overlap minimally: transparent cutout is feasible manually but not yet authored. Keep king silhouette and board diagonals.",
+    "derivativesRequired": [
+      "desktop AVIF/WebP",
+      "tablet AVIF/WebP",
+      "mobile AVIF/WebP",
+      "manually masked transparent hand + king PNG/WebP"
+    ],
+    "nonEndorsement": "People depicted do not endorse Math Intellect.",
+    "sha256": "b1c9192575c484e8985091360a52a8efae9b4fa6f20f394d45a3264f061b0e24",
+    "sourceFilename": "gameForeground.jpg",
+    "role": "gameForeground"
+  },
+  {
+    "creator": "Patrick Federi",
+    "photoId": "DNYYdVsb7EE",
+    "canonicalUrl": "https://unsplash.com/photos/an-aerial-view-of-a-highway-intersection-in-the-country-DNYYdVsb7EE",
+    "license": "Unsplash",
+    "licenseUrl": "https://unsplash.com/license",
+    "imageUrl": "https://images.unsplash.com/photo-1641066070990-eca081737d6f?fm=jpg&q=95",
+    "dimensions": [6574, 8218],
+    "retrieved": "2026-10-17",
+    "cropIntent": "Strict top-down interchange with meaningful distinct loops. Source portrait; rotate 90 degrees clockwise for landscape full topology, then 16:9 slight crop. Mobile retain native portrait. Fields provide overlay breathing room. Visually preferred over Chicago skyline candidate, which is rejected for panorama topology.",
+    "derivativesRequired": [
+      "desktop AVIF/WebP",
+      "tablet AVIF/WebP",
+      "mobile AVIF/WebP"
+    ],
+    "nonEndorsement": "No endorsement implied.",
+    "sha256": "134a75f923fbf55d655efecaa5e19f66fe88a2446429872b62489806a3300f85",
+    "sourceFilename": "market-alt.jpg",
+    "role": "marketEnvironment"
+  },
+  {
+    "creator": "Clint Bustrillos",
+    "photoId": "bCeXyz34Rcc",
+    "canonicalUrl": "https://unsplash.com/photos/school-of-fish-underwater-bCeXyz34Rcc",
+    "license": "Unsplash",
+    "licenseUrl": "https://unsplash.com/license",
+    "imageUrl": "https://images.unsplash.com/photo-1577710943883-98eca3dd1b4e?fm=jpg&q=95",
+    "dimensions": [3376, 6000],
+    "retrieved": "2026-10-17",
+    "cropIntent": "Tightly coherent sardine school in blue/teal water. Portrait source; desktop panoramic crop across upper/middle schooling band at 45% height; mobile native 4:5 crop center 50%/40%. Preferred over Thomas Hoang aquarium ceiling image, whose bright hole competes with diagram layer.",
+    "derivativesRequired": [
+      "desktop AVIF/WebP",
+      "tablet AVIF/WebP",
+      "mobile AVIF/WebP"
+    ],
+    "nonEndorsement": "No endorsement implied.",
+    "sha256": "edf806661292dfbb5aa6b4c44a1ae424a1ddda01232e1484dc0fa178b0d0eae9",
+    "sourceFilename": "agent-alt.jpg",
+    "role": "agentCollective"
+  },
+  {
+    "creator": "Julia Taubitz",
+    "photoId": "wcdlRkLTtrg",
+    "canonicalUrl": "https://unsplash.com/photos/modern-concrete-building-facade-with-geometric-shadows-wcdlRkLTtrg",
+    "license": "Unsplash",
+    "licenseUrl": "https://unsplash.com/license",
+    "imageUrl": "https://images.unsplash.com/photo-1774023451403-bc94b6d6e934?fm=jpg&q=95",
+    "dimensions": [4030, 6045],
+    "retrieved": "2026-10-17",
+    "cropIntent": "Concrete facade with strong rectilinear form and diagonal shadow. Desktop horizontal crop near middle 50% height; mobile 4:5 center 50%/55%; tablet 4:3 around same focal center. Use wall seams as measured-axis continuity, not decorative background. Preferred over overly dark Jonas Gerlach underpass.",
+    "derivativesRequired": [
+      "desktop AVIF/WebP",
+      "tablet AVIF/WebP",
+      "mobile AVIF/WebP"
+    ],
+    "nonEndorsement": "No endorsement implied.",
+    "sha256": "e25a22878cae65e833cbec29251d5ca07ea2cb951c1e92fa531a2f605adee6d4",
+    "sourceFilename": "method-alt.jpg",
+    "role": "methodStructure"
+  }
+]

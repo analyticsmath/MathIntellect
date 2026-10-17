@@ -1,97 +1,25 @@
-import React, { useLayoutEffect } from "react";
-import { Outlet, useLocation } from "react-router-dom";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Outlet } from "react-router-dom";
 import { SkipLink } from "./components/SkipLink";
 import { SiteHeader } from "./components/SiteHeader";
 import { SiteFooter } from "./components/SiteFooter";
 import { ScenarioProvider } from "./film/ScenarioContext";
-import "./film/film.css";
-import "./film/refinement.css";
-
-export const MarketingShell: React.FC = () => {
-  const location = useLocation();
-
-  useLayoutEffect(() => {
-    const root = document.querySelector<HTMLElement>(".mi-cinema");
-    if (!root) return;
-
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (reduceMotion.matches) {
-      root.removeAttribute("data-motion");
-      return;
-    }
-
-    root.setAttribute("data-motion", "ready");
-    gsap.registerPlugin(ScrollTrigger);
-
-    const context = gsap.context(() => {
-      const reveals = gsap.utils.toArray<HTMLElement>("[data-reveal]", root);
-      reveals.forEach((element) => {
-        gsap.fromTo(
-          element,
-          { autoAlpha: 0, y: 24 },
-          {
-            autoAlpha: 1,
-            y: 0,
-            duration: 1.18,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: element,
-              start: "top 82%",
-              once: true,
-              fastScrollEnd: false,
-            },
-          },
-        );
-      });
-
-      gsap.fromTo(root.querySelectorAll(".mi-footer-wordmark-line a"), { yPercent: 42 }, {
-        yPercent: 0, ease: "none",
-        scrollTrigger: { trigger: ".mi-footer-wordmark-line", start: "top bottom", end: "bottom 88%", scrub: 0.65 },
-      });
-
-      const plottedSections = gsap.utils.toArray<HTMLElement>("[data-path-draw]", root);
-      plottedSections.forEach((section) => {
-        const paths = section.querySelectorAll<SVGPathElement>(".mi-path");
-        gsap.fromTo(
-          paths,
-          { strokeDasharray: 1, strokeDashoffset: 1 },
-          {
-            strokeDashoffset: 0,
-            duration: 2.05,
-            stagger: 0.024,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: section,
-              start: "top 88%",
-              once: true,
-              fastScrollEnd: true,
-            },
-          },
-        );
-      });
-    }, root);
-
-    const refreshFrame = window.requestAnimationFrame(() => ScrollTrigger.refresh());
-    return () => {
-      window.cancelAnimationFrame(refreshFrame);
-      context.revert();
-    };
-  }, [location.pathname]);
-
+import { PublicTransitionProvider } from "./possibility/transitions/PublicTransitionProvider";
+import "./possibility/styles/tokens.css";
+import "./possibility/styles/base.css";
+export function MarketingShell() {
   return (
     <ScenarioProvider>
-      <div className="mi-cinema">
-        <SkipLink />
-        <SiteHeader />
-        <main id="main-content" className="mi-page">
-          <Outlet />
-        </main>
-        <SiteFooter />
-      </div>
+      <PublicTransitionProvider>
+        <div className="pe-site">
+          <SkipLink />
+          <SiteHeader />
+          <main id="main-content">
+            <Outlet />
+          </main>
+          <SiteFooter />
+        </div>
+      </PublicTransitionProvider>
     </ScenarioProvider>
   );
-};
-
+}
 export default MarketingShell;
