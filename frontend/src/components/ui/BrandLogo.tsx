@@ -7,7 +7,7 @@ interface BrandLogoProps {
   className?: string;
 }
 
-export function BrandLogo({ compact = false, href = '/', showTagline = false, className = '' }: BrandLogoProps) {
+export function BrandLogo({ compact = false, href = '/', className = '' }: BrandLogoProps) {
   return (
     <Link
       to={href}
