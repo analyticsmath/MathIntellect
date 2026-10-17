@@ -142,7 +142,7 @@ export function ModelCinema({ variant = "overview", title, intro }: ModelCinemaP
         });
         const start = camera.duration();
         if (index > 0) {
-          camera.to(track, { x: () => -index * viewport.clientWidth, duration: move, ease: "power2.inOut" }, start);
+          camera.to(track, { x: () => -panels[index].offsetLeft, duration: move, ease: "power2.inOut" }, start);
           if (photo) camera.fromTo(photo, { scale: 1.18, xPercent: 5 }, { scale: 1, xPercent: 0, duration: move, ease: "power2.out" }, start);
           if (copy) camera.fromTo(copy, { y: 28, opacity: 0.6 }, { y: 0, opacity: 1, duration: move * 0.75, ease: "power2.out" }, start + 0.22);
         }
@@ -167,7 +167,7 @@ export function ModelCinema({ variant = "overview", title, intro }: ModelCinemaP
         onUpdate: (self) => {
           if (progressFillRef.current) progressFillRef.current.style.transform = "scaleX(" + self.progress + ")";
           if (progressRef.current) progressRef.current.setAttribute("aria-valuenow", String(Math.round(self.progress * 100)));
-          const visible = Math.round(-Number(gsap.getProperty(track, "x")) / viewport.clientWidth);
+          const visible = Math.round(-Number(gsap.getProperty(track, "x")) / panels[0].offsetWidth);
           panels.forEach((panel, index) => panel.classList.toggle("is-active", index === visible));
         },
       });
