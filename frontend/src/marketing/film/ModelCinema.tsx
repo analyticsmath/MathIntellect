@@ -136,16 +136,27 @@ export function ModelCinema({ variant = "overview", title, intro }: ModelCinemaP
         activePanel = index;
         panels.forEach((panel, panelIndex) => panel.classList.toggle("is-active", panelIndex === index));
         const panel = panels[index];
+        const photo = panel.querySelector<HTMLElement>(".mi-model-panel-photo img");
         const drawn = Array.from(panel.querySelectorAll<SVGPathElement>(".mi-schema-lines path, .mi-schema-links path, .mi-schema-arrows path"));
-        drawn.forEach((path, pathIndex) => {
+        const sequence = gsap.timeline({ defaults: { ease: "power2.out" } });
+
+        drawn.forEach((path) => {
           const length = path.getTotalLength();
           gsap.killTweensOf(path);
           gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
-          gsap.to(path, { strokeDashoffset: 0, duration: 0.95, delay: Math.min(pathIndex * 0.035, 0.28), ease: "power2.out", overwrite: "auto" });
         });
+
+        if (photo) {
+          gsap.killTweensOf(photo);
+          sequence.fromTo(photo, { autoAlpha: 0.72, scale: 1.035 }, { autoAlpha: 1, scale: 1, duration: 1.12 }, 0);
+        }
+        if (drawn.length) {
+          sequence.to(drawn, { strokeDashoffset: 0, duration: 1.25, stagger: 0.045, ease: "power2.out" }, 0.18);
+        }
         const copy = panel.querySelector<HTMLElement>(".mi-model-panel-copy");
         if (copy) {
-          gsap.fromTo(copy, { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.72, ease: "power3.out", overwrite: "auto" });
+          gsap.killTweensOf(copy);
+          sequence.fromTo(copy, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.76, ease: "power3.out" }, 0.82);
         }
       };
       gsap.to(track, {
@@ -153,13 +164,13 @@ export function ModelCinema({ variant = "overview", title, intro }: ModelCinemaP
         ease: "none",
         scrollTrigger: {
           trigger: viewport,
-          start: "top top",
-          end: () => "+=" + Math.max(window.innerHeight * 4.2, travel() * 1.35),
-          scrub: 0.8,
+          start: "top 84px",
+          end: () => "+=" + Math.max((window.innerHeight - 84) * 4.2, travel() * 1.35),
+          scrub: 1,
           snap: {
             snapTo: snapStep,
-            delay: 0.14,
-            duration: { min: 0.35, max: 0.8 },
+            delay: 0.18,
+            duration: { min: 0.55, max: 1.05 },
             ease: "power2.inOut",
           },
           pin: true,
@@ -193,7 +204,7 @@ export function ModelCinema({ variant = "overview", title, intro }: ModelCinemaP
           <p>{intro}</p>
         </div>
         <div className="mi-model-rail-status">
-          <span>Scroll through the model structures</span>
+          <span>Keep scrolling to move between model questions</span>
         </div>
       </header>
 
@@ -209,9 +220,32 @@ export function ModelCinema({ variant = "overview", title, intro }: ModelCinemaP
                 id={variant === "detail" ? model.id : undefined}
                 aria-labelledby={headingId}
               >
-                <div className="mi-model-panel-art">
-                  <ModelVisual id={model.id} />
-                </div>
+                <figure className="mi-model-panel-art">
+                  <picture className="mi-model-panel-photo">
+                    <source
+                      media="(max-width: 959px)"
+                      srcSet={model.photo.portraitSrc + " 800w"}
+                      sizes="100vw"
+                      type="image/webp"
+                    />
+                    <img
+                      src={model.photo.wideSrc}
+                      srcSet={model.photo.wideSrc + " 1400w"}
+                      sizes="(min-width: 960px) 46vw, 100vw"
+                      width={model.photo.wideDimensions.width}
+                      height={model.photo.wideDimensions.height}
+                      alt={model.photo.alt}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </picture>
+                  <div className="mi-model-panel-diagram">
+                    <ModelVisual id={model.id} />
+                  </div>
+                  <figcaption className="mi-model-photo-credit">
+                    Photograph by <a href={model.photo.sourceUrl} target="_blank" rel="noreferrer">{model.photo.photographer}</a> on <a href="https://unsplash.com" target="_blank" rel="noreferrer">Unsplash</a>
+                  </figcaption>
+                </figure>
                 <div className="mi-model-panel-copy">
                   <h3 id={headingId}>{model.name}</h3>
                   <p className="mi-model-question">{variant === "detail" ? model.question : model.title}</p>

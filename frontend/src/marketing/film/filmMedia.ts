@@ -1,3 +1,5 @@
+import { PHOTO_LIBRARY, type PhotoAsset } from "./photoLibrary";
+
 export type ModelId =
   | "monte-carlo"
   | "game-theory"
@@ -6,6 +8,7 @@ export type ModelId =
 
 export interface ModelStory {
   id: ModelId;
+  photo: PhotoAsset;
   name: string;
   title: string;
   question: string;
@@ -17,6 +20,7 @@ export interface ModelStory {
 export const MODEL_STORIES: ModelStory[] = [
   {
     id: "monte-carlo",
+    photo: PHOTO_LIBRARY.branchingRiver,
     name: "Monte Carlo",
     title: "See the spread, not only the average.",
     question: "How do distributions shape the result?",
@@ -27,6 +31,7 @@ export const MODEL_STORIES: ModelStory[] = [
   },
   {
     id: "game-theory",
+    photo: PHOTO_LIBRARY.chess,
     name: "Game Theory",
     title: "Every choice changes the payoff.",
     question: "Which outcomes suit each player?",
@@ -37,6 +42,7 @@ export const MODEL_STORIES: ModelStory[] = [
   },
   {
     id: "market",
+    photo: PHOTO_LIBRARY.shippingPort,
     name: "Market Dynamics",
     title: "Start from a state. Follow its possible paths.",
     question: "What changes as drift, volatility and horizon change?",
@@ -47,6 +53,7 @@ export const MODEL_STORIES: ModelStory[] = [
   },
   {
     id: "conflict",
+    photo: PHOTO_LIBRARY.cityCrossing,
     name: "Agent Interaction",
     title: "The rules matter as much as the players.",
     question: "How do strategy and repeated rounds shape the result?",

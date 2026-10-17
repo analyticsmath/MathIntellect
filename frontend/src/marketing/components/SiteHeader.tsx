@@ -53,12 +53,6 @@ export function SiteHeader() {
     <>
       <header className="mi-site-header">
         <Link to="/" viewTransition className="mi-brand" aria-label="Math Intellect home">
-          <svg className="mi-brand-mark" viewBox="0 0 40 40" aria-hidden="true">
-            <path d="M5 31C11 31 11 9 18 9S25 31 35 31" />
-            <path d="M5 31C13 29 16 21 20 17S28 8 35 9" />
-            <path d="M5 31C13 32 17 33 20 28S27 20 35 19" />
-            <circle cx="5" cy="31" r="2.5" />
-          </svg>
           <span>Math Intellect</span>
         </Link>
 

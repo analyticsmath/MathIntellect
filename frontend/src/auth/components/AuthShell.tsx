@@ -24,9 +24,8 @@ export const AuthShell: React.FC<AuthShellProps> = ({
       <div className="w-full max-w-5xl mx-auto flex items-center justify-between">
         <Link
           to="/"
-          className="flex items-center gap-2.5 font-medium text-lg tracking-tight text-mi-ink focus-visible:ring-2 focus-visible:ring-mi-focus"
+          className="font-medium text-lg tracking-tight text-mi-ink focus-visible:ring-2 focus-visible:ring-mi-focus"
         >
-          <span className="w-3.5 h-3.5 bg-mi-ink inline-block" aria-hidden="true" />
           <span>Math Intellect</span>
         </Link>
         <Link to="/" className="text-xs font-mono text-mi-muted hover:text-mi-ink">
@@ -57,7 +56,7 @@ export const AuthShell: React.FC<AuthShellProps> = ({
 
       {/* Quiet Auth Footer Note */}
       <div className="w-full max-w-5xl mx-auto text-center text-xs font-mono text-mi-muted">
-        Scientific simulation and decision workbench • Verified deterministic calculations
+        Mathematical models for exploring assumptions and outcomes
       </div>
     </main>
   );

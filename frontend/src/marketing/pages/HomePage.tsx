@@ -3,6 +3,7 @@ import { useScenario } from "../film/scenario";
 import { TrajectoryPlot } from "../film/TrajectoryPlot";
 import { ModelJourney } from "../film/ModelJourney";
 import { ModelCinema } from "../film/ModelCinema";
+import { PHOTO_LIBRARY } from "../film/photoLibrary";
 
 const openingVolatility = 0.35;
 
@@ -14,22 +15,37 @@ export function HomePage() {
   return (
     <div className="mi-home">
       <section className="mi-home-hero" data-home-hero aria-labelledby="mi-home-title">
-        <div className="mi-hero-art" aria-hidden="true">
-          <img
-            className="mi-hero-artwork"
-            src="/media/math-intellect/generated/mi-pathfield-hero.webp"
-            alt=""
-            decoding="async"
-            fetchPriority="high"
-          />
-        </div>
+        <figure className="mi-hero-art">
+          <picture className="mi-hero-picture">
+            <source
+              media="(max-width: 959px)"
+              srcSet={PHOTO_LIBRARY.hero.portraitSrc + " 900w"}
+              sizes="100vw"
+              type="image/webp"
+            />
+            <img
+              className="mi-hero-image"
+              src={PHOTO_LIBRARY.hero.wideSrc}
+              srcSet={PHOTO_LIBRARY.hero.wideSrc + " 1800w"}
+              sizes="(min-width: 960px) 48vw, 100vw"
+              width={PHOTO_LIBRARY.hero.wideDimensions.width}
+              height={PHOTO_LIBRARY.hero.wideDimensions.height}
+              alt={PHOTO_LIBRARY.hero.alt}
+              decoding="async"
+              fetchPriority="high"
+            />
+          </picture>
+          <figcaption className="mi-hero-photo-credit">
+            Photograph by <a href={PHOTO_LIBRARY.hero.sourceUrl} target="_blank" rel="noreferrer">{PHOTO_LIBRARY.hero.photographer}</a> on <a href="https://unsplash.com" target="_blank" rel="noreferrer">Unsplash</a>
+          </figcaption>
+        </figure>
         <div className="mi-hero-copy">
           <h1 id="mi-home-title" tabIndex={-1}>
-            <span className="mi-hero-line"><span data-hero-line>One assumption.</span></span>
-            <span className="mi-hero-line"><span data-hero-line>Many possible paths.</span></span>
+            <span className="mi-hero-line"><span data-hero-line>Change an assumption.</span></span>
+            <span className="mi-hero-line"><span data-hero-line>See every path.</span></span>
           </h1>
           <p data-hero-copy>
-            Follow a seeded model from its conditions to its outcomes. Change volatility alone and see how the same model responds.
+            Explore a seeded simulation from the assumptions that define it to the paths they produce. Adjust volatility, hold everything else fixed, and compare the result.
           </p>
           <div className="mi-hero-actions" data-hero-actions>
             <a className="mi-button mi-button--signal" href="#model-story">
@@ -138,7 +154,7 @@ export function HomePage() {
       <ModelCinema
         variant="overview"
         title="Choose a structure that fits the question."
-        intro="A path simulation, a payoff game, a market process, and an agent network ask different things. Scroll to see what each structure requires."
+        intro="Each photograph sets a real-world context; each diagram explains a model structure. Keep scrolling through four different questions. Only the seeded diffusion run is calculated here."
       />
 
       <section className="mi-home-repeat" aria-labelledby="mi-repeat-title">

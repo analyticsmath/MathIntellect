@@ -34,13 +34,13 @@ function PageLoader() {
     <div
       role="status"
       aria-live="polite"
-      className="min-h-screen grid place-items-center bg-[#0c100e] text-[#f4f7f5]"
+      className="min-h-screen grid place-items-center bg-[#121212] text-[#ffffff]"
     >
       <div className="text-center">
         <span className="block font-medium tracking-tight text-lg">
           math intellect
         </span>
-        <span aria-hidden="true" className="mx-auto mt-5 block h-px w-16 bg-[#cfff4b]" />
+        <span aria-hidden="true" className="mx-auto mt-5 block h-px w-16 bg-[#bf2d32]" />
       </div>
     </div>
   );

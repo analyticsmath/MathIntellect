@@ -27,17 +27,17 @@ export const MarketingShell: React.FC = () => {
     const context = gsap.context(() => {
       const hero = root.querySelector<HTMLElement>("[data-home-hero]");
       if (hero) {
-        const artwork = hero.querySelector<HTMLElement>(".mi-hero-artwork");
+        const heroImage = hero.querySelector<HTMLElement>(".mi-hero-image");
         const lines = gsap.utils.toArray<HTMLElement>("[data-hero-line]", hero);
         const copy = hero.querySelector<HTMLElement>("[data-hero-copy]");
         const conditions = hero.querySelector<HTMLElement>("[data-hero-conditions]");
         const actions = hero.querySelector<HTMLElement>("[data-hero-actions]");
-        const entrance = gsap.timeline({ delay: 0.08, defaults: { ease: "power3.out" } });
-        if (artwork) entrance.fromTo(artwork, { autoAlpha: 0, x: 42, scale: 0.96 }, { autoAlpha: 1, x: 0, scale: 1, duration: 1.15 }, 0);
-        if (lines.length) entrance.fromTo(lines, { autoAlpha: 0, yPercent: 112 }, { autoAlpha: 1, yPercent: 0, duration: 0.86, stagger: 0.14 }, 0.24);
-        if (copy) entrance.fromTo(copy, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.74 }, 0.82);
-        if (actions) entrance.fromTo(actions, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.68 }, 1.02);
-        if (conditions) entrance.fromTo(conditions, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.7 }, 1.18);
+        const entrance = gsap.timeline({ delay: 0.08, defaults: { ease: "power2.out" } });
+        if (heroImage) entrance.fromTo(heroImage, { autoAlpha: 0, scale: 1.045 }, { autoAlpha: 1, scale: 1, duration: 1.35 }, 0);
+        if (lines.length) entrance.fromTo(lines, { autoAlpha: 0, yPercent: 108 }, { autoAlpha: 1, yPercent: 0, duration: 1.02, stagger: 0.18, ease: "power3.out" }, 0.22);
+        if (copy) entrance.fromTo(copy, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.78 }, 1.56);
+        if (actions) entrance.fromTo(actions, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.72 }, 1.94);
+        if (conditions) entrance.fromTo(conditions, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.72 }, 2.28);
       }
 
       const reveals = gsap.utils.toArray<HTMLElement>("[data-reveal]", root);
@@ -48,13 +48,13 @@ export const MarketingShell: React.FC = () => {
           {
             autoAlpha: 1,
             y: 0,
-            duration: 1.05,
-            ease: "power3.out",
+            duration: 1.18,
+            ease: "power2.out",
             scrollTrigger: {
               trigger: element,
               start: "top 82%",
               once: true,
-              fastScrollEnd: true,
+              fastScrollEnd: false,
             },
           },
         );
@@ -68,8 +68,8 @@ export const MarketingShell: React.FC = () => {
           { strokeDasharray: 1, strokeDashoffset: 1 },
           {
             strokeDashoffset: 0,
-            duration: 1.55,
-            stagger: 0.018,
+            duration: 2.05,
+            stagger: 0.024,
             ease: "power2.out",
             scrollTrigger: {
               trigger: section,

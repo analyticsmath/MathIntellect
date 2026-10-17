@@ -16,7 +16,7 @@ export function ModelsPage() {
       <ModelCinema
         variant="detail"
         title="Different models. Different evidence."
-        intro="Scroll through each structure, the inputs it uses, and the outputs it can provide. The diagrams describe model structure, not live calculations."
+        intro="The photos set context; the diagrams explain structure. Only the seeded diffusion example is calculated on this site. Keep scrolling to compare each model’s question, inputs, and outputs."
       />
 
       <section className="mi-models-boundary" data-reveal>

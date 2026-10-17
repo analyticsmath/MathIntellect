@@ -44,9 +44,17 @@ End on the actual calculation surface and a direct invitation to build a model. 
 
 ## Photography plan
 
-Choose the photographs after the storyboard is fixed. Source them from free Unsplash photo pages, inspect the full image and crop before selection, and download local optimized WebP assets. Each image must have a concrete role: branching infrastructure for the opening; human strategy for Game Theory; a market or urban-economy context for Market Dynamics; collective movement for Agent Interaction; and research or mathematical work where a human process is relevant. Reject generic laptop shots, decorative abstract AI artwork, premium-only Unsplash+ files, and any image that does not add meaning.
+The storyboard was fixed before the photos were selected. Five free Unsplash photographs were reviewed at full size, downloaded, cropped to wide and portrait layouts, and stored as local WebP files under `frontend/public/media/math-intellect/unsplash/`. They provide real-world context; the simulation plot remains the evidence. Each image is credited on the page and recorded here with its source, served dimensions, crop intent, alt text, retrieval date, and non-endorsement note.
 
-Keep an internal source record with creator, Unsplash page, photo ID, image dimensions, retrieval date, intended focal crop, alt text, and a note that the image is contextual and does not imply endorsement. Use a small number of distinct, high-quality images with intentional crops and a coherent tonal treatment. Do not reuse the previous Math Intellect photo set or generated hero artwork.
+| Role | Photographer and Unsplash source | Photo ID | Delivered WebP dimensions | Focal intent and alt text |
+| --- | --- | --- | --- | --- |
+| Opening system | J F, [Unsplash photo](https://unsplash.com/photos/an-aerial-view-of-a-city-intersection-at-night-A1QE-1VGKPM) | A1QE-1VGKPM | 1800 × 1220; 900 × 1150 | Keep converging and diverging traffic lanes in frame. “Aerial view of a city interchange at night, with traffic tracing several routes.” |
+| Monte Carlo paths | Cosmin Andrei Buzamat, [Unsplash photo](https://unsplash.com/photos/aerial-view-of-a-river-delta-with-branching-waterways-mVNA-yH7wNM) | mVNA-yH7wNM | 1400 × 960; 800 × 1100 | Preserve branching channels as a natural counterpart to sampled paths. “Top-down view of branching waterways crossing a textured river bed.” |
+| Game Theory | Haroon Khalid, [Unsplash photo](https://unsplash.com/photos/chess-pieces-are-arranged-on-a-chessboard-53qe9oTOdc8) | 53qe9oTOdc8 | 1400 × 960; 800 × 1100 | Keep the king and surrounding pieces visible to establish competing strategies. “Chess pieces arranged across a board, with a wooden king surrounded by possible moves.” |
+| Market Dynamics | Daniel Miksha, [Unsplash photo](https://unsplash.com/photos/aerial-view-of-stacked-shipping-containers-at-a-port-37mW7MvAOvU) | 37mW7MvAOvU | 1400 × 960; 800 × 1100 | Retain the container grid and port lanes as a connected market system. “Aerial view of stacked shipping containers arranged in port lanes.” |
+| Agent Interaction | Xuedi Liu, [Unsplash photo](https://unsplash.com/photos/crowded-crosswalk-in-a-busy-city-street-cu3sTi1Tf7s) | cu3sTi1Tf7s | 1400 × 960; 800 × 1100 | Keep the crossing and separate streams of pedestrians visible. “A crowd moves through a striped city crosswalk from several directions.” |
+
+All five photo pages identified these files as free under the Unsplash License. The original source dimensions are not represented as verified; the dimensions above describe the local responsive crops. The files were retrieved on 2026-10-17. Every photo is contextual and does not represent a calculated result or imply photographer endorsement. Reject generated artwork, premium-only Unsplash+ images, generic laptop shots, and images that do not add a clear role.
 
 ## Art direction
 
