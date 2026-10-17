@@ -87,6 +87,27 @@ describe("editorial public experience", () => {
       ).value,
     ).toBe("42");
   });
+  it("lets a reduced-motion visitor select a model without traversing a pinned scene", () => {
+    const scroll = vi.fn();
+    Object.defineProperty(HTMLElement.prototype, "scrollTo", {
+      configurable: true,
+      value: scroll,
+    });
+    mount();
+    const game = screen.getByRole("button", {
+      name: "Game theory",
+    });
+    fireEvent.click(game);
+    expect(game.getAttribute("aria-pressed")).toBe("true");
+    expect(scroll).toHaveBeenCalledWith(
+      expect.objectContaining({ behavior: "auto" }),
+    );
+    expect(
+      screen
+        .getByRole("button", { name: "Monte Carlo" })
+        .getAttribute("aria-pressed"),
+    ).toBe("false");
+  });
   it("explains the account models without presenting unrelated illustrative engines", () => {
     const { container } = mount("/models#game-theory");
     for (const id of [

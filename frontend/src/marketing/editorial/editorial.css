@@ -201,7 +201,7 @@
 .mi-menu-route[aria-current="page"] {
   color: #f19778;
 }
-.mi-menu-route span:last-child {
+.mi-menu-route > span:last-child {
   font-size: 0.65em;
 }
 .mi-menu-preview {

@@ -11,10 +11,12 @@
     "test:marketing": "vitest run src/marketing"
   },
   "dependencies": {
+    "@fontsource-variable/geist": "^5.3.0",
     "@fontsource-variable/hanken-grotesk": "^5.3.0",
     "@fontsource-variable/instrument-sans": "^5.3.0",
     "@fontsource-variable/syne": "^5.3.0",
     "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@gsap/react": "^2.1.2",
     "@types/katex": "^0.16.8",
     "animejs": "^4.5.0",
     "autoprefixer": "^10.4.27",

@@ -1,4 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Photo, type PhotoId } from "../editorial/Photo";
 const routes = [
@@ -11,9 +17,31 @@ export function SiteHeader() {
   const location = useLocation();
   const [openFor, setOpenFor] = useState("");
   const [preview, setPreview] = useState<PhotoId>("vanes");
+  const [closing, setClosing] = useState(false);
   const open = openFor === location.key;
   const trigger = useRef<HTMLButtonElement>(null);
   const menu = useRef<HTMLDivElement>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const close = useCallback((restoreFocus = true) => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    const finish = () => {
+      setOpenFor("");
+      setClosing(false);
+      closeTimer.current = null;
+      if (restoreFocus) trigger.current?.focus();
+    };
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) finish();
+    else {
+      setClosing(true);
+      closeTimer.current = setTimeout(finish, 360);
+    }
+  }, []);
+  useEffect(
+    () => () => {
+      if (closeTimer.current) clearTimeout(closeTimer.current);
+    },
+    [],
+  );
   useEffect(() => {
     if (!open) return;
     const prior = document.body.style.overflow;
@@ -23,8 +51,8 @@ export function SiteHeader() {
     elements()[0]?.focus();
     const keydown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setOpenFor("");
-        trigger.current?.focus();
+        e.preventDefault();
+        close();
       }
       if (e.key === "Tab") {
         const list = elements();
@@ -42,8 +70,7 @@ export function SiteHeader() {
       document.body.style.overflow = prior;
       window.removeEventListener("keydown", keydown);
     };
-  }, [open]);
-  const close = () => setOpenFor("");
+  }, [open, close]);
   return (
     <>
       <header
@@ -97,48 +124,63 @@ export function SiteHeader() {
           role="dialog"
           aria-modal="true"
           aria-label="Navigation"
-          className="mi-navigation"
+          className={
+            "mi-navigation" + (closing ? " mi-navigation--closing" : "")
+          }
         >
           <div className="mi-menu-top">
             <span className="mi-brand">Math Intellect</span>
-            <button
-              className="mi-menu-close"
-              onClick={() => {
-                close();
-                trigger.current?.focus();
-              }}
-            >
+            <button className="mi-menu-close" onClick={() => close()}>
               Close <span aria-hidden="true">×</span>
             </button>
           </div>
           <div className="mi-menu-composition">
             <nav aria-label="Site">
-              {routes.map((r) => (
+              {routes.map((r, index) => (
                 <Link
                   key={r.to}
                   to={r.to}
                   className="mi-menu-route"
-                  onClick={close}
+                  onClick={() => close(false)}
+                  aria-label={r.label}
+                  style={{ "--mi-order": index } as CSSProperties}
                   onFocus={() => setPreview(r.photo)}
                   onMouseEnter={() => setPreview(r.photo)}
                   aria-current={location.pathname === r.to ? "page" : undefined}
                 >
-                  <span>{r.label}</span>
+                  <span className="mi-menu-label">
+                    <span>{r.label}</span>
+                    <span aria-hidden="true">{r.label}</span>
+                  </span>
                   <span aria-hidden="true">↗</span>
                 </Link>
               ))}
             </nav>
-            <figure className="mi-menu-preview" aria-hidden="true">
-              <Photo key={preview} id={preview} decorative sizes="50vw" />
-            </figure>
+            <div className="mi-menu-preview" aria-hidden="true">
+              {routes.map((r) => (
+                <figure
+                  key={r.to}
+                  className={
+                    "mi-menu-preview-photo" +
+                    (preview === r.photo ? " is-active" : "")
+                  }
+                >
+                  <Photo
+                    id={r.photo}
+                    decorative
+                    sizes="(max-width:800px) 60vw, 42vw"
+                  />
+                </figure>
+              ))}
+            </div>
           </div>
           <div className="mi-menu-bottom">
             <p>Give your next question a mathematical form.</p>
             <div>
-              <Link to="/login" onClick={close}>
+              <Link to="/login" onClick={() => close(false)}>
                 Sign in
               </Link>
-              <Link to="/signup" onClick={close}>
+              <Link to="/signup" onClick={() => close(false)}>
                 Create an account <span aria-hidden="true">↗</span>
               </Link>
             </div>

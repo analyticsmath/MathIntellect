@@ -64,6 +64,19 @@ it("cancels a pending destination when browser history moves", () => {
   expect(screen.getByText("Home destination")).toBeTruthy();
   expect(document.querySelector(".mi-curtain")).toBeNull();
 });
+it("keeps a new transition intact when navigation starts during a reveal", () => {
+  mount();
+  fireEvent.click(screen.getByRole("link", { name: "Models" }));
+  act(() => vi.advanceTimersByTime(650));
+  expect(screen.getByText("Models destination")).toBeTruthy();
+  fireEvent.click(screen.getByRole("link", { name: "Method" }));
+  act(() => vi.advanceTimersByTime(500));
+  expect(screen.getByText("Method destination")).toBeTruthy();
+  expect(document.querySelector(".mi-curtain--reveal")).not.toBeNull();
+  act(() => vi.advanceTimersByTime(620));
+  expect(document.querySelector(".mi-curtain")).toBeNull();
+  expect(vi.getTimerCount()).toBe(0);
+});
 it("bypasses delayed navigation for reduced motion and leaves modified clicks native", () => {
   mount();
   fireEvent.click(screen.getByRole("link", { name: "Models" }), {

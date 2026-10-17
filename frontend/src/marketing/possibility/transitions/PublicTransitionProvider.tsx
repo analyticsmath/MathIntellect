@@ -6,6 +6,15 @@ import {
   type PropsWithChildren,
 } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Photo, type PhotoId } from "../../editorial/Photo";
+const routeScenes: Record<string, { label: string; photo: PhotoId }> = {
+  "/": { label: "Explore the possible.", photo: "vanes" },
+  "/models": { label: "Find your model.", photo: "chess" },
+  "/workbench": { label: "What changes?", photo: "surfer" },
+  "/method": { label: "Look a little closer.", photo: "mechanism" },
+  "/login": { label: "Welcome back.", photo: "observer" },
+  "/signup": { label: "Start with a question.", photo: "climbers" },
+};
 const publicRoutes = [
   "/",
   "/models",
@@ -19,6 +28,7 @@ export function PublicTransitionProvider({ children }: PropsWithChildren) {
   const location = useLocation();
   const [phase, setPhase] = useState<"idle" | "cover" | "reveal">("idle");
   const [revision, setRevision] = useState(0);
+  const [scene, setScene] = useState(routeScenes["/"]);
   const destination = useRef("");
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const mounted = useRef(true);
@@ -89,7 +99,9 @@ export function PublicTransitionProvider({ children }: PropsWithChildren) {
       return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     e.preventDefault();
+    clearTimer();
     destination.current = url.pathname + url.search + url.hash;
+    setScene(routeScenes[url.pathname]);
     pending.current = true;
     setRevision((v) => v + 1);
     setPhase("cover");
@@ -114,7 +126,19 @@ export function PublicTransitionProvider({ children }: PropsWithChildren) {
           className={"mi-curtain mi-curtain--" + phase}
           aria-hidden="true"
         >
-          <span>Math Intellect</span>
+          <div className="mi-curtain-plane" />
+          <div className="mi-curtain-plane" />
+          <div className="mi-curtain-scene">
+            <span>{scene.label}</span>
+            <figure>
+              <Photo
+                id={scene.photo}
+                decorative
+                priority
+                sizes="(max-width:800px) 45vw, 20vw"
+              />
+            </figure>
+          </div>
         </div>
       )}
     </div>
